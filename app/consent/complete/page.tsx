@@ -95,24 +95,25 @@ export default function ConsentComplete() {
         </div>
       </div>
 
-      {/* 툴팁 (말풍선) */}
-      <div className="absolute h-[72.449px] left-[16.26px] shadow-[0px_2.59px_12.952px_0px_rgba(0,0,0,0)] top-[632px] w-[153px]">
-        <div className="absolute bg-[#111111] box-border content-stretch flex gap-[10px] items-center justify-center left-0 p-[10px] rounded-[8px] top-0">
-          <div className="font-['Noto_Sans_KR:Medium',_sans-serif] font-medium leading-[1.4] relative shrink-0 text-[14px] text-center text-nowrap text-white tracking-[-0.28px] whitespace-pre">
-            <p className="mb-0">AI 의사에게 </p>
-            <p>궁금한 점을 물어보세요</p>
+      {/* 하단 버튼 */}
+      <div className="absolute bg-gradient-to-b bottom-0 content-stretch flex flex-col from-[rgba(240,243,255,0)] items-center left-0 to-[#f0f3ff] w-full">
+        {/* 툴팁 (말풍선) - 버튼 위에 고정 */}
+        <div className="relative left-0 w-full px-4 mb-5">
+          <div className="relative inline-block">
+            <div className="bg-[#111111] box-border content-stretch flex gap-[10px] items-center justify-center p-[10px] rounded-[8px]">
+              <div className="font-['Noto_Sans_KR:Medium',_sans-serif] font-medium leading-[1.4] text-[14px] text-center text-white tracking-[-0.28px]">
+                <p className="mb-0">AI 의사에게 </p>
+                <p className="mb-0">궁금한 점을 물어보세요</p>
+              </div>
+            </div>
+            {/* 말풍선 꼬리 */}
+            <div className="absolute left-[25px] -bottom-[10px]">
+              <svg width="21" height="12" viewBox="0 0 21 12" fill="none">
+                <path d="M0 0L10.5 12L21 0" fill="#111111" />
+              </svg>
+            </div>
           </div>
         </div>
-        {/* 말풍선 꼬리 */}
-        <div className="absolute left-[25.62px] top-[52.57px] size-[20.883px] rotate-0">
-          <svg width="21" height="21" viewBox="0 0 21 21" fill="none">
-            <path d="M3 2L10.5 15L18 2" fill="#111111" />
-          </svg>
-        </div>
-      </div>
-
-      {/* 하단 버튼 */}
-      <div className="absolute bg-gradient-to-b bottom-0 content-stretch flex flex-col from-[rgba(240,243,255,0)] items-center left-[0.89px] to-[#f0f3ff] w-full">
         <div className="bg-white box-border content-stretch flex gap-[16px] items-start justify-center pb-[24px] pt-0 px-[16px] relative shrink-0 w-full">
           <button
             onClick={handleAdditionalInquiry}
