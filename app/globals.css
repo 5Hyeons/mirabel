@@ -23,6 +23,10 @@
   --color-accent-red: var(--accent-red);
 }
 
+html, body {
+  height: 100%;
+}
+
 body {
   background: var(--background);
   color: var(--text-primary);

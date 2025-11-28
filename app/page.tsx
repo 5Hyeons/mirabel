@@ -43,7 +43,7 @@ export default function Home() {
   // 로딩 상태
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-[#6490ff]">
+      <div className="flex items-center justify-center h-full bg-[#6490ff]">
         <div className="text-white text-2xl">로딩 중...</div>
       </div>
     );
@@ -52,7 +52,7 @@ export default function Home() {
   // 에러 상태
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-5">
+      <div className="flex flex-col items-center justify-center h-full p-5">
         <h1 className="text-2xl font-bold text-red-500 mb-4">오류 발생</h1>
         <p className="text-center mb-4">{error}</p>
         <button
@@ -68,7 +68,7 @@ export default function Home() {
   if (!patientData) return null;
 
   return (
-    <div className="bg-[#6490ff] overflow-clip relative rounded-[8px] size-full min-h-screen" data-name="예약 확인 성공" data-node-id="77:6188">
+    <div className="bg-[#6490ff] overflow-clip relative rounded-[8px] w-full h-full" data-name="예약 확인 성공" data-node-id="77:6188">
       {/* 의사 아바타 이미지 (배경) */}
       <div className="absolute h-[242.317px] left-[calc(62.5%+9.664px)] top-[95.55px] translate-x-[-50%] w-[262.672px]" data-name="_0036 1">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -90,7 +90,7 @@ export default function Home() {
       </div>
 
       {/* 헤더 (언어 변경 버튼) */}
-      <div className="absolute content-stretch flex flex-col h-[100px] items-center justify-end left-0 top-0 w-[360px]">
+      <div className="absolute content-stretch flex flex-col h-[100px] items-center justify-end left-0 top-0 w-full">
         <div className="box-border content-stretch flex gap-[12px] items-center justify-end pb-[12px] pt-[30px] px-[20px] relative shrink-0 w-full">
           <div className="flex-1" />
           <button
@@ -104,7 +104,7 @@ export default function Home() {
       </div>
 
       {/* 제목 */}
-      <div className="absolute box-border content-stretch flex gap-[10px] items-center justify-center left-0 p-[20px] top-[100px] w-[360px]">
+      <div className="absolute box-border content-stretch flex gap-[10px] items-center justify-center left-0 p-[20px] top-[100px] w-full">
         <div className="basis-0 font-['Noto_Sans_KR:Medium',_sans-serif] font-medium grow leading-[0] min-h-px min-w-px relative shrink-0 text-[0px] text-white tracking-[-0.48px]">
           <p className="leading-[1.4] mb-0 text-[24px]">안녕하세요.</p>
           <p className="leading-[1.4] mb-0 text-[24px]">
@@ -118,7 +118,7 @@ export default function Home() {
       </div>
 
       {/* 예약 정보 카드 */}
-      <div className="absolute bg-white border border-[#dddddd] border-solid box-border content-stretch flex flex-col gap-[16px] items-center justify-center left-1/2 px-[16px] py-[24px] rounded-[10px] top-[347.5px] translate-x-[-50%] w-[328px]">
+      <div className="absolute bg-white border border-[#dddddd] border-solid box-border content-stretch flex flex-col gap-[16px] items-center justify-center left-4 right-4 px-[16px] py-[24px] rounded-[10px] top-[347.5px]">
         {/* 카드 타이틀 */}
         <div className="content-stretch flex gap-[8px] items-center relative shrink-0 w-full">
           <div className="basis-0 flex flex-col font-['Noto_Sans_KR:Bold',_sans-serif] font-bold grow justify-center leading-[0] min-h-px min-w-px relative shrink-0 text-[#111111] text-[18px] tracking-[-0.36px]">

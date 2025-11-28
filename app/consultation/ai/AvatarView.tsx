@@ -240,9 +240,9 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack }: Avat
   }, [isLoaded, latestFrame, sendMessage]);
 
   return (
-    <div className="bg-[#f0f3ff] overflow-clip relative size-full min-h-screen">
+    <div className="bg-[#f0f3ff] overflow-clip relative w-full h-full">
       {/* 상단 헤더 */}
-      <div className="absolute bg-[#f0f3ff] content-stretch flex flex-col h-[100px] items-center justify-end left-1/2 top-0 translate-x-[-50%] w-[360px] z-50">
+      <div className="absolute bg-[#f0f3ff] content-stretch flex flex-col h-[100px] items-center justify-end left-1/2 top-0 translate-x-[-50%] w-full z-50">
         <div className="box-border content-stretch flex gap-[12px] items-center justify-end pb-[12px] pt-[30px] px-[20px] relative shrink-0 w-full">
           <button onClick={onBack} className="relative shrink-0 size-[24px]">
             <img alt="" className="block max-w-none size-full" src={imgIconArrowLeft} />
@@ -259,7 +259,7 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack }: Avat
       {/* Agent Message - 헤더 아래 실시간 transcription 표시 */}
       {isLoaded && lastMessage && (
         <div
-          className="absolute left-1/2 translate-x-[-50%] w-[360px] px-5 z-10"
+          className="absolute left-1/2 translate-x-[-50%] w-full px-5 z-10"
           style={{
             top: '100px',
             bottom: 'calc(420px + 100px)',
@@ -326,7 +326,7 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack }: Avat
       {/* Unity→Footer 그라데이션 (z-50) - Unity 하단 오버레이 */}
       {isLoaded && (
         <div
-          className="absolute left-1/2 translate-x-[-50%] w-[360px] pointer-events-none"
+          className="absolute left-1/2 translate-x-[-50%] w-full pointer-events-none"
           style={{
             bottom: '100px',
             height: '70px',
@@ -338,7 +338,7 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack }: Avat
 
       {/* 하단 버튼 (z-70) */}
       <div
-        className="absolute bottom-0 left-1/2 translate-x-[-50%] w-[360px] flex gap-[16px] items-end justify-center px-[16px] pt-[8px]"
+        className="absolute bottom-0 left-1/2 translate-x-[-50%] w-full flex gap-[16px] items-end justify-center px-[16px] pt-[8px]"
         style={{
           paddingBottom: 'calc(38px + env(safe-area-inset-bottom, 0px))',
           zIndex: 70,

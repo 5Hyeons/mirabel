@@ -6,6 +6,7 @@
 
 'use client';
 
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { usePatientStore } from '@/lib/store/patient-store';
@@ -19,15 +20,20 @@ export default function DoctorIntro() {
   const router = useRouter();
   const { patientData } = usePatientStore();
 
+  useEffect(() => {
+    if (!patientData) {
+      router.push('/');
+    }
+  }, [patientData, router]);
+
   if (!patientData) {
-    router.push('/');
     return null;
   }
 
   return (
-    <div className="bg-[#f0f3ff] overflow-clip relative rounded-[8px] size-full min-h-screen" data-name="검사안내" data-node-id="77:9033">
+    <div className="bg-[#f0f3ff] overflow-clip relative rounded-[8px] w-full h-full" data-name="검사안내" data-node-id="77:9033">
       {/* 상단 헤더 */}
-      <div className="absolute bg-[#f0f3ff] content-stretch flex flex-col h-[100px] items-center justify-end left-1/2 top-0 translate-x-[-50%] w-[360px]">
+      <div className="absolute bg-[#f0f3ff] content-stretch flex flex-col h-[100px] items-center justify-end left-1/2 top-0 translate-x-[-50%] w-full">
         <div className="box-border content-stretch flex gap-[12px] items-center justify-end pb-[12px] pt-[30px] px-[20px] relative shrink-0 w-full">
           {/* 뒤로가기 버튼 */}
           <button
@@ -55,7 +61,7 @@ export default function DoctorIntro() {
       </div>
 
       {/* 메인 콘텐츠 */}
-      <div className="absolute content-stretch flex flex-col gap-[24px] items-start left-[16px] top-[116px] w-[328px]">
+      <div className="absolute content-stretch flex flex-col gap-[24px] items-start left-0 right-0 top-[116px] px-4">
         {/* 제목 */}
         <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full">
           <div className="content-stretch flex flex-col gap-[8px] items-start relative shrink-0 w-full">
@@ -98,7 +104,7 @@ export default function DoctorIntro() {
       </div>
 
       {/* 하단 버튼 (그라데이션 배경) */}
-      <div className="absolute bg-gradient-to-b bottom-[-1px] content-stretch flex flex-col from-[rgba(240,243,255,0)] items-center left-[0.5px] to-[#f0f3ff] w-[360px]">
+      <div className="absolute bg-gradient-to-b bottom-[-1px] content-stretch flex flex-col from-[rgba(240,243,255,0)] items-center left-[0.5px] to-[#f0f3ff] w-full">
         <div className="bg-[#f0f3ff] box-border content-stretch flex gap-[16px] h-[100px] items-start justify-center pb-[24px] pt-0 px-[16px] relative shrink-0 w-full">
           <button
             onClick={() => router.push('/examination/procedure')}

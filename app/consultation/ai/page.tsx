@@ -32,7 +32,7 @@ export default function AIConsultation() {
   // Connection error state
   if (error) {
     return (
-      <div className="bg-white min-h-screen flex items-center justify-center">
+      <div className="bg-white h-full flex items-center justify-center">
         <div className="text-center px-6">
           <div className="text-[60px] mb-4">⚠️</div>
           <h1 className="text-[20px] font-bold text-[#111111] mb-2">연결 오류</h1>
@@ -54,7 +54,7 @@ export default function AIConsultation() {
   // Connecting state
   if (isConnecting || !token) {
     return (
-      <div className="bg-white min-h-screen flex items-center justify-center">
+      <div className="bg-white h-full flex items-center justify-center">
         <div className="text-center">
           <div className="w-[120px] h-[120px] rounded-full bg-[#e1e9ff] flex items-center justify-center mb-6 mx-auto animate-pulse">
             <span className="text-[40px]">🩺</span>

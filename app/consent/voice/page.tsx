@@ -8,7 +8,7 @@
 
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { usePatientStore } from '@/lib/store/patient-store';
@@ -46,8 +46,13 @@ export default function ConsentVoice() {
   const audioChunksRef = useRef<Blob[]>([]);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
+  useEffect(() => {
+    if (!patientData) {
+      router.push('/');
+    }
+  }, [patientData, router]);
+
   if (!patientData) {
-    router.push('/');
     return null;
   }
 
@@ -125,9 +130,9 @@ export default function ConsentVoice() {
   };
 
   return (
-    <div className="bg-[#f0f3ff] overflow-clip relative rounded-[8px] size-full min-h-screen" data-name="동의">
+    <div className="bg-[#f0f3ff] overflow-clip relative rounded-[8px] w-full h-full" data-name="동의">
       {/* 상단 헤더 */}
-      <div className="absolute bg-[#f0f3ff] content-stretch flex flex-col h-[100px] items-center justify-end left-1/2 top-0 translate-x-[-50%] w-[360px]">
+      <div className="absolute bg-[#f0f3ff] content-stretch flex flex-col h-[100px] items-center justify-end left-1/2 top-0 translate-x-[-50%] w-full">
         <div className="box-border content-stretch flex gap-[12px] items-center justify-end pb-[12px] pt-[30px] px-[20px] relative shrink-0 w-full">
           <button onClick={() => router.back()} className="relative shrink-0 size-[24px]">
             <img alt="" className="block max-w-none size-full" src={imgIconArrowLeft} />
@@ -142,7 +147,7 @@ export default function ConsentVoice() {
       </div>
 
       {/* 메인 콘텐츠 */}
-      <div className="absolute content-stretch flex flex-col gap-[24px] items-start left-[16px] top-[116px] w-[328px]">
+      <div className="absolute content-stretch flex flex-col gap-[24px] items-start left-0 right-0 top-[116px] px-4">
         {/* 아이콘 및 제목 */}
         <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full">
           <div className="relative shrink-0 size-[60px]">
@@ -169,7 +174,7 @@ export default function ConsentVoice() {
           </div>
 
           {/* 녹음 문구 */}
-          <div className="bg-white box-border content-stretch flex flex-col gap-[16px] items-center justify-center p-[16px] relative rounded-[8px] shrink-0 w-[308px]">
+          <div className="bg-white box-border content-stretch flex flex-col gap-[16px] items-center justify-center p-[16px] relative rounded-[8px] shrink-0 w-full">
             <p className="font-['Pretendard:SemiBold',_sans-serif] leading-[1.5] not-italic relative shrink-0 text-[16px] text-black tracking-[-0.32px] w-full">
               "저는 [내시경 검사]에 대한 설명을 충분히 들었으며, 검사의 목적, 방법, 주의사항을 이해하였습니다. 이에 검사 및 치료에 동의합니다"
             </p>
@@ -241,7 +246,7 @@ export default function ConsentVoice() {
               {/* 다시 녹음하기 버튼 */}
               <button
                 onClick={handleRetryRecording}
-                className="bg-white border-2 border-[#d7d7d7] border-solid box-border content-stretch flex gap-[4px] h-[56px] items-center justify-center p-[20px] relative rounded-[8px] shrink-0 w-[308px] active:scale-95 transition-transform"
+                className="bg-white border-2 border-[#d7d7d7] border-solid box-border content-stretch flex gap-[4px] h-[56px] items-center justify-center p-[20px] relative rounded-[8px] shrink-0 w-full active:scale-95 transition-transform"
               >
                 <p className="font-['Noto_Sans_KR:Bold',_sans-serif] font-bold leading-[1.4] relative shrink-0 text-[#666666] text-[16px] text-center text-nowrap tracking-[-0.32px] whitespace-pre">
                   다시 녹음하기
@@ -254,7 +259,7 @@ export default function ConsentVoice() {
       </div>
 
       {/* 하단 버튼 */}
-      <div className="absolute bg-gradient-to-b bottom-[-1px] content-stretch flex flex-col from-[rgba(240,243,255,0)] items-center left-[0.55px] to-[#f0f3ff] w-[360px]">
+      <div className="absolute bg-gradient-to-b bottom-[-1px] content-stretch flex flex-col from-[rgba(240,243,255,0)] items-center left-[0.55px] to-[#f0f3ff] w-full">
         <div className="bg-[#f0f3ff] box-border content-stretch flex gap-[16px] h-[100px] items-start justify-center pb-[24px] pt-0 px-[16px] relative shrink-0 w-full">
           {recordingState === 'idle' && (
             <button
