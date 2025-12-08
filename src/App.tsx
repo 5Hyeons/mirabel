@@ -1,7 +1,9 @@
 import { Routes, Route } from 'react-router-dom';
 import { Home } from './pages/Home';
-import { DoctorIntro } from './pages/examination/DoctorIntro';
-import { Procedure } from './pages/examination/Procedure';
+import { HealthCheck } from './pages/examination/HealthCheck';
+import { HealthWarning } from './pages/examination/HealthWarning';
+import { HealthRecording } from './pages/examination/HealthRecording';
+import { HealthComplete } from './pages/examination/HealthComplete';
 import { AIConsultation } from './pages/consultation/ai/AIConsultation';
 import { ConsentCheckbox } from './pages/consent/Checkbox';
 import { ConsentSignature } from './pages/consent/Signature';
@@ -17,8 +19,10 @@ function App() {
       >
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/examination/doctor-intro" element={<DoctorIntro />} />
-          <Route path="/examination/procedure" element={<Procedure />} />
+          <Route path="/health-check" element={<HealthCheck />} />
+          <Route path="/health-check/warning" element={<HealthWarning />} />
+          <Route path="/health-check/recording" element={<HealthRecording />} />
+          <Route path="/health-check/complete" element={<HealthComplete />} />
           <Route path="/consultation/ai" element={<AIConsultation />} />
           <Route path="/consent/checkbox" element={<ConsentCheckbox />} />
           <Route path="/consent/signature" element={<ConsentSignature />} />

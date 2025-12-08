@@ -4,12 +4,14 @@ import { useCallback, useEffect, useState, useRef } from 'react';
 import { useAudioContext, useTrackVolume } from '@/lib/hooks';
 import { ChatMessage, AgentState } from '@/lib/types/consultation';
 import { AvatarView } from './AvatarView';
+import type { UnityContextHook } from 'react-unity-webgl/distribution/types/unity-context-hook';
 
 interface SessionManagerProps {
   onBack: () => void;
+  unityContext: UnityContextHook;
 }
 
-export function SessionManager({ onBack }: SessionManagerProps) {
+export function SessionManager({ onBack, unityContext }: SessionManagerProps) {
   const [, setMessages] = useState<ChatMessage[]>([]);
   const [avatarMessage, setAvatarMessage] = useState<ChatMessage | undefined>(undefined);
   const [agentState, setAgentState] = useState<AgentState | null>(null);
@@ -161,6 +163,7 @@ export function SessionManager({ onBack }: SessionManagerProps) {
         agentState={agentState}
         userVolume={userVolume}
         onBack={handleBack}
+        unityContext={unityContext}
       />
     </>
   );

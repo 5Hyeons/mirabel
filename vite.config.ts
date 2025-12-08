@@ -16,7 +16,7 @@ export default defineConfig({
     host: true
   },
   build: {
-    assetsInlineLimit: 0,
+    assetsInlineLimit: 10240, // 10KB 이하는 Base64 인라인
     chunkSizeWarningLimit: 2000,
     rollupOptions: {
       output: {

@@ -4,10 +4,9 @@
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-const imgIconArrowRight = "/images/icon-arrow-right.svg";
-const imgIconArrowLeft = "/images/icon-arrow-left.svg";
-const imgIconHome = "/images/icon-home.svg";
+import imgIconArrowRight from '@/assets/icon-arrow-right.svg';
+import imgIconArrowLeft from '@/assets/icon-arrow-left.svg';
+import imgIconHome from '@/assets/icon-home.svg';
 
 const examinationPages = [
   {

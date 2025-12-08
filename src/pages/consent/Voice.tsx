@@ -6,13 +6,12 @@ import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePatientStore } from '@/lib/store/patient-store';
 import { apiClient } from '@/lib/api/mock-api';
-
-const imgMicIcon = "/images/icon-mic-large.png";
-const imgIconMic = "/images/icon-mic.svg";
-const imgIconRefresh = "/images/icon-refresh.svg";
-const imgIconPlay = "/images/icon-play.svg";
-const imgIconArrowLeft = "/images/icon-arrow-left.svg";
-const imgIconHome = "/images/icon-home.svg";
+import imgMicIcon from '@/assets/icon-mic-large.png';
+import imgIconMic from '@/assets/icon-mic.svg';
+import imgIconRefresh from '@/assets/icon-refresh.svg';
+import imgIconPlay from '@/assets/icon-play.svg';
+import imgIconArrowLeft from '@/assets/icon-arrow-left.svg';
+import imgIconHome from '@/assets/icon-home.svg';
 
 type RecordingState = 'idle' | 'recording' | 'completed';
 

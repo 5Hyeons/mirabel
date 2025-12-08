@@ -3,11 +3,10 @@
  */
 
 import { useNavigate } from 'react-router-dom';
-
-const imgCheckIcon = "/images/icon-check-circle.svg";
-const imgDoctorAvatar = "/images/doctor-avatar-complete.png";
-const imgIconArrowLeft = "/images/icon-arrow-left.svg";
-const imgIconHome = "/images/icon-home.svg";
+import imgCheckIcon from '@/assets/icon-check-circle.svg';
+import imgDoctorAvatar from '@/assets/doctor-avatar-complete.png';
+import imgIconArrowLeft from '@/assets/icon-arrow-left.svg';
+import imgIconHome from '@/assets/icon-home.svg';
 
 function IconCheckCircleMono({ className }: { className?: string }) {
   return (

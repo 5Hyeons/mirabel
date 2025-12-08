@@ -6,16 +6,20 @@ interface PatientStore {
   loading: boolean;
   error: string | null;
   patientData: PatientData | null;
+  healthCheckState: string[] | null;
 
   loadPatientData: (token: string) => Promise<void>;
   setError: (error: string) => void;
   clearError: () => void;
+  setHealthCheckState: (ids: string[]) => void;
+  clearHealthCheckState: () => void;
 }
 
 export const usePatientStore = create<PatientStore>((set) => ({
   loading: false,
   error: null,
   patientData: null,
+  healthCheckState: null,
 
   loadPatientData: async (token: string) => {
     set({ loading: true, error: null });
@@ -29,5 +33,7 @@ export const usePatientStore = create<PatientStore>((set) => ({
   },
 
   setError: (error: string) => set({ error }),
-  clearError: () => set({ error: null })
+  clearError: () => set({ error: null }),
+  setHealthCheckState: (ids: string[]) => set({ healthCheckState: ids }),
+  clearHealthCheckState: () => set({ healthCheckState: null })
 }));

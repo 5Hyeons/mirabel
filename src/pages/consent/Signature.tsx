@@ -7,11 +7,10 @@ import { useNavigate } from 'react-router-dom';
 import SignatureCanvas from 'react-signature-canvas';
 import { usePatientStore } from '@/lib/store/patient-store';
 import { apiClient } from '@/lib/api/mock-api';
-
-const imgPenIcon = "/images/icon-pen.png";
-const imgIconBin = "/images/icon-bin.svg";
-const imgIconArrowLeft = "/images/icon-arrow-left.svg";
-const imgIconHome = "/images/icon-home.svg";
+import imgPenIcon from '@/assets/icon-pen.png';
+import imgIconBin from '@/assets/icon-bin.svg';
+import imgIconArrowLeft from '@/assets/icon-arrow-left.svg';
+import imgIconHome from '@/assets/icon-home.svg';
 
 function IconBinMono({ className }: { className?: string }) {
   return (

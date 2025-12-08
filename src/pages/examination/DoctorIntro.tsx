@@ -5,10 +5,9 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePatientStore } from '@/lib/store/patient-store';
-
-const imgDoctorPhoto = "/images/doctor-photo.png";
-const imgIconArrowLeft = "/images/icon-arrow-left.svg";
-const imgIconHome = "/images/icon-home.svg";
+import imgDoctorPhoto from '@/assets/doctor-photo.png';
+import imgIconArrowLeft from '@/assets/icon-arrow-left.svg';
+import imgIconHome from '@/assets/icon-home.svg';
 
 export function DoctorIntro() {
   const navigate = useNavigate();

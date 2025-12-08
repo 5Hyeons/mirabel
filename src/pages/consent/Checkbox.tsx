@@ -6,11 +6,10 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePatientStore } from '@/lib/store/patient-store';
 import { apiClient } from '@/lib/api/mock-api';
-
-const imgDocumentIcon = "/images/icon-document.png";
-const imgCheckIcon = "/images/icon-check.svg";
-const imgIconArrowLeft = "/images/icon-arrow-left.svg";
-const imgIconHome = "/images/icon-home.svg";
+import imgDocumentIcon from '@/assets/icon-document.png';
+import imgCheckIcon from '@/assets/icon-check.svg';
+import imgIconArrowLeft from '@/assets/icon-arrow-left.svg';
+import imgIconHome from '@/assets/icon-home.svg';
 
 export function ConsentCheckbox() {
   const navigate = useNavigate();

@@ -1,33 +1,29 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Unity, useUnityContext } from 'react-unity-webgl';
+import { Unity } from 'react-unity-webgl';
 import { useLocalParticipant, useConnectionState, useRoomContext } from '@livekit/components-react';
 import { ConnectionState, Track } from 'livekit-client';
 import { ChatMessage, AgentState } from '@/lib/types/consultation';
 import { useAnimationData } from '@/lib/hooks';
+import imgIconArrowLeft from '@/assets/icon-arrow-left.svg';
+import imgIconHome from '@/assets/icon-home.svg';
+import type { UnityContextHook } from 'react-unity-webgl/distribution/types/unity-context-hook';
 
 let firstUnityFrameTime: number | null = null;
 let unitySentCount = 0;
-
-const imgIconArrowLeft = "/images/icon-arrow-left.svg";
-const imgIconHome = "/images/icon-home.svg";
 
 interface AvatarViewProps {
   lastMessage?: ChatMessage;
   agentState: AgentState | null;
   userVolume: number;
   onBack: () => void;
+  unityContext: UnityContextHook;
 }
 
-export function AvatarView({ lastMessage, agentState, userVolume, onBack }: AvatarViewProps) {
+export function AvatarView({ lastMessage, agentState, userVolume, onBack, unityContext }: AvatarViewProps) {
   const navigate = useNavigate();
 
-  const { unityProvider, isLoaded, sendMessage } = useUnityContext({
-    loaderUrl: '/unity/doctor/Build/doctor.loader.js',
-    dataUrl: '/unity/doctor/Build/doctor.data',
-    frameworkUrl: '/unity/doctor/Build/doctor.framework.js',
-    codeUrl: '/unity/doctor/Build/doctor.wasm',
-  });
+  const { unityProvider, isLoaded, sendMessage } = unityContext;
 
   const { latestFrame, interruptSignal } = useAnimationData();
   const { localParticipant } = useLocalParticipant();
@@ -265,18 +261,7 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack }: Avat
         </div>
       </div>
 
-      {/* 로딩 오버레이 */}
-      {!isLoaded && (
-        <div className="absolute inset-0 flex items-center justify-center bg-[#f0f3ff] z-40">
-          <div className="flex flex-col items-center">
-            <div className="w-[120px] h-[120px] rounded-full bg-[#e1e9ff] flex items-center justify-center mb-6 animate-pulse">
-              <span className="text-[40px]">&#129658;</span>
-            </div>
-            <p className="text-[20px] font-medium text-[#111111] mb-2">AI 의사를 불러오고 있어요</p>
-            <p className="text-[14px] text-[#666666]">잠시만 기다려주세요</p>
-          </div>
-        </div>
-      )}
+      {/* 로딩은 AIConsultation에서 처리됨 - Unity + LiveKit 모두 완료 후 이 컴포넌트 렌더링 */}
 
       {/* Volume-reactive gradient */}
       {isLoaded && isMicEnabled && (
