@@ -15,6 +15,7 @@ export function SessionManager({ onBack, unityContext }: SessionManagerProps) {
   const [, setMessages] = useState<ChatMessage[]>([]);
   const [avatarMessage, setAvatarMessage] = useState<ChatMessage | undefined>(undefined);
   const [agentState, setAgentState] = useState<AgentState | null>(null);
+  const [conversationStarted, setConversationStarted] = useState(false);
 
   const rpcHandlerRegistered = useRef(false);
   const transcriptionHandlerRegistered = useRef(false);
@@ -150,6 +151,32 @@ export function SessionManager({ onBack, unityContext }: SessionManagerProps) {
     onBack();
   }, [localParticipant, onBack]);
 
+  const handleStartConversation = useCallback(async () => {
+    if (!localParticipant || !room) return;
+
+    // Set immediately to transition UI without waiting for RPC
+    setConversationStarted(true);
+
+    try {
+      const remoteParticipants = Array.from(room.remoteParticipants.values());
+      const agentParticipant = remoteParticipants.find(p => p.identity.startsWith('agent'));
+
+      if (agentParticipant) {
+        console.log('[SessionManager] Sending start_conversation RPC...');
+        await localParticipant.performRpc({
+          destinationIdentity: agentParticipant.identity,
+          method: 'start_conversation',
+          payload: '',
+        });
+        console.log('[SessionManager] start_conversation RPC sent');
+      } else {
+        console.warn('[SessionManager] No agent participant found for RPC');
+      }
+    } catch (error) {
+      console.error('[SessionManager] Failed to start conversation:', error);
+    }
+  }, [localParticipant, room]);
+
   return (
     <>
       {audioTracks
@@ -164,6 +191,8 @@ export function SessionManager({ onBack, unityContext }: SessionManagerProps) {
         userVolume={userVolume}
         onBack={handleBack}
         unityContext={unityContext}
+        conversationStarted={conversationStarted}
+        onStartConversation={handleStartConversation}
       />
     </>
   );
