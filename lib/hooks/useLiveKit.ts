@@ -1,0 +1,67 @@
+'use client';
+
+import { useState, useCallback } from 'react';
+import { generateToken, generateRoomId, getOrCreateParticipantIdentity } from '../livekit';
+import { ClientMetadata } from '../types/consultation';
+
+export function useLiveKit() {
+  const [token, setToken] = useState<string>('');
+  const [serverUrl, setServerUrl] = useState<string>('');
+  const [roomName, setRoomName] = useState<string>('');
+  const [identity, setIdentity] = useState<string>('');
+  const [isConnecting, setIsConnecting] = useState(false);
+  const [error, setError] = useState<string>('');
+
+  const connect = useCallback(async (customMetadata?: Partial<ClientMetadata>) => {
+    setIsConnecting(true);
+    setError('');
+
+    try {
+      const roomPrefix = process.env.NEXT_PUBLIC_ROOM_PREFIX || 'mirabel';
+      const room = `${roomPrefix}-${generateRoomId()}`;
+      const userId = getOrCreateParticipantIdentity();
+      const livekitUrl = process.env.NEXT_PUBLIC_LIVEKIT_URL || '';
+
+      // 기본 메타데이터와 커스텀 메타데이터 병합
+      const metadata: ClientMetadata = {
+        language: 'ko',
+        ...customMetadata
+      };
+
+      const generatedToken = await generateToken(room, userId, metadata);
+
+      setToken(generatedToken);
+      setServerUrl(livekitUrl);
+      setRoomName(room);
+      setIdentity(userId);
+
+      console.log('[Mirabel LiveKit] Connected to room:', room);
+      console.log('[Mirabel LiveKit] Language:', metadata.language);
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : 'Failed to connect';
+      setError(errorMsg);
+      console.error('[LiveKit] Connection error:', err);
+    } finally {
+      setIsConnecting(false);
+    }
+  }, []);
+
+  const reset = useCallback(() => {
+    setToken('');
+    setServerUrl('');
+    setRoomName('');
+    setIdentity('');
+    setError('');
+  }, []);
+
+  return {
+    token,
+    serverUrl,
+    roomName,
+    identity,
+    isConnecting,
+    error,
+    connect,
+    reset,
+  };
+}
