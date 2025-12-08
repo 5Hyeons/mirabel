@@ -26,12 +26,13 @@ interface AvatarViewProps {
   agentState: AgentState | null;
   userVolume: number;
   onBack: () => void;
+  onShowSummary: () => void;
   unityContext: UnityContextHook;
   conversationStarted: boolean;
   onStartConversation: () => void;
 }
 
-export function AvatarView({ lastMessage, agentState, userVolume, onBack, unityContext, conversationStarted, onStartConversation }: AvatarViewProps) {
+export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShowSummary, unityContext, conversationStarted, onStartConversation }: AvatarViewProps) {
   // Agent is ready when state is 'listening' (uses existing agent_state_changed RPC)
   const isAgentReady = agentState === 'listening';
 
@@ -449,7 +450,7 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack, unityC
 
           {/* 종료 버튼 */}
           <button
-            onClick={onBack}
+            onClick={onShowSummary}
             disabled={!isLoaded}
             className="w-[86px] h-[56px] bg-[#fd4848] rounded-[8px] shadow-[0px_2.59px_12.952px_0px_rgba(0,0,0,0.12)] flex items-center justify-center gap-[4px] active:scale-95 transition-transform disabled:opacity-50"
           >

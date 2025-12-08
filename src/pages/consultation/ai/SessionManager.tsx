@@ -3,19 +3,23 @@ import { Track } from 'livekit-client';
 import { useCallback, useEffect, useState, useRef } from 'react';
 import { useAudioContext, useTrackVolume } from '@/lib/hooks';
 import { ChatMessage, AgentState } from '@/lib/types/consultation';
+import { useConsultationStore } from '@/lib/store/consultation-store';
 import { AvatarView } from './AvatarView';
 import type { UnityContextHook } from 'react-unity-webgl/distribution/types/unity-context-hook';
 
 interface SessionManagerProps {
   onBack: () => void;
+  onShowSummary: () => void;
   unityContext: UnityContextHook;
+  conversationStarted: boolean;
+  onConversationStart: () => void;
 }
 
-export function SessionManager({ onBack, unityContext }: SessionManagerProps) {
-  const [, setMessages] = useState<ChatMessage[]>([]);
+export function SessionManager({ onBack, onShowSummary, unityContext, conversationStarted, onConversationStart }: SessionManagerProps) {
   const [avatarMessage, setAvatarMessage] = useState<ChatMessage | undefined>(undefined);
   const [agentState, setAgentState] = useState<AgentState | null>(null);
-  const [conversationStarted, setConversationStarted] = useState(false);
+
+  const { addMessage, updateMessage } = useConsultationStore();
 
   const rpcHandlerRegistered = useRef(false);
   const transcriptionHandlerRegistered = useRef(false);
@@ -81,6 +85,8 @@ export function SessionManager({ onBack, unityContext }: SessionManagerProps) {
         const messageId = segmentId || streamId || `msg_${Date.now()}`;
 
         let fullText = '';
+        let messageAdded = false;
+
         for await (const chunk of reader) {
           fullText += chunk;
 
@@ -97,15 +103,18 @@ export function SessionManager({ onBack, unityContext }: SessionManagerProps) {
             setAvatarMessage(updatedMessage);
           }
 
-          setMessages((prev) => {
-            const existingIndex = prev.findIndex(m => m.id === messageId);
-            if (existingIndex >= 0) {
-              const newMessages = [...prev];
-              newMessages[existingIndex] = updatedMessage;
-              return newMessages;
-            }
-            return [...prev, updatedMessage];
-          });
+          // Use store to manage messages
+          const currentMessages = useConsultationStore.getState().messages;
+          const existingMessage = currentMessages.find(m => m.id === messageId);
+
+          if (existingMessage) {
+            updateMessage(messageId, updatedMessage);
+          } else if (!messageAdded) {
+            addMessage(updatedMessage);
+            messageAdded = true;
+          } else {
+            updateMessage(messageId, updatedMessage);
+          }
         }
 
         const finalMessage: ChatMessage = {
@@ -121,15 +130,8 @@ export function SessionManager({ onBack, unityContext }: SessionManagerProps) {
           setAvatarMessage(finalMessage);
         }
 
-        setMessages((prev) => {
-          const existingIndex = prev.findIndex(m => m.id === messageId);
-          if (existingIndex >= 0) {
-            const newMessages = [...prev];
-            newMessages[existingIndex] = finalMessage;
-            return newMessages;
-          }
-          return prev;
-        });
+        // Update to final message
+        updateMessage(messageId, finalMessage);
       } catch (error) {
         console.error('[SessionManager] Transcription error:', error);
       }
@@ -151,11 +153,18 @@ export function SessionManager({ onBack, unityContext }: SessionManagerProps) {
     onBack();
   }, [localParticipant, onBack]);
 
+  const handleShowSummary = useCallback(() => {
+    if (localParticipant) {
+      localParticipant.setMicrophoneEnabled(false);
+    }
+    onShowSummary();
+  }, [localParticipant, onShowSummary]);
+
   const handleStartConversation = useCallback(async () => {
     if (!localParticipant || !room) return;
 
     // Set immediately to transition UI without waiting for RPC
-    setConversationStarted(true);
+    onConversationStart();
 
     try {
       const remoteParticipants = Array.from(room.remoteParticipants.values());
@@ -175,7 +184,7 @@ export function SessionManager({ onBack, unityContext }: SessionManagerProps) {
     } catch (error) {
       console.error('[SessionManager] Failed to start conversation:', error);
     }
-  }, [localParticipant, room]);
+  }, [localParticipant, room, onConversationStart]);
 
   return (
     <>
@@ -190,6 +199,7 @@ export function SessionManager({ onBack, unityContext }: SessionManagerProps) {
         agentState={agentState}
         userVolume={userVolume}
         onBack={handleBack}
+        onShowSummary={handleShowSummary}
         unityContext={unityContext}
         conversationStarted={conversationStarted}
         onStartConversation={handleStartConversation}

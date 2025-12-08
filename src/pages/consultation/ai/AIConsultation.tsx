@@ -3,13 +3,15 @@
  * Unity WebGL + LiveKit 통합
  */
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LiveKitRoom } from '@livekit/components-react';
 import { Unity, useUnityContext } from 'react-unity-webgl';
 import '@livekit/components-styles';
 import { useLiveKit } from '@/lib/hooks';
+import { useConsultationStore } from '@/lib/store/consultation-store';
 import { SessionManager } from './SessionManager';
+import { ConsultationSummary } from './ConsultationSummary';
 import imgDoctorAvatar from '@/assets/doctor-avatar-complete.png';
 import imgIconSize from '@/assets/icon-size.png';
 import imgIconArrowLeft from '@/assets/icon-arrow-left.svg';
@@ -18,6 +20,9 @@ import imgIconCallSlash from '@/assets/icon-call-slash-mono.png';
 export function AIConsultation() {
   const navigate = useNavigate();
   const { token, serverUrl, isConnecting, error, connect, reset } = useLiveKit();
+  const { clearMessages } = useConsultationStore();
+  const [showSummary, setShowSummary] = useState(false);
+  const [conversationStarted, setConversationStarted] = useState(false);
 
   // Unity WebGL을 먼저 로드 시작
   const unityContext = useUnityContext({
@@ -33,9 +38,28 @@ export function AIConsultation() {
     connect();
   }, [connect]);
 
+  // 로딩 화면에서 뒤로가기
   const handleBack = () => {
+    clearMessages();
     reset();
     navigate(-1);
+  };
+
+  // 상담 중 종료 버튼 → 요약 화면 표시
+  const handleShowSummary = () => {
+    setShowSummary(true);
+  };
+
+  // 요약 화면에서 돌아가기 → 상담 화면으로 복귀
+  const handleBackToConsultation = () => {
+    setShowSummary(false);
+  };
+
+  // 요약 화면에서 상담 종료 → 홈으로 이동
+  const handleEndConsultation = () => {
+    clearMessages();
+    reset();
+    navigate('/');
   };
 
   if (error) {
@@ -68,8 +92,8 @@ export function AIConsultation() {
 
   return (
     <div className="h-full relative">
-      {/* Unity 백그라운드 로드를 위해 항상 렌더링 (숨김 처리) */}
-      <div style={{ visibility: isLoading ? 'hidden' : 'visible', height: '100%' }}>
+      {/* Unity + LiveKit 항상 렌더링 (요약 페이지에서는 숨김 처리) */}
+      <div style={{ visibility: isLoading || showSummary ? 'hidden' : 'visible', height: '100%' }}>
         {isLiveKitReady ? (
           <LiveKitRoom
             token={token}
@@ -78,7 +102,13 @@ export function AIConsultation() {
             audio={true}
             video={false}
           >
-            <SessionManager onBack={handleBack} unityContext={unityContext} />
+            <SessionManager
+              onBack={handleBack}
+              onShowSummary={handleShowSummary}
+              unityContext={unityContext}
+              conversationStarted={conversationStarted}
+              onConversationStart={() => setConversationStarted(true)}
+            />
           </LiveKitRoom>
         ) : (
           // LiveKit 연결 전 Unity만 미리 로드
@@ -91,8 +121,18 @@ export function AIConsultation() {
         )}
       </div>
 
+      {/* 요약 페이지 오버레이 */}
+      {showSummary && (
+        <div className="absolute inset-0 z-50">
+          <ConsultationSummary
+            onBack={handleBackToConsultation}
+            onEndConsultation={handleEndConsultation}
+          />
+        </div>
+      )}
+
       {/* 로딩 오버레이 */}
-      {isLoading && (
+      {isLoading && !showSummary && (
         <div className="absolute inset-0 bg-white flex flex-col z-50">
           {/* 헤더 */}
           <div className="flex items-center pb-[12px] pt-[32px] px-[16px]">
