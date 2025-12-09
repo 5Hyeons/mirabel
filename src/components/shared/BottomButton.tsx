@@ -10,7 +10,7 @@ export function BottomButton({ text, onClick, disabled = false, active = false }
 
   return (
     <div className="bg-gradient-to-b from-[rgba(240,243,255,0)] to-[#f0f3ff] w-full">
-      <div className="bg-[#f0f3ff] flex h-[100px] items-start justify-center pb-[24px] px-[16px]">
+      <div className="bg-[#f0f3ff] flex h-[100px] items-start justify-center pb-[24px]">
         <button
           onClick={onClick}
           disabled={disabled}

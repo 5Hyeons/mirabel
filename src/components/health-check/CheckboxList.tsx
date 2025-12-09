@@ -9,9 +9,13 @@ interface CheckboxListProps {
 
 export function CheckboxList({ items, selected, onChange }: CheckboxListProps) {
   const handleToggle = (itemId: string) => {
-    // "없음" 선택 시 다른 항목 모두 해제
+    // "없음" 선택 시 다른 항목 모두 해제, 이미 선택된 경우 해제
     if (itemId === 'hc-1') {
-      onChange(['hc-1']);
+      if (selected.includes('hc-1')) {
+        onChange([]);
+      } else {
+        onChange(['hc-1']);
+      }
       return;
     }
 

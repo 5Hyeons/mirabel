@@ -40,6 +40,11 @@ body {
   .animate-wave {
     animation: wave 1s ease-in-out infinite;
   }
+
+  /* 스크롤바 숨기기 */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @keyframes wave {

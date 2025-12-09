@@ -82,10 +82,9 @@ export function HealthCheck() {
         <ProgressIndicator current={1} total={3} />
       </div>
 
-      <DoctorGreeting />
-
       <ScrollableContainer>
-        <div className="px-[24px] py-[32px] flex flex-col gap-[16px]">
+        <DoctorGreeting />
+        <div className="px-[24px] pb-[16px] flex flex-col gap-[16px]">
           <CheckboxList
             items={healthCheckData.items}
             selected={selected}
@@ -95,6 +94,8 @@ export function HealthCheck() {
           <BottomButton
             text="확인"
             onClick={handleSubmit}
+            active={selected.length > 0}
+            disabled={selected.length === 0}
           />
         </div>
       </ScrollableContainer>
