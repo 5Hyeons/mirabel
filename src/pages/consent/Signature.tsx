@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import SignatureCanvas from 'react-signature-canvas';
 import { usePatientStore } from '@/lib/store/patient-store';
 import { apiClient } from '@/lib/api/mock-api';
-import imgPenIcon from '@/assets/icon-pen.png';
+import imgPenIcon from '@/assets/icon-pen.webp';
 import imgIconBin from '@/assets/icon-bin.svg';
 import imgIconArrowLeft from '@/assets/icon-arrow-left.svg';
 import imgIconHome from '@/assets/icon-home.svg';

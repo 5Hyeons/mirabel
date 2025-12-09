@@ -5,7 +5,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePatientStore } from '@/lib/store/patient-store';
-import imgDoctorPhoto from '@/assets/doctor-photo.png';
+import imgDoctorPhoto from '@/assets/doctor-photo.webp';
 import imgIconArrowLeft from '@/assets/icon-arrow-left.svg';
 import imgIconHome from '@/assets/icon-home.svg';
 

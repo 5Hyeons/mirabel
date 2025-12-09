@@ -2,8 +2,8 @@ import { useMemo } from 'react';
 import { useConsultationStore } from '@/lib/store/consultation-store';
 import { ChatMessage } from '@/lib/types/consultation';
 import imgIconArrowLeft from '@/assets/icon-arrow-left.svg';
-import imgIconGlobe from '@/assets/icon-globe.png';
-import imgIconSize from '@/assets/icon-size.png';
+import imgIconGlobe from '@/assets/icon-globe.webp';
+import imgIconSize from '@/assets/icon-size.webp';
 
 interface ConsultationSummaryProps {
   onBack: () => void;

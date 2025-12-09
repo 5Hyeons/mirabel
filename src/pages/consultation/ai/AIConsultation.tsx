@@ -12,10 +12,10 @@ import { useLiveKit } from '@/lib/hooks';
 import { useConsultationStore } from '@/lib/store/consultation-store';
 import { SessionManager } from './SessionManager';
 import { ConsultationSummary } from './ConsultationSummary';
-import imgDoctorAvatar from '@/assets/doctor-avatar-complete.png';
-import imgIconSize from '@/assets/icon-size.png';
+import imgDoctorAvatar from '@/assets/doctor-avatar-complete.webp';
+import imgIconSize from '@/assets/icon-size.webp';
 import imgIconArrowLeft from '@/assets/icon-arrow-left.svg';
-import imgIconCallSlash from '@/assets/icon-call-slash-mono.png';
+import imgIconCallSlash from '@/assets/icon-call-slash-mono.webp';
 
 export function AIConsultation() {
   const navigate = useNavigate();

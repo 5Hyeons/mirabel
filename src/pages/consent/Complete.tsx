@@ -4,7 +4,7 @@
 
 import { useNavigate } from 'react-router-dom';
 import imgCheckIcon from '@/assets/icon-check-circle.svg';
-import imgDoctorAvatar from '@/assets/doctor-avatar-complete.png';
+import imgDoctorAvatar from '@/assets/doctor-avatar-complete.webp';
 import imgIconArrowLeft from '@/assets/icon-arrow-left.svg';
 import imgIconHome from '@/assets/icon-home.svg';
 

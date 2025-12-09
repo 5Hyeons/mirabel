@@ -10,7 +10,7 @@ import { HealthCheckHeader } from '@/components/health-check/HealthCheckHeader';
 import { ProgressIndicator } from '@/components/health-check/ProgressIndicator';
 import { ScrollableContainer } from '@/components/shared/ScrollableContainer';
 import { BottomButton } from '@/components/shared/BottomButton';
-import imgDoctorAvatar from '@/assets/doctor-avatar.png';
+import imgDoctorAvatar from '@/assets/doctor-avatar.webp';
 
 export function HealthWarning() {
   const navigate = useNavigate();

@@ -1,5 +1,5 @@
 import { PatientData } from '@/lib/api/types';
-import imgDoctorPhoto from '@/assets/doctor-photo.png';
+import imgDoctorPhoto from '@/assets/doctor-photo.webp';
 
 interface DoctorInfoSectionProps {
   patientData: PatientData;

@@ -1,4 +1,4 @@
-import imgDoctorAvatar from '@/assets/doctor-avatar.png';
+import imgDoctorAvatar from '@/assets/doctor-avatar.webp';
 
 export function DoctorGreeting() {
   return (

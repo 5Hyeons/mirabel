@@ -4,9 +4,9 @@
 
 import { useNavigate } from 'react-router-dom';
 import imgCheckCircle from '@/assets/icon-check-circle.svg';
-import imgDoctorTooltip from '@/assets/doctor-tooltip.png';
+import imgDoctorTooltip from '@/assets/doctor-tooltip.webp';
 import imgTooltipPointer from '@/assets/tooltip-pointer.svg';
-import imgIconSize from '@/assets/icon-size.png';
+import imgIconSize from '@/assets/icon-size.webp';
 
 export function HealthComplete() {
   const navigate = useNavigate();

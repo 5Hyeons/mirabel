@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePatientStore } from '@/lib/store/patient-store';
 import { apiClient } from '@/lib/api/mock-api';
-import imgDocumentIcon from '@/assets/icon-document.png';
+import imgDocumentIcon from '@/assets/icon-document.webp';
 import imgCheckIcon from '@/assets/icon-check.svg';
 import imgIconArrowLeft from '@/assets/icon-arrow-left.svg';
 import imgIconHome from '@/assets/icon-home.svg';

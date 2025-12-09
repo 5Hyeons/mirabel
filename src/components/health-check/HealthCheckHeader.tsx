@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import imgIconArrowLeft from '@/assets/icon-arrow-left.svg';
-import imgIconSize from '@/assets/icon-size.png';
+import imgIconSize from '@/assets/icon-size.webp';
 
 export function HealthCheckHeader() {
   const navigate = useNavigate();

@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { HealthCheckHeader } from '@/components/health-check/HealthCheckHeader';
 import { ProgressIndicator } from '@/components/health-check/ProgressIndicator';
 import { ScrollableContainer } from '@/components/shared/ScrollableContainer';
-import imgDoctorAvatar from '@/assets/doctor-avatar.png';
+import imgDoctorAvatar from '@/assets/doctor-avatar.webp';
 import imgIconPlay from '@/assets/icon-play.svg';
 import imgIconRefresh from '@/assets/icon-refresh.svg';
 import imgTooltipPointer from '@/assets/tooltip-pointer.svg';

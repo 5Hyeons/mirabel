@@ -5,9 +5,9 @@ import { ConnectionState, Track } from 'livekit-client';
 import { ChatMessage, AgentState } from '@/lib/types/consultation';
 import { useAnimationData } from '@/lib/hooks';
 import imgIconArrowLeft from '@/assets/icon-arrow-left.svg';
-import imgIconGlobe from '@/assets/icon-globe.png';
-import imgIconSize from '@/assets/icon-size.png';
-import type { UnityContextHook } from 'react-unity-webgl/distribution/types/unity-context-hook';
+import imgIconGlobe from '@/assets/icon-globe.webp';
+import imgIconSize from '@/assets/icon-size.webp';
+import type { useUnityContext } from 'react-unity-webgl';
 
 // Phone icon component for "대화 시작" button
 function IconCall({ className }: { className?: string }) {
@@ -27,7 +27,7 @@ interface AvatarViewProps {
   userVolume: number;
   onBack: () => void;
   onShowSummary: () => void;
-  unityContext: UnityContextHook;
+  unityContext: ReturnType<typeof useUnityContext>;
   conversationStarted: boolean;
   onStartConversation: () => void;
 }
@@ -170,6 +170,12 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShow
     } catch (error) {
       console.error('[AvatarView] Failed to interrupt agent:', error);
     }
+  };
+
+  // 종료 버튼 클릭 핸들러 - Agent 말 끊고 요약 페이지로 이동
+  const handleEndClick = async () => {
+    await handleInterruptAgent();
+    onShowSummary();
   };
 
   useEffect(() => {
@@ -430,7 +436,7 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShow
               isMicEnabled ? 'bg-[#666666]' : 'bg-[#ff6464]'
             }`}
           >
-            <img src="/images/icon-mic-mono.png" alt="" width={20} height={20} />
+            <img src="/images/icon-mic-mono.webp" alt="" width={20} height={20} />
             <p className="font-bold text-[16px] text-white tracking-[-0.32px]">
               {isMicEnabled ? '음소거' : '해제'}
             </p>
@@ -442,7 +448,7 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShow
             disabled={!isLoaded}
             className="flex-1 h-[56px] bg-[#6490ff] rounded-[8px] shadow-[0px_2.59px_12.952px_0px_rgba(0,0,0,0.12)] flex items-center justify-center gap-[4px] active:scale-95 transition-transform disabled:opacity-50"
           >
-            <img src="/images/icon-stop.png" alt="" width={20} height={20} />
+            <img src="/images/icon-stop.webp" alt="" width={20} height={20} />
             <p className="font-bold text-[16px] text-white tracking-[-0.32px]">
               일시중지
             </p>
@@ -450,11 +456,11 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShow
 
           {/* 종료 버튼 */}
           <button
-            onClick={onShowSummary}
+            onClick={handleEndClick}
             disabled={!isLoaded}
             className="w-[86px] h-[56px] bg-[#fd4848] rounded-[8px] shadow-[0px_2.59px_12.952px_0px_rgba(0,0,0,0.12)] flex items-center justify-center gap-[4px] active:scale-95 transition-transform disabled:opacity-50"
           >
-            <img src="/images/icon-call-slash-mono.png" alt="" width={20} height={20} />
+            <img src="/images/icon-call-slash-mono.webp" alt="" width={20} height={20} />
             <p className="font-bold text-[16px] text-white tracking-[-0.32px]">
               종료
             </p>

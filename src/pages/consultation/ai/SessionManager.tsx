@@ -5,12 +5,12 @@ import { useAudioContext, useTrackVolume } from '@/lib/hooks';
 import { ChatMessage, AgentState } from '@/lib/types/consultation';
 import { useConsultationStore } from '@/lib/store/consultation-store';
 import { AvatarView } from './AvatarView';
-import type { UnityContextHook } from 'react-unity-webgl/distribution/types/unity-context-hook';
+import type { useUnityContext } from 'react-unity-webgl';
 
 interface SessionManagerProps {
   onBack: () => void;
   onShowSummary: () => void;
-  unityContext: UnityContextHook;
+  unityContext: ReturnType<typeof useUnityContext>;
   conversationStarted: boolean;
   onConversationStart: () => void;
 }

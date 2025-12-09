@@ -1,5 +1,5 @@
-import imgIconGlobe from '@/assets/icon-globe.png';
-import imgIconSize from '@/assets/icon-size.png';
+import imgIconGlobe from '@/assets/icon-globe.webp';
+import imgIconSize from '@/assets/icon-size.webp';
 
 export function HomeHeader() {
   return (
