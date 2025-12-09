@@ -10,7 +10,7 @@ export function useLiveKit() {
   const [isConnecting, setIsConnecting] = useState(false);
   const [error, setError] = useState<string>('');
 
-  const connect = useCallback(async (customMetadata?: Partial<ClientMetadata>) => {
+  const connect = useCallback(async (language: string = 'ko', customMetadata?: Partial<ClientMetadata>) => {
     setIsConnecting(true);
     setError('');
 
@@ -21,7 +21,7 @@ export function useLiveKit() {
       const livekitUrl = import.meta.env.VITE_LIVEKIT_URL || '';
 
       const metadata: ClientMetadata = {
-        language: 'ko',
+        language,
         ...customMetadata
       };
 

@@ -20,7 +20,7 @@ import imgIconCallSlash from '@/assets/icon-call-slash-mono.webp';
 
 export function AIConsultation() {
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   const { token, serverUrl, isConnecting, error, connect, reset } = useLiveKit();
   const { clearMessages } = useConsultationStore();
   const [showSummary, setShowSummary] = useState(false);
@@ -37,8 +37,8 @@ export function AIConsultation() {
   const { isLoaded: isUnityLoaded } = unityContext;
 
   useEffect(() => {
-    connect();
-  }, [connect]);
+    connect(language);
+  }, [connect, language]);
 
   // 로딩 화면에서 뒤로가기
   const handleBack = () => {
@@ -74,7 +74,7 @@ export function AIConsultation() {
           <button
             onClick={() => {
               reset();
-              connect();
+              connect(language);
             }}
             className="bg-[#6490ff] text-white px-6 py-3 rounded-lg font-bold"
           >

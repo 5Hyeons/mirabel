@@ -76,7 +76,7 @@ export function ConsultationSummary({ onBack, onEndConsultation }: ConsultationS
   };
 
   return (
-    <div className="bg-[#f0f3ff] min-h-full flex flex-col">
+    <div className="bg-[#f0f3ff] h-full flex flex-col overflow-hidden">
       {/* Header */}
       <div className="content-stretch flex items-center pb-[12px] pt-[32px] px-[20px] shrink-0 w-full">
         <div className="basis-0 content-stretch flex gap-[4px] grow h-[36px] items-center min-h-px min-w-px shrink-0">
