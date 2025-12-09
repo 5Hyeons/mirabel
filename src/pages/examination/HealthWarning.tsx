@@ -5,6 +5,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePatientStore } from '@/lib/store/patient-store';
+import { useTranslation } from '@/lib/i18n';
 import { HealthCheckData } from '@/lib/api/types';
 import { HealthCheckHeader } from '@/components/health-check/HealthCheckHeader';
 import { ProgressIndicator } from '@/components/health-check/ProgressIndicator';
@@ -14,6 +15,7 @@ import imgDoctorAvatar from '@/assets/doctor-avatar.webp';
 
 export function HealthWarning() {
   const navigate = useNavigate();
+  const { t, language } = useTranslation();
   const { healthCheckState } = usePatientStore();
   const [healthCheckData, setHealthCheckData] = useState<HealthCheckData | null>(null);
   const [showDanger, setShowDanger] = useState(false);
@@ -22,7 +24,7 @@ export function HealthWarning() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const response = await fetch('/mock-data.json');
+        const response = await fetch(`/mock-data.${language}.json`);
         const data = await response.json();
         setHealthCheckData(data.healthCheck);
 
@@ -42,12 +44,12 @@ export function HealthWarning() {
     };
 
     loadData();
-  }, [healthCheckState]);
+  }, [healthCheckState, language]);
 
   if (!healthCheckData) {
     return (
       <div className="flex items-center justify-center h-full bg-[#f0f3ff]">
-        <div className="text-[#666666]">로딩 중...</div>
+        <div className="text-[#666666]">{t('common.loading')}</div>
       </div>
     );
   }
@@ -59,40 +61,31 @@ export function HealthWarning() {
         <ProgressIndicator current={1} total={3} />
       </div>
 
-      {/* 의사 인사 영역 */}
-      <div className="h-[240px] w-full relative">
-        <div className="absolute bottom-0 right-0 w-[280px] h-[240px] overflow-hidden">
-          <img
-            alt="Dr.Lee"
-            src={imgDoctorAvatar}
-            className="absolute object-contain"
-            style={{
-              width: '260px',
-              height: '260px',
-              right: '-10px',
-              bottom: '-10px'
-            }}
-          />
-        </div>
-
-        <div className="absolute left-0 top-0 w-[360px] p-[20px] flex flex-col gap-[10px]">
-          <div className="text-[23px] text-[#222222] tracking-[-0.46px] leading-[1.3]">
-            <p>선택하신 항목은</p>
-            <p>
-              <span className="font-['Noto_Sans_KR:Bold',sans-serif] font-bold">검사 전 의사 확인</span>이
-            </p>
-            <p>반드시 필요합니다</p>
+      <ScrollableContainer>
+        {/* 의사 인사 영역 - DoctorGreeting과 동일한 스타일 */}
+        <div className="h-[152px] w-full relative mb-[24px]">
+          <div className="absolute bottom-0 right-0 w-[180px] h-[160px]">
+            <img
+              alt="Dr.Lee"
+              src={imgDoctorAvatar}
+              className="w-full h-full object-contain object-bottom"
+            />
           </div>
 
-          <p className="text-[16px] text-[#666666] tracking-[-0.32px] leading-[1.3]">
-            검사 중 주의가 필요하여
-            <br />
-            의료진이 사전 확인을 진행합니다.
-          </p>
-        </div>
-      </div>
+          <div className="absolute left-0 top-0 w-[calc(100%-180px)] pl-[20px] pt-[10px] flex flex-col gap-[15px]">
+            <div className="text-[20px] text-[#222222] tracking-[-0.46px] leading-[1.3] font-['Noto_Sans_KR:Bold',sans-serif] font-bold">
+              <p>{t('healthWarning.title1')}</p>
+              <p>{t('healthWarning.title2')}</p>
+              <p>{t('healthWarning.title3')}</p>
+            </div>
 
-      <ScrollableContainer>
+            <p className="text-[16px] text-[#666666] tracking-[-0.32px] leading-[1.3]">
+              {t('healthWarning.desc1')}
+              <br />
+              {t('healthWarning.desc2')}
+            </p>
+          </div>
+        </div>
         <div className="flex flex-col items-center p-[16px] gap-[16px]">
           <div className="bg-white border border-[#dddddd] border-solid rounded-[8px] p-[16px] flex flex-col gap-[24px] w-full">
             {/* 위험 메시지 */}
@@ -100,18 +93,14 @@ export function HealthWarning() {
               <div className="flex flex-col gap-[8px]">
                 <div className="flex gap-[8px] items-start">
                   <p className="font-['Pretendard:Bold',sans-serif] text-[16px] text-[#fd4848] tracking-[-0.32px] leading-[1.5]">
-                    위험
+                    {t('healthWarning.danger')}
                   </p>
                   <p className="flex-1 font-['Noto_Sans_KR:Bold',sans-serif] font-bold text-[16px] text-black tracking-[-0.32px] leading-[1.4]">
-                    🫀 심장 질환
+                    🫀 {t('healthWarning.heartDisease')}
                   </p>
                 </div>
                 <p className="font-['Noto_Sans_KR:Regular',sans-serif] text-[16px] text-black tracking-[-0.32px] leading-[1.4]">
-                  수면내시경 중 사용하는 진정약이 혈압이나
-                  <br />
-                  맥박을 일시적으로 변화시킬 수 있습니다.
-                  <br />
-                  심장 질환이 있는 경우, 이런 변화에 민감하게 반응해 혈압이 떨어지거나 맥박이 불규칙해질 수 있어 주의가 필요합니다.
+                  {t('healthWarning.heartDesc')}
                 </p>
               </div>
             )}
@@ -121,25 +110,21 @@ export function HealthWarning() {
               <div className="flex flex-col gap-[8px]">
                 <div className="flex gap-[8px] items-start">
                   <p className="font-['Pretendard:Bold',sans-serif] text-[16px] text-[#fd4848] tracking-[-0.32px] leading-[1.5]">
-                    주의
+                    {t('healthWarning.caution')}
                   </p>
                   <p className="flex-1 font-['Noto_Sans_KR:Bold',sans-serif] font-bold text-[16px] text-black tracking-[-0.32px] leading-[1.4]">
-                    🫁 호흡기 질환
+                    🫁 {t('healthWarning.respiratoryDisease')}
                   </p>
                 </div>
                 <p className="font-['Noto_Sans_KR:Regular',sans-serif] text-[16px] text-black tracking-[-0.32px] leading-[1.4]">
-                  수면내시경 중 사용하는 진정약이 혈압이나
-                  <br />
-                  맥박을 일시적으로 변화시킬 수 있습니다.
-                  <br />
-                  심장 질환이 있는 경우, 이런 변화에 민감하게 반응해 혈압이 떨어지거나 맥박이 불규칙해질 수 있어 주의가 필요합니다.
+                  {t('healthWarning.respiratoryDesc')}
                 </p>
               </div>
             )}
           </div>
 
           <BottomButton
-            text="확인"
+            text={t('common.confirm')}
             onClick={() => navigate('/health-check/recording')}
             active={true}
           />

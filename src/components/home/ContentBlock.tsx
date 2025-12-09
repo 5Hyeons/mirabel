@@ -1,4 +1,5 @@
 import { ExaminationSection } from '@/lib/api/types';
+import { useTranslation } from '@/lib/i18n';
 import imgCheckIcon from '@/assets/icon-check.svg';
 
 interface ContentBlockProps {
@@ -8,6 +9,8 @@ interface ContentBlockProps {
 }
 
 export function ContentBlock({ section, selectedValue, onCheckboxChange }: ContentBlockProps) {
+  const { t } = useTranslation();
+
   if (section.type === 'section-header') {
     return (
       <div className="pt-[16px] border-t border-[#e9e9e9]">
@@ -65,7 +68,7 @@ export function ContentBlock({ section, selectedValue, onCheckboxChange }: Conte
   if (section.type === 'checkbox') {
     return (
       <div className="border-l-2 border-[#6490ff] pl-[20px] py-[8px]">
-        <div className="flex justify-between items-center w-[235px]">
+        <div className="flex flex-wrap gap-[16px] items-center">
           {section.checkboxOptions?.map((option) => (
             <button
               key={option.id}
@@ -96,7 +99,7 @@ export function ContentBlock({ section, selectedValue, onCheckboxChange }: Conte
         <div className="border-l-2 border-[#6490ff] pl-[20px] py-[8px] flex flex-col gap-[8px]">
           <div className="flex gap-[8px] items-start">
             <p className="font-['Pretendard:Bold',sans-serif] text-[16px] text-[#6490ff] tracking-[-0.32px] leading-[1.5]">
-              필수
+              {t('common.required')}
             </p>
             <p className="font-['Pretendard:Bold',sans-serif] flex-1 text-[16px] text-black tracking-[-0.32px] leading-[1.5]">
               {section.title}
@@ -107,12 +110,12 @@ export function ContentBlock({ section, selectedValue, onCheckboxChange }: Conte
           </p>
         </div>
 
-        <div className="flex justify-between items-center">
+        <div className="flex flex-wrap gap-[24px] items-center">
           {section.checkboxOptions?.map((option) => (
             <button
               key={option.id}
               onClick={() => onCheckboxChange?.(option.id)}
-              className="flex gap-[10px] items-center flex-1"
+              className="flex gap-[10px] items-center"
             >
               <div className={`size-[28px] rounded-[4px] flex items-center justify-center ${
                 selectedValue === option.id ? 'bg-[#6490ff]' : 'border-2 border-[#666666]'

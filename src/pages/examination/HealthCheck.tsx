@@ -5,6 +5,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePatientStore } from '@/lib/store/patient-store';
+import { useTranslation } from '@/lib/i18n';
 import { HealthCheckData } from '@/lib/api/types';
 import { ScrollableContainer } from '@/components/shared/ScrollableContainer';
 import { BottomButton } from '@/components/shared/BottomButton';
@@ -15,6 +16,7 @@ import { CheckboxList } from '@/components/health-check/CheckboxList';
 
 export function HealthCheck() {
   const navigate = useNavigate();
+  const { t, language } = useTranslation();
   const { setHealthCheckState } = usePatientStore();
   const [healthCheckData, setHealthCheckData] = useState<HealthCheckData | null>(null);
   const [selected, setSelected] = useState<string[]>([]);
@@ -23,7 +25,7 @@ export function HealthCheck() {
   useEffect(() => {
     const loadHealthCheckData = async () => {
       try {
-        const response = await fetch('/mock-data.json');
+        const response = await fetch(`/mock-data.${language}.json`);
         const data = await response.json();
         setHealthCheckData(data.healthCheck);
       } catch (error) {
@@ -34,7 +36,7 @@ export function HealthCheck() {
     };
 
     loadHealthCheckData();
-  }, []);
+  }, [language]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -62,7 +64,7 @@ export function HealthCheck() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-full bg-[#f0f3ff]">
-        <div className="text-[#666666]">로딩 중...</div>
+        <div className="text-[#666666]">{t('common.loading')}</div>
       </div>
     );
   }
@@ -70,7 +72,7 @@ export function HealthCheck() {
   if (!healthCheckData) {
     return (
       <div className="flex items-center justify-center h-full bg-[#f0f3ff]">
-        <div className="text-[#666666]">데이터를 불러올 수 없습니다</div>
+        <div className="text-[#666666]">{t('healthCheck.loadError')}</div>
       </div>
     );
   }
@@ -92,7 +94,7 @@ export function HealthCheck() {
           />
 
           <BottomButton
-            text="확인"
+            text={t('common.confirm')}
             onClick={handleSubmit}
             active={selected.length > 0}
             disabled={selected.length === 0}

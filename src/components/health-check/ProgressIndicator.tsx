@@ -1,9 +1,13 @@
+import { useTranslation } from '@/lib/i18n';
+
 interface ProgressIndicatorProps {
   current: number;
   total: number;
 }
 
 export function ProgressIndicator({ current, total }: ProgressIndicatorProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="flex flex-col gap-[8px] pb-[16px] px-[22px]">
       {/* 진행 바 */}
@@ -20,7 +24,7 @@ export function ProgressIndicator({ current, total }: ProgressIndicatorProps) {
 
       {/* 텍스트 */}
       <p className="font-['Noto_Sans_KR:Bold',sans-serif] font-bold text-[13px] text-[#6490ff] tracking-[-0.26px] leading-[1.4]">
-        {current} / {total} 단계
+        {current} / {total} {t('healthCheck.step')}
       </p>
     </div>
   );

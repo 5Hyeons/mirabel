@@ -10,6 +10,7 @@ import { Unity, useUnityContext } from 'react-unity-webgl';
 import '@livekit/components-styles';
 import { useLiveKit } from '@/lib/hooks';
 import { useConsultationStore } from '@/lib/store/consultation-store';
+import { useTranslation } from '@/lib/i18n';
 import { SessionManager } from './SessionManager';
 import { ConsultationSummary } from './ConsultationSummary';
 import imgDoctorAvatar from '@/assets/doctor-avatar-complete.webp';
@@ -19,6 +20,7 @@ import imgIconCallSlash from '@/assets/icon-call-slash-mono.webp';
 
 export function AIConsultation() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { token, serverUrl, isConnecting, error, connect, reset } = useLiveKit();
   const { clearMessages } = useConsultationStore();
   const [showSummary, setShowSummary] = useState(false);
@@ -67,7 +69,7 @@ export function AIConsultation() {
       <div className="bg-white h-full flex items-center justify-center">
         <div className="text-center px-6">
           <div className="text-[60px] mb-4">&#9888;&#65039;</div>
-          <h1 className="text-[20px] font-bold text-[#111111] mb-2">연결 오류</h1>
+          <h1 className="text-[20px] font-bold text-[#111111] mb-2">{t('consultation.connectionError')}</h1>
           <p className="text-[14px] text-[#666666] mb-6">{error}</p>
           <button
             onClick={() => {
@@ -76,7 +78,7 @@ export function AIConsultation() {
             }}
             className="bg-[#6490ff] text-white px-6 py-3 rounded-lg font-bold"
           >
-            다시 시도
+            {t('common.retry')}
           </button>
         </div>
       </div>
@@ -144,7 +146,7 @@ export function AIConsultation() {
             <div className="flex gap-[4px] items-center p-[8px]">
               <img src={imgIconSize} alt="" className="w-[20px] h-[20px]" />
               <p className="font-bold text-[14px] text-[rgba(17,17,17,0.5)] tracking-[-0.28px]">
-                크기 조절
+                {t('common.sizeAdjust')}
               </p>
             </div>
           </div>
@@ -168,10 +170,10 @@ export function AIConsultation() {
           {/* 텍스트 영역 */}
           <div className="flex flex-col gap-[10px] items-center justify-center pt-[20px] px-[20px]">
             <p className="text-[23px] text-[#222222] text-center tracking-[-0.46px] leading-[1.3]">
-              AI 의사에게 연결 중...
+              {t('consultation.connecting')}
             </p>
             <p className="text-[16px] text-[#666666] text-center tracking-[-0.32px]">
-              잠시만 기다려주세요
+              {t('consultation.pleaseWait')}
             </p>
           </div>
 
@@ -183,7 +185,7 @@ export function AIConsultation() {
             >
               <img src={imgIconCallSlash} alt="" className="w-[20px] h-[20px]" />
               <p className="font-bold text-[16px] text-white tracking-[-0.32px]">
-                종료
+                {t('consultation.exit')}
               </p>
             </button>
           </div>

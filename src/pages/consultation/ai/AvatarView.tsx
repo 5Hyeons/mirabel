@@ -4,6 +4,7 @@ import { useLocalParticipant, useConnectionState, useRoomContext } from '@liveki
 import { ConnectionState, Track } from 'livekit-client';
 import { ChatMessage, AgentState } from '@/lib/types/consultation';
 import { useAnimationData } from '@/lib/hooks';
+import { useTranslation } from '@/lib/i18n';
 import imgIconArrowLeft from '@/assets/icon-arrow-left.svg';
 import imgIconGlobe from '@/assets/icon-globe.webp';
 import imgIconSize from '@/assets/icon-size.webp';
@@ -35,6 +36,7 @@ interface AvatarViewProps {
 export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShowSummary, unityContext, conversationStarted, onStartConversation }: AvatarViewProps) {
   // Agent is ready when state is 'listening' (uses existing agent_state_changed RPC)
   const isAgentReady = agentState === 'listening';
+  const { t, language } = useTranslation();
 
   const { unityProvider, isLoaded, sendMessage } = unityContext;
 
@@ -43,8 +45,25 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShow
   const connectionState = useConnectionState();
   const room = useRoomContext();
   const [isMicEnabled, setIsMicEnabled] = useState(false);
+  const [sampleQuestions, setSampleQuestions] = useState<string[]>([]);
 
   const hasUserInteracted = useRef(false);
+
+  // Load sample questions from mock data
+  useEffect(() => {
+    const loadSampleQuestions = async () => {
+      try {
+        const response = await fetch(`/mock-data.${language}.json`);
+        const data = await response.json();
+        if (data.aiConsultation?.sampleQuestions) {
+          setSampleQuestions(data.aiConsultation.sampleQuestions);
+        }
+      } catch (error) {
+        console.error('Failed to load sample questions:', error);
+      }
+    };
+    loadSampleQuestions();
+  }, [language]);
 
   useEffect(() => {
     if (!localParticipant) return;
@@ -258,13 +277,13 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShow
             <div className="content-stretch flex gap-[4px] items-center p-[8px] relative shrink-0">
               <img alt="" className="relative shrink-0 size-[20px]" src={imgIconGlobe} />
               <p className="font-bold leading-[1.4] relative shrink-0 text-[14px] text-[rgba(17,17,17,0.5)] text-nowrap text-right tracking-[-0.28px]">
-                한국어
+                {language === 'ko' ? t('language.korean') : t('language.english')}
               </p>
             </div>
             <div className="content-stretch flex gap-[4px] items-center p-[8px] relative shrink-0">
               <img alt="" className="relative shrink-0 size-[20px]" src={imgIconSize} />
               <p className="font-bold leading-[1.4] relative shrink-0 text-[14px] text-[rgba(17,17,17,0.5)] text-nowrap text-right tracking-[-0.28px]">
-                크기 조절
+                {t('common.sizeAdjust')}
               </p>
             </div>
           </div>
@@ -272,21 +291,21 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShow
           {/* FAQ 힌트 바 */}
           <div className="backdrop-blur-[10px] bg-white content-stretch flex gap-[8px] h-[46px] items-center leading-[1.4] max-w-full px-[16px] py-[8px] relative rounded-[8px] shrink-0 text-nowrap w-full mx-auto">
             <p className="basis-0 font-normal grow min-h-px min-w-px overflow-ellipsis overflow-hidden relative shrink-0 text-[#666666] text-[16px] tracking-[-0.32px]">
-              Q. 수면 내시경도 고통을 느끼나요?
+              Q. {sampleQuestions[0] || '...'}
             </p>
             <p className="font-medium relative shrink-0 text-[#dddddd] text-[14px] text-center tracking-[-0.28px]">
-              더보기
+              {t('avatar.seeMore')}
             </p>
           </div>
 
           {/* 메인 텍스트 */}
           <div className="content-stretch flex flex-col font-normal gap-[10px] items-center justify-center leading-[1.3] p-[20px] relative shrink-0 text-center w-full">
             <div className="relative shrink-0 text-[#222222] text-[23px] tracking-[-0.46px] w-full">
-              <p className="mb-0">내시경 검사에 대해</p>
-              <p>궁금한 게 있으신가요?</p>
+              <p className="mb-0">{t('avatar.questionTitle1')}</p>
+              <p>{t('avatar.questionTitle2')}</p>
             </div>
             <p className="relative shrink-0 text-[#666666] text-[16px] tracking-[-0.32px] w-full">
-              버튼을 탭하여 말해보세요
+              {t('avatar.tapToSpeak')}
             </p>
           </div>
         </div>
@@ -305,13 +324,13 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShow
             <div className="content-stretch flex gap-[4px] items-center p-[8px] relative shrink-0">
               <img alt="" className="relative shrink-0 size-[20px]" src={imgIconGlobe} />
               <p className="font-bold leading-[1.4] relative shrink-0 text-[14px] text-[rgba(17,17,17,0.5)] text-nowrap text-right tracking-[-0.28px]">
-                한국어
+                {language === 'ko' ? t('language.korean') : t('language.english')}
               </p>
             </div>
             <div className="content-stretch flex gap-[4px] items-center p-[8px] relative shrink-0">
               <img alt="" className="relative shrink-0 size-[20px]" src={imgIconSize} />
               <p className="font-bold leading-[1.4] relative shrink-0 text-[14px] text-[rgba(17,17,17,0.5)] text-nowrap text-right tracking-[-0.28px]">
-                크기 조절
+                {t('common.sizeAdjust')}
               </p>
             </div>
           </div>
@@ -319,10 +338,10 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShow
           {/* FAQ 힌트 바 */}
           <div className="backdrop-blur-[10px] bg-white content-stretch flex gap-[8px] h-[46px] items-center leading-[1.4] max-w-full px-[16px] py-[8px] relative rounded-[8px] shrink-0 text-nowrap w-full mx-auto">
             <p className="basis-0 font-normal grow min-h-px min-w-px overflow-ellipsis overflow-hidden relative shrink-0 text-[#666666] text-[16px] tracking-[-0.32px]">
-              Q. 수면 내시경도 고통을 느끼나요?
+              Q. {sampleQuestions[0] || '...'}
             </p>
             <p className="font-medium relative shrink-0 text-[#dddddd] text-[14px] text-center tracking-[-0.28px]">
-              더보기
+              {t('avatar.seeMore')}
             </p>
           </div>
         </div>
@@ -412,7 +431,7 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShow
             >
               <IconCall className="shrink-0" />
               <p className="font-bold leading-[1.4] text-[16px] text-center text-nowrap text-white tracking-[-0.32px]">
-                {isAgentReady ? '대화 시작' : '준비 중...'}
+                {isAgentReady ? t('avatar.startConversation') : t('avatar.preparing')}
               </p>
             </button>
           </div>
@@ -438,7 +457,7 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShow
           >
             <img src="/images/icon-mic-mono.webp" alt="" width={20} height={20} />
             <p className="font-bold text-[16px] text-white tracking-[-0.32px]">
-              {isMicEnabled ? '음소거' : '해제'}
+              {isMicEnabled ? t('avatar.mute') : t('avatar.unmute')}
             </p>
           </button>
 
@@ -450,7 +469,7 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShow
           >
             <img src="/images/icon-stop.webp" alt="" width={20} height={20} />
             <p className="font-bold text-[16px] text-white tracking-[-0.32px]">
-              일시중지
+              {t('avatar.pause')}
             </p>
           </button>
 
@@ -462,7 +481,7 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShow
           >
             <img src="/images/icon-call-slash-mono.webp" alt="" width={20} height={20} />
             <p className="font-bold text-[16px] text-white tracking-[-0.32px]">
-              종료
+              {t('avatar.end')}
             </p>
           </button>
         </div>

@@ -6,6 +6,7 @@ import { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SignatureCanvas from 'react-signature-canvas';
 import { usePatientStore } from '@/lib/store/patient-store';
+import { useTranslation } from '@/lib/i18n';
 import { apiClient } from '@/lib/api/mock-api';
 import imgPenIcon from '@/assets/icon-pen.webp';
 import imgIconBin from '@/assets/icon-bin.svg';
@@ -24,6 +25,7 @@ function IconBinMono({ className }: { className?: string }) {
 
 export function ConsentSignature() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { patientData } = usePatientStore();
   const signatureCanvasRef = useRef<SignatureCanvas>(null);
   const [hasSignature, setHasSignature] = useState(false);
@@ -54,7 +56,7 @@ export function ConsentSignature() {
 
   const handleSubmit = async () => {
     if (!hasSignature || !signatureCanvasRef.current) {
-      alert('서명을 입력해주세요.');
+      alert(t('signature.required'));
       return;
     }
 
@@ -70,7 +72,7 @@ export function ConsentSignature() {
 
       navigate('/consent/voice');
     } catch {
-      alert('서명 저장에 실패했습니다.');
+      alert(t('signature.saveFailed'));
       setSubmitting(false);
     }
   };
@@ -84,7 +86,7 @@ export function ConsentSignature() {
             <img alt="" className="block max-w-none size-full" src={imgIconArrowLeft} />
           </button>
           <p className="basis-0 font-['Noto_Sans_KR:Bold',_sans-serif] font-bold grow leading-[1.4] min-h-px min-w-px relative shrink-0 text-[16px] text-[rgba(17,17,17,0.5)] text-center tracking-[-0.32px]">
-            동의서 작성
+            {t('consent.title')}
           </p>
           <button onClick={() => navigate('/')} className="relative shrink-0 size-[24px]">
             <img alt="" className="block max-w-none size-full" src={imgIconHome} />
@@ -101,13 +103,11 @@ export function ConsentSignature() {
           </div>
           <div className="content-stretch flex flex-col font-['Noto_Sans_KR:Regular',_sans-serif] font-normal gap-[8px] items-start relative shrink-0 w-full">
             <div className="leading-[0] relative shrink-0 text-[#111111] text-[22px] tracking-[-0.44px] w-full">
-              <p className="leading-[1.4] mb-0">검사를 진행하기 위해서는</p>
-              <p className="leading-[1.4]">
-                <span className="font-['Noto_Sans_KR:Bold',_sans-serif] font-bold">서명</span>이 필요해요
-              </p>
+              <p className="leading-[1.4] mb-0">{t('signature.title1')}</p>
+              <p className="leading-[1.4]">{t('signature.title2')}</p>
             </div>
             <p className="leading-[1.4] relative shrink-0 text-[#666666] text-[14px] tracking-[-0.28px] w-full">
-              서명 영역에 손가락으로 직접 서명해 주세요.
+              {t('signature.instruction')}
             </p>
           </div>
         </div>
@@ -115,9 +115,9 @@ export function ConsentSignature() {
         {/* 서명 영역 */}
         <div className="border-[#6490ff] border-[0px_0px_0px_2px] border-solid box-border content-stretch flex flex-col gap-[8px] items-start px-[20px] py-0 relative shrink-0 w-full">
           <div className="content-stretch flex font-['Pretendard:Bold',_sans-serif] gap-[8px] items-start leading-[1.5] not-italic relative shrink-0 text-[16px] tracking-[-0.32px] w-full">
-            <p className="relative shrink-0 text-[#6490ff] text-nowrap whitespace-pre">필수</p>
+            <p className="relative shrink-0 text-[#6490ff] text-nowrap whitespace-pre">{t('common.required')}</p>
             <p className="basis-0 grow min-h-px min-w-px relative shrink-0 text-black">
-              전자 서명 입력
+              {t('signature.inputTitle')}
             </p>
           </div>
 
@@ -135,7 +135,7 @@ export function ConsentSignature() {
             />
             {!hasSignature && (
               <p className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-['Pretendard:SemiBold',_sans-serif] leading-[1.5] not-italic opacity-60 text-[#666666] text-[14px] text-nowrap tracking-[-0.28px] whitespace-pre pointer-events-none">
-                서명해주세요
+                {t('signature.placeholder')}
               </p>
             )}
           </div>
@@ -146,7 +146,7 @@ export function ConsentSignature() {
             className="bg-white border-2 border-[#d7d7d7] border-solid box-border content-stretch flex gap-[4px] h-[56px] items-center justify-center p-[20px] relative rounded-[8px] shrink-0 w-full active:scale-95 transition-transform"
           >
             <p className="font-['Noto_Sans_KR:Bold',_sans-serif] font-bold leading-[1.4] relative shrink-0 text-[#666666] text-[16px] text-center text-nowrap tracking-[-0.32px] whitespace-pre">
-              지우기
+              {t('signature.clear')}
             </p>
             <IconBinMono className="overflow-clip relative shrink-0 size-[24px]" />
           </button>
@@ -162,7 +162,7 @@ export function ConsentSignature() {
             className="basis-0 bg-[#6490ff] disabled:bg-[#666666] box-border content-stretch flex gap-[4px] grow h-[56px] items-center justify-center min-h-px min-w-px p-[20px] relative rounded-[8px] shrink-0 disabled:opacity-70 active:scale-95 transition-all"
           >
             <p className="font-['Noto_Sans_KR:Bold',_sans-serif] font-bold leading-[1.4] relative shrink-0 text-[16px] text-white text-center text-nowrap tracking-[-0.32px] whitespace-pre">
-              {submitting ? '저장 중...' : '다음'}
+              {submitting ? t('common.loading') : t('common.next')}
             </p>
           </button>
         </div>

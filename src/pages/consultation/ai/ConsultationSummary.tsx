@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useConsultationStore } from '@/lib/store/consultation-store';
+import { useTranslation } from '@/lib/i18n';
 import { ChatMessage } from '@/lib/types/consultation';
 import imgIconArrowLeft from '@/assets/icon-arrow-left.svg';
 import imgIconGlobe from '@/assets/icon-globe.webp';
@@ -17,6 +18,7 @@ interface MessagePair {
 }
 
 export function ConsultationSummary({ onBack, onEndConsultation }: ConsultationSummaryProps) {
+  const { t, language } = useTranslation();
   const { messages, removeMessage } = useConsultationStore();
 
   // Group messages into user/AI pairs
@@ -85,13 +87,13 @@ export function ConsultationSummary({ onBack, onEndConsultation }: ConsultationS
         <div className="content-stretch flex gap-[4px] items-center p-[8px] shrink-0">
           <img alt="" className="shrink-0 size-[20px]" src={imgIconGlobe} />
           <p className="font-bold leading-[1.4] shrink-0 text-[14px] text-[rgba(17,17,17,0.5)] text-nowrap text-right tracking-[-0.28px]">
-            한국어
+            {language === 'ko' ? t('language.korean') : t('language.english')}
           </p>
         </div>
         <div className="content-stretch flex gap-[4px] items-center p-[8px] shrink-0">
           <img alt="" className="shrink-0 size-[20px]" src={imgIconSize} />
           <p className="font-bold leading-[1.4] shrink-0 text-[14px] text-[rgba(17,17,17,0.5)] text-nowrap text-right tracking-[-0.28px]">
-            크기 조절
+            {t('common.sizeAdjust')}
           </p>
         </div>
       </div>
@@ -99,11 +101,11 @@ export function ConsultationSummary({ onBack, onEndConsultation }: ConsultationS
       {/* Title */}
       <div className="content-stretch flex flex-col gap-[10px] items-center justify-center leading-[1.3] p-[20px] shrink-0 text-center w-full">
         <div className="font-bold shrink-0 text-[#222222] text-[23px] tracking-[-0.46px] w-full">
-          <p className="mb-0">상담 내용을</p>
-          <p>확인해보세요</p>
+          <p className="mb-0">{t('consultationSummary.title1')}</p>
+          <p>{t('consultationSummary.title2')}</p>
         </div>
         <p className="font-normal shrink-0 text-[#666666] text-[16px] tracking-[-0.32px] w-full">
-          상담 내용은 의료진에게 전달됩니다
+          {t('consultationSummary.deliveryNotice')}
         </p>
       </div>
 
@@ -122,7 +124,7 @@ export function ConsultationSummary({ onBack, onEndConsultation }: ConsultationS
                     onClick={() => handleDelete(pair)}
                     className="shrink-0 font-medium text-[#666666] text-[14px] text-right tracking-[-0.28px] hover:text-[#444444] transition-colors"
                   >
-                    삭제하기
+                    {t('common.delete')}
                   </button>
                 </div>
               )}
@@ -140,7 +142,7 @@ export function ConsultationSummary({ onBack, onEndConsultation }: ConsultationS
 
           {groupedMessages.length === 0 && (
             <div className="text-center py-[40px] text-[#666666] w-full">
-              <p>상담 내역이 없습니다.</p>
+              <p>{t('consultationSummary.noHistory')}</p>
             </div>
           )}
         </div>
@@ -155,7 +157,7 @@ export function ConsultationSummary({ onBack, onEndConsultation }: ConsultationS
           className="basis-0 bg-[#666666] flex gap-[4px] grow h-[56px] items-center justify-center min-h-px min-w-px p-[20px] rounded-[8px] shadow-[0px_2.59px_12.952px_0px_rgba(0,0,0,0.12)] shrink-0 active:scale-95 transition-transform"
         >
           <p className="font-bold leading-[1.4] text-[16px] text-center text-nowrap text-white tracking-[-0.32px]">
-            돌아가기
+            {t('consultationSummary.goBack')}
           </p>
         </button>
         <button
@@ -163,7 +165,7 @@ export function ConsultationSummary({ onBack, onEndConsultation }: ConsultationS
           className="basis-0 bg-[#6490ff] flex gap-[4px] grow h-[56px] items-center justify-center min-h-px min-w-px p-[20px] rounded-[8px] shadow-[0px_2.59px_12.952px_0px_rgba(0,0,0,0.12)] shrink-0 active:scale-95 transition-transform"
         >
           <p className="font-bold leading-[1.4] text-[16px] text-center text-nowrap text-white tracking-[-0.32px]">
-            상담 종료하기
+            {t('consultationSummary.endConsultation')}
           </p>
         </button>
       </div>
