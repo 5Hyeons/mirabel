@@ -3,6 +3,7 @@
  */
 
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from '@/lib/i18n';
 import imgCheckIcon from '@/assets/icon-check-circle.svg';
 import imgDoctorAvatar from '@/assets/doctor-avatar-complete.webp';
 import imgIconArrowLeft from '@/assets/icon-arrow-left.svg';
@@ -20,13 +21,14 @@ function IconCheckCircleMono({ className }: { className?: string }) {
 
 export function ConsentComplete() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleAdditionalInquiry = () => {
     navigate('/consultation/ai');
   };
 
   const handleComplete = () => {
-    if (window.confirm('검사 사전교육을 완료하시겠습니까?')) {
+    if (window.confirm(t('consentComplete.confirmComplete'))) {
       window.close();
     }
   };
@@ -54,11 +56,8 @@ export function ConsentComplete() {
           <IconCheckCircleMono className="overflow-clip relative shrink-0 size-[40px]" />
           <div className="content-stretch flex flex-col gap-[8px] items-start relative shrink-0 w-full">
             <div className="font-['Noto_Sans_KR:Regular',_sans-serif] font-normal leading-[1.4] relative shrink-0 text-[#111111] text-[22px] text-center tracking-[-0.44px] w-full">
-              <p className="mb-0">
-                <span className="font-['Noto_Sans_KR:Bold',_sans-serif] font-bold">내시경 설명 및 동의서 작성</span>
-                <span className="font-['Noto_Sans_KR:Regular',_sans-serif] font-normal">이</span>
-              </p>
-              <p>모두 마무리 되었습니다!</p>
+              <p className="mb-0">{t('consentComplete.title1')}</p>
+              <p>{t('consentComplete.title2')}</p>
             </div>
           </div>
         </div>
@@ -88,8 +87,8 @@ export function ConsentComplete() {
           <div className="relative inline-block">
             <div className="bg-[#111111] box-border content-stretch flex gap-[10px] items-center justify-center p-[10px] rounded-[8px]">
               <div className="font-['Noto_Sans_KR:Medium',_sans-serif] font-medium leading-[1.4] text-[14px] text-center text-white tracking-[-0.28px]">
-                <p className="mb-0">AI 의사에게 </p>
-                <p className="mb-0">궁금한 점을 물어보세요</p>
+                <p className="mb-0">{t('consentComplete.askAI1')}</p>
+                <p className="mb-0">{t('consentComplete.askAI2')}</p>
               </div>
             </div>
             <div className="absolute left-[25px] -bottom-[10px]">
@@ -105,7 +104,7 @@ export function ConsentComplete() {
             className="basis-0 bg-[#bcceff] box-border content-stretch flex gap-[10px] grow h-[60px] items-center justify-center min-h-px min-w-px p-[20px] relative rounded-[8px] shrink-0 active:scale-95 transition-transform"
           >
             <p className="font-['Noto_Sans_KR:Bold',_sans-serif] font-bold leading-[1.4] relative shrink-0 text-[#4472e4] text-[16px] text-center text-nowrap tracking-[-0.32px] whitespace-pre">
-              추가 문의하기
+              {t('consentComplete.additionalInquiry')}
             </p>
           </button>
           <button
@@ -113,7 +112,7 @@ export function ConsentComplete() {
             className="basis-0 bg-[#6490ff] box-border content-stretch flex gap-[4px] grow h-[56px] items-center justify-center min-h-px min-w-px p-[20px] relative rounded-[8px] shadow-[0px_2.59px_12.952px_0px_rgba(0,0,0,0.12)] shrink-0 active:scale-95 transition-transform"
           >
             <p className="font-['Noto_Sans_KR:Bold',_sans-serif] font-bold leading-[1.4] relative shrink-0 text-[16px] text-center text-nowrap text-white tracking-[-0.32px] whitespace-pre">
-              완료
+              {t('common.complete')}
             </p>
           </button>
         </div>

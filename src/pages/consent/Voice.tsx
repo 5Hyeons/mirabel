@@ -5,6 +5,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePatientStore } from '@/lib/store/patient-store';
+import { useTranslation } from '@/lib/i18n';
 import { apiClient } from '@/lib/api/mock-api';
 import imgMicIcon from '@/assets/icon-mic-large.webp';
 import imgIconMic from '@/assets/icon-mic.svg';
@@ -27,6 +28,7 @@ function IconRefreshMono({ className }: { className?: string }) {
 
 export function ConsentVoice() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { patientData } = usePatientStore();
   const [recordingState, setRecordingState] = useState<RecordingState>('idle');
   const [recordingTime, setRecordingTime] = useState(0);
@@ -71,7 +73,7 @@ export function ConsentVoice() {
         setRecordingTime((prev) => prev + 1);
       }, 1000);
     } catch {
-      alert('마이크 접근 권한이 필요합니다.');
+      alert(t('healthRecording.micPermission'));
     }
   };
 
@@ -94,7 +96,7 @@ export function ConsentVoice() {
 
   const handleSubmit = async () => {
     if (!audioBlob) {
-      alert('음성 녹음을 완료해주세요.');
+      alert(t('voice.saveFailed'));
       return;
     }
 
@@ -108,7 +110,7 @@ export function ConsentVoice() {
 
       navigate('/consent/complete');
     } catch {
-      alert('음성 녹음 저장에 실패했습니다.');
+      alert(t('voice.saveFailed'));
       setSubmitting(false);
     }
   };
@@ -128,7 +130,7 @@ export function ConsentVoice() {
             <img alt="" className="block max-w-none size-full" src={imgIconArrowLeft} />
           </button>
           <p className="basis-0 font-['Noto_Sans_KR:Bold',_sans-serif] font-bold grow leading-[1.4] min-h-px min-w-px relative shrink-0 text-[16px] text-[rgba(17,17,17,0.5)] text-center tracking-[-0.32px]">
-            동의서 작성
+            {t('consent.title')}
           </p>
           <button onClick={() => navigate('/')} className="relative shrink-0 size-[24px]">
             <img alt="" className="block max-w-none size-full" src={imgIconHome} />
@@ -145,13 +147,11 @@ export function ConsentVoice() {
           </div>
           <div className="content-stretch flex flex-col font-['Noto_Sans_KR:Regular',_sans-serif] font-normal gap-[8px] items-start relative shrink-0 w-full">
             <div className="leading-[0] relative shrink-0 text-[#111111] text-[22px] tracking-[-0.44px] w-full">
-              <p className="leading-[1.4] mb-0">검사를 진행하기 위해서는</p>
-              <p className="leading-[1.4]">
-                <span className="font-['Noto_Sans_KR:Bold',_sans-serif] font-bold">음성 녹음 동의</span>가 필요해요
-              </p>
+              <p className="leading-[1.4] mb-0">{t('voice.title1')}</p>
+              <p className="leading-[1.4]">{t('voice.title2')}</p>
             </div>
             <p className="leading-[1.4] relative shrink-0 text-[#666666] text-[14px] tracking-[-0.28px] w-full">
-              아래 문구를 음성으로 녹음하여 동의해 주세요
+              {t('voice.instruction')}
             </p>
           </div>
         </div>
@@ -159,14 +159,14 @@ export function ConsentVoice() {
         {/* 녹음 영역 */}
         <div className="border-[#6490ff] border-[0px_0px_0px_2px] border-solid box-border content-stretch flex flex-col gap-[8px] items-start pl-[20px] pr-0 py-0 relative shrink-0 w-full">
           <div className="content-stretch flex font-['Pretendard:Bold',_sans-serif] gap-[8px] items-start leading-[1.5] not-italic relative shrink-0 text-[16px] tracking-[-0.32px] w-full">
-            <p className="relative shrink-0 text-[#6490ff] text-nowrap whitespace-pre">필수</p>
-            <p className="basis-0 grow min-h-px min-w-px relative shrink-0 text-black">녹음</p>
+            <p className="relative shrink-0 text-[#6490ff] text-nowrap whitespace-pre">{t('common.required')}</p>
+            <p className="basis-0 grow min-h-px min-w-px relative shrink-0 text-black">{t('voice.recording')}</p>
           </div>
 
           {/* 녹음 문구 */}
           <div className="bg-white box-border content-stretch flex flex-col gap-[16px] items-center justify-center p-[16px] relative rounded-[8px] shrink-0 w-full">
             <p className="font-['Pretendard:SemiBold',_sans-serif] leading-[1.5] not-italic relative shrink-0 text-[16px] text-black tracking-[-0.32px] w-full">
-              "저는 [내시경 검사]에 대한 설명을 충분히 들었으며, 검사의 목적, 방법, 주의사항을 이해하였습니다. 이에 검사 및 치료에 동의합니다"
+              "{t('voice.script')}"
             </p>
           </div>
 
@@ -234,7 +234,7 @@ export function ConsentVoice() {
                 className="bg-white border-2 border-[#d7d7d7] border-solid box-border content-stretch flex gap-[4px] h-[56px] items-center justify-center p-[20px] relative rounded-[8px] shrink-0 w-full active:scale-95 transition-transform"
               >
                 <p className="font-['Noto_Sans_KR:Bold',_sans-serif] font-bold leading-[1.4] relative shrink-0 text-[#666666] text-[16px] text-center text-nowrap tracking-[-0.32px] whitespace-pre">
-                  다시 녹음하기
+                  {t('voice.recordAgain')}
                 </p>
                 <IconRefreshMono className="overflow-clip relative shrink-0 size-[20px]" />
               </button>
@@ -252,7 +252,7 @@ export function ConsentVoice() {
               className="basis-0 bg-[#6490ff] box-border content-stretch flex gap-[8px] grow h-[56px] items-center justify-center min-h-px min-w-px p-[20px] relative rounded-[8px] shadow-[0px_2.59px_12.952px_0px_rgba(0,0,0,0.12)] shrink-0 active:scale-95 transition-transform"
             >
               <p className="font-['Noto_Sans_KR:Bold',_sans-serif] font-bold leading-[1.4] relative shrink-0 text-[16px] text-center text-nowrap text-white tracking-[-0.32px] whitespace-pre">
-                녹음 시작
+                {t('voice.startRecording')}
               </p>
               <div className="relative shrink-0 size-[20px]">
                 <img alt="" className="block max-w-none size-full" src={imgIconMic} />
@@ -266,7 +266,7 @@ export function ConsentVoice() {
               className="basis-0 bg-[#fd4848] box-border content-stretch flex gap-[8px] grow h-[56px] items-center justify-center min-h-px min-w-px p-[20px] relative rounded-[8px] shadow-[0px_2.59px_12.952px_0px_rgba(0,0,0,0.12)] shrink-0 active:scale-95 transition-transform"
             >
               <p className="font-['Noto_Sans_KR:Bold',_sans-serif] font-bold leading-[1.4] relative shrink-0 text-[16px] text-center text-nowrap text-white tracking-[-0.32px] whitespace-pre">
-                녹음중
+                {t('voice.recordingInProgress')}
               </p>
               <div className="overflow-clip relative rounded-[999px] shrink-0 size-[20px] flex items-center justify-center">
                 <div className="bg-white rounded-[2px] size-[13.039px]" />
@@ -281,7 +281,7 @@ export function ConsentVoice() {
               className="basis-0 bg-[#6490ff] box-border content-stretch flex gap-[4px] grow h-[56px] items-center justify-center min-h-px min-w-px p-[20px] relative rounded-[8px] shadow-[0px_2.59px_12.952px_0px_rgba(0,0,0,0.12)] shrink-0 disabled:opacity-50 active:scale-95 transition-all"
             >
               <p className="font-['Noto_Sans_KR:Bold',_sans-serif] font-bold leading-[1.4] relative shrink-0 text-[16px] text-center text-nowrap text-white tracking-[-0.32px] whitespace-pre">
-                {submitting ? '저장 중...' : '다음'}
+                {submitting ? t('common.loading') : t('common.next')}
               </p>
             </button>
           )}

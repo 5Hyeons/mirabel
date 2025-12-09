@@ -1,0 +1,305 @@
+{
+  "patient": {
+    "patientId": "P20251124001",
+    "name": "John Doe",
+    "birthDate": "1990.01.01",
+    "phoneNumber": "010-1234-5678",
+    "appointment": {
+      "appointmentId": "A20251124001",
+      "hospitalName": "Siheung Heart Clinic",
+      "hospitalLogo": "/images/hospital-logo.png",
+      "doctorName": "Dr. Park Ki-ho",
+      "doctorPhoto": "/images/doctor-photo.png",
+      "doctorSpecialty": "Gastroenterology Specialist",
+      "examinationDate": "Nov 24, 2025 11:00 AM",
+      "examinationType": "Sedation Endoscopy"
+    }
+  },
+  "doctor": {
+    "name": "Dr. Park Ki-ho",
+    "photo": "/images/doctor-photo.png",
+    "specialty": "Gastroenterology Specialist",
+    "hospital": "Siheung Heart Clinic",
+    "hospitalLogo": "/images/hospital-logo.png"
+  },
+  "examinationInfo": {
+    "intro": {
+      "title": "We will now explain the [Endoscopy Examination] and proceed with the consent process.",
+      "subtitle": "This will take about 2-3 minutes. The patient must listen carefully and understand the information."
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "totalPages": 4,
+        "title": "Examination Overview",
+        "content": "Conscious sedation, or sedation gastroscopy, involves intravenously administering sedatives to relax the patient and allow for a comfortable examination. However, the procedure is performed while the patient maintains cooperative consciousness."
+      },
+      {
+        "pageNumber": 2,
+        "totalPages": 4,
+        "title": "Individual Variation in Sedation",
+        "content": "Since patients react differently to medications, even with appropriate doses, some may not achieve sufficient sedation or sleep, or may become less cooperative, making the examination more difficult."
+      },
+      {
+        "pageNumber": 3,
+        "totalPages": 4,
+        "title": "Possible Side Effects",
+        "content": "Side effects may include respiratory issues such as breathing difficulty and hypoxia, blood pressure changes, and heart rate changes. However, these side effects are very rare, and medical staff continuously monitor patients to ensure safe examination."
+      },
+      {
+        "pageNumber": 4,
+        "totalPages": 4,
+        "title": "Post-Examination Precautions",
+        "content": "You must rest for at least 1 hour after the examination, and driving is prohibited on the same day. A guardian must accompany you, and it is advisable to avoid important tasks or decision-making on the day of the examination."
+      }
+    ]
+  },
+  "consent": {
+    "checkbox": {
+      "title": "Consent for Additional Tests and Costs",
+      "content": "If abnormalities are found during the endoscopy, additional tests such as biopsy or Helicobacter tests may be performed immediately for accurate diagnosis. Additional costs will be incurred. Do you consent to tissue biopsy or Helicobacter testing during the endoscopy?",
+      "options": [
+        { "value": true, "label": "Yes (Required)" },
+        { "value": false, "label": "No" }
+      ]
+    },
+    "signature": {
+      "title": "Electronic Signature",
+      "instruction": "Please sign directly in the signature area with your finger."
+    },
+    "voice": {
+      "title": "Voice Recording",
+      "instruction": "Please record your consent by reading the following statement",
+      "script": "I have fully understood the explanation about [Endoscopy Examination], understand the purpose, procedure, and precautions, and hereby consent to the examination and treatment."
+    }
+  },
+  "aiConsultation": {
+    "greeting": "Hello. I am an AI doctor. Please feel free to ask any questions about the endoscopy examination.",
+    "sampleQuestions": [
+      "Can I feel pain during sedation endoscopy?",
+      "How long should I fast before the examination?",
+      "Can I drive after the examination?",
+      "How are polyps removed?",
+      "How much does the examination cost?"
+    ],
+    "responses": {
+      "pain": {
+        "answer": "Sedation endoscopy uses sedatives to keep patients comfortable during the examination. Most patients experience little to no discomfort during the procedure, and pain after the examination is usually mild. However, individual experiences may vary, and some patients may feel slight discomfort.",
+        "relatedQuestions": ["How long does the examination take?", "How long is the recovery time?"]
+      },
+      "fasting": {
+        "answer": "For gastroscopy, fasting for 8 hours before the examination is required. Small amounts of water can be consumed up to 2 hours before the examination. Consult with your doctor about whether to take your morning medications.",
+        "relatedQuestions": ["What preparations are needed?", "How should I take my medications?"]
+      },
+      "driving": {
+        "answer": "Due to the effects of sedatives, driving is prohibited on the day of sedation endoscopy. A guardian must accompany you, and we recommend using public transportation or taxi. Regular endoscopy without sedation allows driving.",
+        "relatedQuestions": ["Can I return to work on the same day?", "Is a guardian required?"]
+      },
+      "polyps": {
+        "answer": "If polyps are found, they can be removed immediately during the endoscopy depending on their size and shape. Small polyps are removed using a snare, while larger polyps may require separate procedures. Removed polyps are examined through biopsy to determine if they are benign or malignant.",
+        "relatedQuestions": ["What precautions after polyp removal?", "What is the cost of polyp removal?"]
+      },
+      "cost": {
+        "answer": "Basic endoscopy is covered by health insurance with a patient copay of approximately 10,000-30,000 won. Sedation endoscopy incurs an additional 30,000-50,000 won. Additional costs apply for biopsy or polyp removal. Exact costs can be confirmed after the examination.",
+        "relatedQuestions": ["Is insurance applicable?", "Is card payment available?"]
+      },
+      "default": {
+        "answer": "I'm sorry, I couldn't find an answer to that question. Please ask another question about the examination or consult directly with the medical staff.",
+        "relatedQuestions": ["Frequently asked questions"]
+      }
+    }
+  },
+  "images": {
+    "doctorAvatar": "/images/doctor-avatar.png",
+    "doctorPhoto": "/images/doctor-photo.png",
+    "hospitalLogo": "/images/hospital-logo.png",
+    "successIcon": "✓",
+    "errorIcon": "✗",
+    "loadingIcon": "⏳"
+  },
+  "navigation": {
+    "screens": [
+      { "path": "/", "name": "Entry", "description": "Appointment Confirmation" },
+      { "path": "/examination/doctor-intro", "name": "Doctor Introduction", "description": "Attending Doctor Information" },
+      { "path": "/examination/procedure", "name": "Examination Explanation", "description": "Procedure and Precautions" },
+      { "path": "/consent/checkbox", "name": "Consent - Checkbox", "description": "Additional Test Consent" },
+      { "path": "/consent/signature", "name": "Consent - Signature", "description": "Electronic Signature" },
+      { "path": "/consent/voice", "name": "Consent - Voice", "description": "Voice Recording Consent" },
+      { "path": "/consent/complete", "name": "Consent Complete", "description": "Completion" },
+      { "path": "/consultation/ai", "name": "AI Consultation", "description": "Additional Inquiries" }
+    ]
+  },
+  "examinationTypes": {
+    "stomach": {
+      "type": "Gastroscopy",
+      "sections": [
+        {
+          "title": "1. Gastroscopy Overview",
+          "content": "Upper gastrointestinal endoscopy is the most fundamental examination for diagnosing inflammation, ulcers, and cancer occurring in the esophagus, stomach, and duodenum. The examination takes about 5-10 minutes. To reduce throat discomfort, throat anesthesia is administered before the examination. As air is introduced for observation, you may experience abdominal bloating, coughing, or nausea.",
+          "type": "text"
+        },
+        {
+          "title": "Other Complications",
+          "items": [
+            "Swelling around the esophageal entrance due to gagging and coughing during examination, spasms, bleeding, foreign body sensation, throat pain",
+            "Endoscopy fever with chills and fever that improves within 24 hours after examination",
+            "Severe bleeding and infection after endoscopic biopsy, perforation (occurs very rarely)"
+          ],
+          "type": "bullet-list"
+        },
+        {
+          "title": "",
+          "content": "If abnormalities are found during endoscopy, biopsy or Helicobacter testing may be necessary for accurate diagnosis.\nBiopsy may cause slight bleeding and pain, and additional costs will be incurred. Do you consent to biopsy and Helicobacter testing?\n\nTissue Biopsy / Helicobacter Testing",
+          "type": "text"
+        },
+        {
+          "title": "",
+          "type": "checkbox",
+          "checkboxOptions": [
+            {"id": "tissue-yes", "label": "Yes"},
+            {"id": "tissue-no", "label": "No"}
+          ]
+        },
+        {
+          "title": "Patients Requiring Caution",
+          "content": "During gastroscopy, dental damage (implants, dentures, resin, bridges, orthodontic/retaining devices, loose teeth) may occur if the patient bites the mouthpiece too hard, as well as lip injuries and jaw dislocation. Our clinic is not responsible for such incidents.\n\n*If you have no TMJ disorder and have not received dental treatment on front teeth, select 'No dental issues'",
+          "type": "warning"
+        },
+        {
+          "title": "",
+          "type": "checkbox",
+          "checkboxOptions": [
+            {"id": "dental-confirm", "label": "Confirmed"},
+            {"id": "dental-unconfirm", "label": "Unconfirmed"}
+          ]
+        },
+        {
+          "title": "Consent Form for Conscious Sedation (Sleep) Endoscopy",
+          "type": "section-header"
+        },
+        {
+          "title": "Examination Overview",
+          "content": "Conscious sedation (sleep) endoscopy involves administering medication via injection to bring the patient to a certain level of sedation, reducing discomfort during the examination. However, this is not a procedure under general anesthesia; the examination is conducted while the patient can still cooperate. Therefore, you may experience some pain or discomfort during the examination. Also, despite using appropriate doses of medication, some patients may not achieve adequate sedation or may become less cooperative, making the examination itself difficult.",
+          "type": "text",
+          "highlight": "This is not a procedure under general anesthesia; the examination is conducted while the patient can still cooperate. Therefore, you may experience some pain or discomfort during the examination. Also, despite using appropriate doses of medication, some patients may not achieve adequate sedation or may become less cooperative, making the examination itself difficult."
+        },
+        {
+          "title": "Side Effects and Complications",
+          "content": "About 10% may show paradoxical reactions (aggressive behavior such as shouting or trying to get up from bed). In such cases, an antagonist medication is administered to restore consciousness before proceeding with the examination. Respiratory complications such as breathing difficulty and hypoxia, cardiovascular complications such as rapid heartbeat or blood pressure drop (0.1-0.54%) may occur. Very rarely, it may result in irreversible conditions including death (0.03%). Allergic reactions may also occur depending on the medication administered.\n\nAfter the examination, rest is required for complete recovery. You should not drive on the day of examination and should avoid important appointments or tasks. Since rest is required after sedation endoscopy, unless absolutely necessary, we recommend safer options such as regular endoscopy or upper GI series.",
+          "type": "text"
+        },
+        {
+          "title": "Cases Where Sedation Endoscopy Cannot Be Performed",
+          "items": [
+            "Breathing difficulty from various causes",
+            "Various respiratory diseases (asthma, chronic obstructive pulmonary disease, etc.)",
+            "Various heart diseases",
+            "Pregnant women",
+            "Chronic liver diseases (chronic hepatitis, cirrhosis, etc.)",
+            "Severe snoring, sleep apnea syndrome",
+            "Others: Sedation endoscopy is not recommended for overweight individuals or elderly patients (69 years or older)"
+          ],
+          "type": "bullet-list"
+        },
+        {
+          "title": "",
+          "items": [
+            "Sedatives may cause temporary memory loss during and after the examination.",
+            "Please refrain from sedation endoscopy in the above cases. We remind you that you are responsible for any issues arising from your own actions (including accidents while driving).",
+            "For sedation endoscopy, please avoid excessive nail art as it can interfere with accurate oxygen saturation measurement.",
+            "As sedatives are administered intravenously, injection site pain, redness, and bruising may occur, and rarely, phlebitis may develop."
+          ],
+          "type": "warning"
+        },
+        {
+          "title": "",
+          "type": "checkbox",
+          "checkboxOptions": [
+            {"id": "warning-understood", "label": "I understand the precautions"}
+          ]
+        },
+        {
+          "title": "Consent for Additional Tests and Costs",
+          "content": "If abnormalities are found during endoscopy, additional tests such as biopsy and Helicobacter testing may be performed immediately for accurate diagnosis. Additional costs will be incurred. Do you consent to tissue biopsy or Helicobacter testing during the endoscopy?",
+          "type": "consent-checkbox",
+          "required": true,
+          "checkboxOptions": [
+            {"id": "consent-yes", "label": "Yes (Required)"},
+            {"id": "consent-no", "label": "No"}
+          ]
+        }
+      ]
+    }
+  },
+  "healthCheck": {
+    "title": "Health Status",
+    "doctorMessage": "Hello, I'm Dr. Lee\nBefore the examination,\nlet me briefly check\nyour health status\n\nPlease select all current\nor past medical conditions",
+    "items": [
+      {"id": "hc-1", "text": "None", "category": "normal"},
+      {"id": "hc-2", "text": "Drug allergy", "category": "caution"},
+      {"id": "hc-3", "text": "Heart disease (angina, myocardial infarction, arrhythmia, etc.)", "category": "caution"},
+      {"id": "hc-4", "text": "Taking anticoagulants (Coumadin, Warfarin, Aspirin)", "category": "caution"},
+      {"id": "hc-5", "text": "Hypertension, Diabetes", "category": "caution"},
+      {"id": "hc-6", "text": "Glaucoma, Hyperthyroidism, Benign prostatic hyperplasia", "category": "caution"},
+      {"id": "hc-7", "text": "Hepatitis, Cirrhosis (Type B, C, Alcoholic, etc.)", "category": "caution"},
+      {"id": "hc-8", "text": "Asthma, Chronic obstructive pulmonary disease (COPD)", "category": "caution"},
+      {"id": "hc-9", "text": "Dyspnea (at rest)", "category": "caution"},
+      {"id": "hc-10", "text": "Pregnant, Possibly pregnant, Breastfeeding", "category": "danger"},
+      {"id": "hc-11", "text": "Denture use", "category": "danger"},
+      {"id": "hc-12", "text": "Dental prosthetics (implants, crowns, resin, bridges, orthodontic/retaining devices, veneers, loose teeth)", "category": "danger"},
+      {"id": "hc-13", "text": "TMJ disorder", "category": "danger"},
+      {"id": "hc-14", "text": "Other diseases or surgical history", "category": "danger"},
+      {"id": "hc-15", "text": "GLP-1 weight loss injections\n(Wegovy, Saxenda, Ozempic, etc.)", "category": "danger"},
+      {"id": "hc-16", "text": "Not sure (Request consultation)", "bold": true, "category": "normal"}
+    ],
+    "warnings": {
+      "danger": {
+        "title": "Warning - Heart Disease",
+        "content": "Sedatives used during sedation endoscopy can temporarily change blood pressure or heart rate. Patients with heart disease may react sensitively to these changes, potentially triggering angina attacks or other side effects, requiring caution."
+      },
+      "caution": {
+        "title": "Caution - Respiratory Disease",
+        "content": "Sedatives used during sedation endoscopy can temporarily change blood pressure or heart rate. Patients with heart disease may react sensitively to these changes, potentially triggering angina attacks or other side effects, requiring caution."
+      }
+    }
+  },
+  "procedurePages": [
+    {
+      "sections": [
+        {
+          "title": "Examination Overview",
+          "content": "Conscious sedation, or sedation gastroscopy, involves administering medication via injection to bring the patient to a certain level of sedation, reducing discomfort during the examination. However, this is not a procedure under complete anesthesia; the examination is conducted while the patient can still cooperate."
+        },
+        {
+          "title": "Individual Variation in Sedation Effect",
+          "content": "Since patients react differently to medications, even with appropriate doses, sedation or sleep may not be sufficient, or patient cooperation may decrease, making the examination itself difficult."
+        },
+        {
+          "title": "Possible Side Effects",
+          "content": "Side effects may include respiratory issues such as breathing difficulty and hypoxia, cardiovascular reactions such as rapid heart rate, and falls. Most cases improve without special treatment, but rarely, breathing or heart may stop, posing life-threatening situations and requiring emergency measures."
+        }
+      ]
+    },
+    {
+      "sections": [
+        {
+          "title": "Patients Requiring Caution",
+          "content": "Special caution is needed during sedation endoscopy for patients with respiratory diseases affecting lung function, or those with kidney or heart conditions."
+        },
+        {
+          "title": "Post-Examination Precautions",
+          "content": "Complete recovery and rest are required after sedation endoscopy. Do not drive on the day of examination, and avoid important appointments or tasks. You must return home with a guardian to prevent risks such as falls."
+        },
+        {
+          "title": "Consent Form Signing Guide",
+          "content": "I (or my guardian) have heard explanations about the necessity of sedation endoscopy, the examination process, and potential complications after the procedure, and fully understand the contents. Accordingly, I hereby apply in writing to the hospital to receive the examination and treatment."
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "version": "1.0.0",
+    "lastUpdated": "2025-12-08",
+    "description": "Mock data for endoscopy patient AI consultation platform demo"
+  }
+}

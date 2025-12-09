@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ExaminationType } from '@/lib/api/types';
 import { ContentBlock } from './ContentBlock';
+import { useTranslation } from '@/lib/i18n';
 
 interface ExaminationContentProps {
   examinationType: string;
@@ -8,6 +9,7 @@ interface ExaminationContentProps {
 }
 
 export function ExaminationContent({ examinationType, onCheckboxComplete }: ExaminationContentProps) {
+  const { t, language } = useTranslation();
   const [content, setContent] = useState<ExaminationType | null>(null);
   const [loading, setLoading] = useState(true);
   const [checkboxes, setCheckboxes] = useState<Record<string, string>>({});
@@ -15,7 +17,7 @@ export function ExaminationContent({ examinationType, onCheckboxComplete }: Exam
   useEffect(() => {
     const loadContent = async () => {
       try {
-        const response = await fetch('/mock-data.json');
+        const response = await fetch(`/mock-data.${language}.json`);
         const data = await response.json();
         setContent(data.examinationTypes[examinationType]);
       } catch (error) {
@@ -26,7 +28,7 @@ export function ExaminationContent({ examinationType, onCheckboxComplete }: Exam
     };
 
     loadContent();
-  }, [examinationType]);
+  }, [examinationType, language]);
 
   useEffect(() => {
     // 필수 체크박스가 모두 선택됐는지 확인
@@ -45,7 +47,7 @@ export function ExaminationContent({ examinationType, onCheckboxComplete }: Exam
   if (loading) {
     return (
       <div className="bg-white rounded-[8px] p-[16px] shadow-[0px_2.59px_12.952px_0px_rgba(0,0,0,0.12)]">
-        <p className="text-center text-[#666666]">검사 내용을 불러오는 중...</p>
+        <p className="text-center text-[#666666]">{t('common.loading')}</p>
       </div>
     );
   }
@@ -53,7 +55,7 @@ export function ExaminationContent({ examinationType, onCheckboxComplete }: Exam
   if (!content) {
     return (
       <div className="bg-white rounded-[8px] p-[16px] shadow-[0px_2.59px_12.952px_0px_rgba(0,0,0,0.12)]">
-        <p className="text-center text-[#666666]">검사 내용을 불러올 수 없습니다</p>
+        <p className="text-center text-[#666666]">{t('examination.loadError')}</p>
       </div>
     );
   }
@@ -67,7 +69,7 @@ export function ExaminationContent({ examinationType, onCheckboxComplete }: Exam
       {/* 메인 카드 */}
       <div className="bg-white border border-[#dddddd] border-solid rounded-[8px] p-[16px] flex flex-col gap-[24px]">
         <p className="font-['Noto_Sans_KR:Bold',sans-serif] font-bold text-[18px] text-[#111111] tracking-[-0.36px] leading-[1.4]">
-          위 내시경(수면) 검사 동의서
+          {t('examination.consentForm')}
         </p>
 
         {mainSections.map((section, index) => (

@@ -1,4 +1,5 @@
 import { PatientData, ConsentCheckboxData, ConsentResponse, SignatureData, VoiceData, MockData } from './types';
+import { useLanguageStore } from '../store/language-store';
 
 interface ApiClient {
   getPatientInfo(token: string): Promise<PatientData>;
@@ -9,14 +10,18 @@ interface ApiClient {
 }
 
 class MockApiClient implements ApiClient {
-  private mockData: MockData | null = null;
+  private mockDataCache: Record<string, MockData> = {};
 
   private async loadMockData(): Promise<MockData> {
-    if (this.mockData) return this.mockData;
+    const language = useLanguageStore.getState().language;
 
-    const response = await fetch('/mock-data.json');
+    if (this.mockDataCache[language]) {
+      return this.mockDataCache[language];
+    }
+
+    const response = await fetch(`/mock-data.${language}.json`);
     const data: MockData = await response.json();
-    this.mockData = data;
+    this.mockDataCache[language] = data;
     return data;
   }
 

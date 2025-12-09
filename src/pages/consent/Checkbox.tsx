@@ -5,6 +5,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePatientStore } from '@/lib/store/patient-store';
+import { useTranslation } from '@/lib/i18n';
 import { apiClient } from '@/lib/api/mock-api';
 import imgDocumentIcon from '@/assets/icon-document.webp';
 import imgCheckIcon from '@/assets/icon-check.svg';
@@ -13,6 +14,7 @@ import imgIconHome from '@/assets/icon-home.svg';
 
 export function ConsentCheckbox() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { patientData } = usePatientStore();
   const [agreed, setAgreed] = useState<boolean | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -29,14 +31,12 @@ export function ConsentCheckbox() {
 
   const handleSubmit = async () => {
     if (agreed === null) {
-      alert('동의 여부를 선택해주세요.');
+      alert(t('consent.selectConsent'));
       return;
     }
 
     if (agreed === false) {
-      const confirm = window.confirm(
-        '추가 검사를 동의하지 않으면 검사 진행에 제약이 있을 수 있습니다. 계속하시겠습니까?'
-      );
+      const confirm = window.confirm(t('consent.noConsentWarning'));
       if (!confirm) return;
     }
 
@@ -45,13 +45,13 @@ export function ConsentCheckbox() {
       await apiClient.saveCheckboxConsent({
         patientId: patientData.patientId,
         agreed,
-        consentText: '내시경 검사에서 이상이 발견되면...',
+        consentText: t('consent.additionalTestDesc'),
         timestamp: new Date().toISOString()
       });
 
       navigate('/consent/signature');
     } catch {
-      alert('동의서 저장에 실패했습니다.');
+      alert(t('consent.saveFailed'));
       setSubmitting(false);
     }
   };
@@ -65,7 +65,7 @@ export function ConsentCheckbox() {
             <img alt="" className="block max-w-none size-full" src={imgIconArrowLeft} />
           </button>
           <p className="basis-0 font-['Noto_Sans_KR:Bold',_sans-serif] font-bold grow leading-[1.4] min-h-px min-w-px relative shrink-0 text-[16px] text-[rgba(17,17,17,0.5)] text-center tracking-[-0.32px]">
-            동의서 작성
+            {t('consent.title')}
           </p>
           <button onClick={() => navigate('/')} className="relative shrink-0 size-[24px]">
             <img alt="" className="block max-w-none size-full" src={imgIconHome} />
@@ -83,10 +83,10 @@ export function ConsentCheckbox() {
           <div className="content-stretch flex flex-col gap-[8px] items-start relative shrink-0 w-full">
             <div className="font-['Noto_Sans_KR:Regular',_sans-serif] font-normal leading-[1.4] relative shrink-0 text-[#111111] text-[22px] tracking-[-0.44px] w-full">
               <p className="mb-0">
-                <span className="font-['Noto_Sans_KR:Bold',_sans-serif] font-bold">추가 검사 및 비용 발생</span>
-                <span>에 대한 </span>
+                <span className="font-['Noto_Sans_KR:Bold',_sans-serif] font-bold">{t('consent.additionalTestTitle1')}</span>
+                <span>{t('consent.additionalTestTitle2')}</span>
               </p>
-              <p>동의가 필요해요</p>
+              <p>{t('consent.additionalTestTitle3')}</p>
             </div>
           </div>
         </div>
@@ -94,13 +94,13 @@ export function ConsentCheckbox() {
         {/* 동의 내용 */}
         <div className="border-[#6490ff] border-[0px_0px_0px_2px] border-solid box-border content-stretch flex flex-col gap-[8px] items-start leading-[1.5] not-italic px-[20px] py-0 relative shrink-0 text-[16px] tracking-[-0.32px] w-full">
           <div className="content-stretch flex font-['Pretendard:Bold',_sans-serif] gap-[8px] items-start relative shrink-0 w-full">
-            <p className="relative shrink-0 text-[#6490ff] text-nowrap whitespace-pre">필수</p>
+            <p className="relative shrink-0 text-[#6490ff] text-nowrap whitespace-pre">{t('common.required')}</p>
             <p className="basis-0 grow min-h-px min-w-px relative shrink-0 text-black">
-              추가 검사 및 비용발생 동의
+              {t('consent.additionalTestConsent')}
             </p>
           </div>
           <p className="font-['Pretendard:Medium',_sans-serif] relative shrink-0 text-black w-full">
-            내시경 검사에서 이상이 발견되면 정확한 진단을 위하여 즉시 조직검사, 헬리코박터 검사 등 추가검사를 할 수 있습니다. 이때 추가 비용이 발생하게 됩니다. 내시경 검사 중 조직 검사 또는 헬리코박터 검사를 시행하는 것에 동의하십니까?
+            {t('consent.additionalTestDesc')}
           </p>
         </div>
 
@@ -121,7 +121,7 @@ export function ConsentCheckbox() {
               )}
             </div>
             <p className="basis-0 font-['Pretendard:Regular',_sans-serif] grow leading-[1.5] min-h-px min-w-px not-italic relative shrink-0 text-[16.734px] text-black text-left tracking-[-0.3347px]">
-              예 (필수)
+              {t('consent.yesRequired')}
             </p>
           </button>
 
@@ -140,7 +140,7 @@ export function ConsentCheckbox() {
               )}
             </div>
             <p className="basis-0 font-['Pretendard:Regular',_sans-serif] grow leading-[1.5] min-h-px min-w-px not-italic relative shrink-0 text-[16.734px] text-black text-left tracking-[-0.3347px]">
-              아니오
+              {t('common.no')}
             </p>
           </button>
         </div>
@@ -155,7 +155,7 @@ export function ConsentCheckbox() {
             className="basis-0 bg-[#6490ff] box-border content-stretch flex gap-[4px] grow h-[56px] items-center justify-center min-h-px min-w-px p-[20px] relative rounded-[8px] shadow-[0px_2.59px_12.952px_0px_rgba(0,0,0,0.12)] shrink-0 disabled:opacity-50 active:scale-95 transition-transform"
           >
             <p className="font-['Noto_Sans_KR:Bold',_sans-serif] font-bold leading-[1.4] relative shrink-0 text-[16px] text-center text-nowrap text-white tracking-[-0.32px] whitespace-pre">
-              {submitting ? '저장 중...' : '필수 동의하기'}
+              {submitting ? t('common.loading') : t('consent.agreeRequired')}
             </p>
           </button>
         </div>
