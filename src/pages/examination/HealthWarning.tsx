@@ -62,8 +62,8 @@ export function HealthWarning() {
       </div>
 
       <ScrollableContainer>
-        {/* 의사 인사 영역 - DoctorGreeting과 동일한 스타일 */}
-        <div className="h-[152px] w-full relative mb-[24px]">
+        {/* 의사 인사 영역 */}
+        <div className="h-[152px] w-full relative mb-[16px]">
           <div className="absolute bottom-0 right-0 w-[180px] h-[160px]">
             <img
               alt="Dr.Lee"
@@ -72,7 +72,7 @@ export function HealthWarning() {
             />
           </div>
 
-          <div className="absolute left-0 top-0 w-[calc(100%-180px)] pl-[20px] pt-[10px] flex flex-col gap-[15px]">
+          <div className="absolute left-0 top-0 w-[calc(100%-180px)] pl-[20px] pt-[10px] flex flex-col gap-[10px]">
             <div className="text-[20px] text-[#222222] tracking-[-0.46px] leading-[1.3] font-['Noto_Sans_KR:Bold',sans-serif] font-bold">
               <p>{t('healthWarning.title1')}</p>
               <p>{t('healthWarning.title2')}</p>
@@ -86,45 +86,65 @@ export function HealthWarning() {
             </p>
           </div>
         </div>
-        <div className="flex flex-col items-center p-[16px] gap-[16px]">
-          <div className="bg-white border border-[#dddddd] border-solid rounded-[8px] p-[16px] flex flex-col gap-[24px] w-full">
-            {/* 위험 메시지 */}
-            {showDanger && (
+
+        <div className="flex flex-col items-center px-[16px] gap-[16px]">
+          {/* 위험 카드 */}
+          {showDanger && (
+            <div className="bg-white border border-[#dddddd] rounded-[8px] p-[16px] w-full">
               <div className="flex flex-col gap-[8px]">
-                <div className="flex gap-[8px] items-start">
-                  <p className="font-['Pretendard:Bold',sans-serif] text-[16px] text-[#fd4848] tracking-[-0.32px] leading-[1.5]">
-                    {t('healthWarning.danger')}
-                  </p>
-                  <p className="flex-1 font-['Noto_Sans_KR:Bold',sans-serif] font-bold text-[16px] text-black tracking-[-0.32px] leading-[1.4]">
+                <div className="flex gap-[8px] items-center">
+                  <div className="bg-[#fd4848] rounded-full px-[10px] py-[2px]">
+                    <span className="text-[12px] text-white font-semibold">
+                      {t('healthWarning.danger')}
+                    </span>
+                  </div>
+                  <p className="flex-1 font-['Pretendard:Bold',sans-serif] font-bold text-[16px] text-black tracking-[-0.32px] leading-[1.5]">
                     🫀 {t('healthWarning.heartDisease')}
                   </p>
                 </div>
-                <p className="font-['Noto_Sans_KR:Regular',sans-serif] text-[16px] text-black tracking-[-0.32px] leading-[1.4]">
-                  {t('healthWarning.heartDesc')}
-                </p>
+                <div className="text-[14px] text-[#4f5161] tracking-[-0.28px] leading-[2] font-medium">
+                  <p><span className="font-black text-[#fd4848]">|</span>   {t('healthWarning.heartDesc1')}</p>
+                  <p><span className="font-black text-[#fd4848]">|</span>   {t('healthWarning.heartDesc2')}</p>
+                  <p><span className="font-black text-[#fd4848]">|</span>   {t('healthWarning.heartDesc3')}</p>
+                </div>
               </div>
-            )}
+            </div>
+          )}
 
-            {/* 주의 메시지 */}
-            {showCaution && (
+          {/* 주의 카드 */}
+          {showCaution && (
+            <div className="bg-white border border-[#dddddd] rounded-[8px] p-[16px] w-full">
               <div className="flex flex-col gap-[8px]">
-                <div className="flex gap-[8px] items-start">
-                  <p className="font-['Pretendard:Bold',sans-serif] text-[16px] text-[#fd4848] tracking-[-0.32px] leading-[1.5]">
-                    {t('healthWarning.caution')}
-                  </p>
+                <div className="flex gap-[8px] items-center">
+                  <div className="bg-[#ff8e26] rounded-full px-[10px] py-[2px]">
+                    <span className="text-[12px] text-white font-semibold">
+                      {t('healthWarning.caution')}
+                    </span>
+                  </div>
                   <p className="flex-1 font-['Noto_Sans_KR:Bold',sans-serif] font-bold text-[16px] text-black tracking-[-0.32px] leading-[1.4]">
-                    🫁 {t('healthWarning.respiratoryDisease')}
+                    🫁  {t('healthWarning.respiratoryDisease')}
                   </p>
                 </div>
-                <p className="font-['Noto_Sans_KR:Regular',sans-serif] text-[16px] text-black tracking-[-0.32px] leading-[1.4]">
-                  {t('healthWarning.respiratoryDesc')}
-                </p>
+                <div className="text-[14px] text-[#4f5161] tracking-[-0.28px] leading-[2] font-medium">
+                  <p><span className="font-black text-[#ff8e26]">|</span>   {t('healthWarning.respiratoryDesc1')}</p>
+                  <p><span className="font-black text-[#ff8e26]">|</span>   {t('healthWarning.respiratoryDesc2')}</p>
+                  <p><span className="font-black text-[#ff8e26]">|</span>   {t('healthWarning.respiratoryDesc3')}</p>
+                </div>
               </div>
-            )}
+            </div>
+          )}
+
+          {/* 노란 안내 문구 */}
+          <div className="bg-[#fff8d8] border border-[#fed200] rounded-[8px] p-[16px] w-full">
+            <p className="text-[13px] text-[#786300] text-center leading-[1.4] tracking-[-0.26px]">
+              <span className="font-bold">⚠️</span> {t('healthCheck.unknownWarningLine1')}
+              <br />
+              {t('healthCheck.unknownWarningLine2')}
+            </p>
           </div>
 
           <BottomButton
-            text={t('common.confirm')}
+            text={t('healthWarning.nextStep')}
             onClick={() => navigate('/health-check/recording')}
             active={true}
           />
