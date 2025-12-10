@@ -35,10 +35,14 @@ mirabel/
 │   │   ├── hooks/                # 커스텀 훅
 │   │   │   ├── useAnimationData.ts   # 아바타 애니메이션 데이터
 │   │   │   ├── useAudioContext.ts    # 오디오 컨텍스트 관리
-│   │   │   ├── useLiveKit.ts         # LiveKit 연결 관리
+│   │   │   ├── useLiveKit.ts         # LiveKit 연결 관리 (language 전달)
 │   │   │   └── useTrackVolume.ts     # 마이크 볼륨 추적
+│   │   ├── i18n/                 # 다국어 지원
+│   │   │   ├── index.ts              # useTranslation 훅
+│   │   │   └── translations/         # 언어별 번역 파일 (ko.ts, en.ts)
 │   │   ├── store/                # Zustand 스토어
 │   │   │   ├── consultation-store.ts # 상담 메시지 저장
+│   │   │   ├── language-store.ts     # 언어 설정 저장
 │   │   │   └── patient-store.ts      # 환자 정보 저장
 │   │   └── types/                # TypeScript 타입 정의
 │   └── pages/                    # 페이지 컴포넌트
@@ -63,10 +67,18 @@ mirabel/
 
 | 훅 | 용도 |
 |-----|------|
-| `useLiveKit` | LiveKit 토큰 발급 및 연결 관리 |
+| `useLiveKit` | LiveKit 토큰 발급 및 연결 관리 (language 메타데이터 전달) |
 | `useAnimationData` | Agent → Unity 애니메이션 데이터 수신 |
 | `useTrackVolume` | 마이크 볼륨 실시간 추적 |
 | `useAudioContext` | iOS Safari 오디오 컨텍스트 unlock |
+
+### 다국어 지원 (`src/lib/i18n/`)
+
+| 파일 | 용도 |
+|-----|------|
+| `index.ts` | `useTranslation` 훅 - 번역 및 언어 상태 |
+| `translations/ko.ts` | 한국어 번역 |
+| `translations/en.ts` | 영어 번역 |
 
 ## 개발 가이드라인
 
@@ -82,9 +94,31 @@ mirabel/
 - `src/assets/`: 컴포넌트에서 import하는 이미지
 - `public/images/`: 정적 경로로 참조하는 이미지
 
+### 다국어 사용
+
+```typescript
+// 컴포넌트에서 번역 사용
+import { useTranslation } from '@/lib/i18n';
+
+function MyComponent() {
+  const { t, language, setLanguage } = useTranslation();
+
+  return (
+    <div>
+      <p>{t('common.confirm')}</p>
+      <button onClick={() => setLanguage('en')}>English</button>
+    </div>
+  );
+}
+```
+
 ### LiveKit 통신
 
 ```typescript
+// 연결 시 language 메타데이터 전달
+const { connect } = useLiveKit();
+connect(language); // 'ko' | 'en' → Agent에서 언어별 응답
+
 // RPC 등록 (Agent → Client)
 localParticipant.registerRpcMethod('agent_state_changed', handler);
 
@@ -158,4 +192,4 @@ LIVEKIT_URL=wss://xxx.livekit.cloud
 
 ---
 
-**업데이트**: 2024-12-10
+**업데이트**: 2025-12-10
