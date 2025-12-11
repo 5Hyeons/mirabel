@@ -157,5 +157,9 @@
   "avatar.end": "End",
   "avatar.listening": "Listening...",
   "avatar.thinking": "Thinking...",
-  "avatar.speaking": "Speaking..."
+  "avatar.speaking": "Speaking...",
+
+  "faq.title": "Frequently Asked Questions",
+  "faq.subtitle": "Tap a question to ask the AI",
+  "faq.close": "Close"
 }

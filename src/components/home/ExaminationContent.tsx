@@ -32,7 +32,7 @@ export function ExaminationContent({ examinationType, onCheckboxComplete }: Exam
 
   useEffect(() => {
     // 필수 체크박스가 모두 선택됐는지 확인
-    const required = ['tissue-yes', 'dental-confirm', 'warning-understood', 'consent-yes'];
+    const required = ['dental-confirm', 'warning-understood', 'consent-yes'];
     const allSelected = required.every(key => Object.values(checkboxes).includes(key));
     onCheckboxComplete?.(allSelected);
   }, [checkboxes, onCheckboxComplete]);

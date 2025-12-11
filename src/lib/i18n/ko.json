@@ -157,5 +157,9 @@
   "avatar.end": "종료",
   "avatar.listening": "듣는 중이에요",
   "avatar.thinking": "생각 중이에요",
-  "avatar.speaking": "답변 중이에요"
+  "avatar.speaking": "답변 중이에요",
+
+  "faq.title": "자주 묻는 질문",
+  "faq.subtitle": "버튼을 눌러서 AI에게 물어보세요",
+  "faq.close": "닫기"
 }

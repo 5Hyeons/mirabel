@@ -6,6 +6,8 @@ import { ChatMessage, AgentState } from '@/lib/types/consultation';
 import { useAnimationData } from '@/lib/hooks';
 import { useTranslation } from '@/lib/i18n';
 import { useFontSizeStore } from '@/lib/store/font-size-store';
+import { useConsultationStore } from '@/lib/store/consultation-store';
+import { FAQBottomSheet } from '@/components/shared/FAQBottomSheet';
 import imgIconArrowLeft from '@/assets/icon-arrow-left.svg';
 import imgIconSize from '@/assets/icon-size.webp';
 import type { useUnityContext } from 'react-unity-webgl';
@@ -38,6 +40,7 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShow
   const isAgentReady = agentState === 'listening';
   const { t, language } = useTranslation();
   const { fontSize, toggleFontSize } = useFontSizeStore();
+  const { addMessage } = useConsultationStore();
   const fontSizeLabel = fontSize === 'normal' ? '' : fontSize === 'large' ? ' (L)' : ' (XL)';
 
   const { unityProvider, isLoaded, sendMessage } = unityContext;
@@ -48,6 +51,7 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShow
   const room = useRoomContext();
   const [isMicEnabled, setIsMicEnabled] = useState(false);
   const [sampleQuestions, setSampleQuestions] = useState<string[]>([]);
+  const [showFAQ, setShowFAQ] = useState(false);
 
   const hasUserInteracted = useRef(false);
 
@@ -199,6 +203,44 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShow
     onShowSummary();
   };
 
+  // FAQ 항목 선택 핸들러 - RPC로 질문 전송
+  const handleSelectFAQ = async (question: string) => {
+    setShowFAQ(false); // 바텀시트 닫기
+
+    if (!localParticipant || !room) return;
+
+    // FAQ 질문을 대화 기록에 추가
+    addMessage({
+      id: `faq-${Date.now()}`,
+      message: question,
+      isUser: true,
+      timestamp: Date.now(),
+      sender: 'You',
+      isFinal: true,
+    });
+
+    try {
+      // Agent 말 끊기 (현재 말하고 있다면)
+      handleInterrupt();
+
+      const remoteParticipants = Array.from(room.remoteParticipants.values());
+      const agentParticipant = remoteParticipants.find(p => p.identity.startsWith('agent'));
+
+      if (agentParticipant) {
+        await localParticipant.performRpc({
+          destinationIdentity: agentParticipant.identity,
+          method: 'send_text_input',
+          payload: JSON.stringify({ text: question }),
+        });
+        console.log('[AvatarView] FAQ question sent:', question);
+      } else {
+        console.warn('[AvatarView] No agent participant found for FAQ RPC');
+      }
+    } catch (error) {
+      console.error('[AvatarView] Failed to send FAQ question:', error);
+    }
+  };
+
   useEffect(() => {
     if (interruptSignal > 0 && isLoaded) {
       sendMessage('ReactBridge', 'OnAnimationData', 'interrupted');
@@ -301,14 +343,17 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShow
           </div>
 
           {/* FAQ 힌트 바 */}
-          <div className="backdrop-blur-[10px] bg-white content-stretch flex gap-[8px] min-h-[46px] items-center leading-[1.4] max-w-full px-[16px] py-[8px] rounded-[8px] shrink-0 text-nowrap w-full mx-auto">
-            <p className="basis-0 font-normal grow min-h-px min-w-px overflow-ellipsis overflow-hidden shrink-0 text-[#666666] text-scale-16 tracking-[-0.32px]">
+          <button
+            onClick={() => setShowFAQ(true)}
+            className="backdrop-blur-[10px] bg-white content-stretch flex gap-[8px] min-h-[46px] items-center leading-[1.4] max-w-full px-[16px] py-[8px] rounded-[8px] shrink-0 text-nowrap w-full mx-auto active:scale-[0.98] transition-transform"
+          >
+            <p className="basis-0 font-normal grow min-h-px min-w-px overflow-ellipsis overflow-hidden shrink-0 text-[#666666] text-scale-16 tracking-[-0.32px] text-left">
               Q. {sampleQuestions[0] || '...'}
             </p>
             <p className="font-medium shrink-0 text-[#dddddd] text-scale-14 text-center tracking-[-0.28px]">
               {t('avatar.seeMore')}
             </p>
-          </div>
+          </button>
 
           {/* 메인 텍스트 */}
           <div className="content-stretch flex flex-col font-normal gap-[10px] items-center justify-center leading-[1.3] p-[20px] shrink-0 text-center w-full">
@@ -368,14 +413,17 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShow
           </div>
 
           {/* FAQ 힌트 바 */}
-          <div className="backdrop-blur-[10px] bg-white content-stretch flex gap-[8px] min-h-[46px] items-center leading-[1.4] max-w-full px-[16px] py-[8px] rounded-[8px] shrink-0 text-nowrap w-full mx-auto">
-            <p className="basis-0 font-normal grow min-h-px min-w-px overflow-ellipsis overflow-hidden shrink-0 text-[#666666] text-scale-16 tracking-[-0.32px]">
+          <button
+            onClick={() => setShowFAQ(true)}
+            className="backdrop-blur-[10px] bg-white content-stretch flex gap-[8px] min-h-[46px] items-center leading-[1.4] max-w-full px-[16px] py-[8px] rounded-[8px] shrink-0 text-nowrap w-full mx-auto active:scale-[0.98] transition-transform"
+          >
+            <p className="basis-0 font-normal grow min-h-px min-w-px overflow-ellipsis overflow-hidden shrink-0 text-[#666666] text-scale-16 tracking-[-0.32px] text-left">
               Q. {sampleQuestions[0] || '...'}
             </p>
             <p className="font-medium shrink-0 text-[#dddddd] text-scale-14 text-center tracking-[-0.28px]">
               {t('avatar.seeMore')}
             </p>
-          </div>
+          </button>
 
           {/* Agent Message - 3줄 고정 높이, 항상 공간 유지 */}
           <div
@@ -467,6 +515,14 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShow
           </div>
         </div>
       )}
+
+      {/* FAQ 바텀시트 */}
+      <FAQBottomSheet
+        isOpen={showFAQ}
+        onClose={() => setShowFAQ(false)}
+        questions={sampleQuestions}
+        onSelectQuestion={handleSelectFAQ}
+      />
     </div>
   );
 }
