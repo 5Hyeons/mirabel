@@ -154,5 +154,8 @@
   "avatar.mute": "Mute",
   "avatar.unmute": "Unmute",
   "avatar.pause": "Pause",
-  "avatar.end": "End"
+  "avatar.end": "End",
+  "avatar.listening": "Listening...",
+  "avatar.thinking": "Thinking...",
+  "avatar.speaking": "Speaking..."
 }

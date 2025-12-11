@@ -154,5 +154,8 @@
   "avatar.mute": "음소거",
   "avatar.unmute": "해제",
   "avatar.pause": "일시중지",
-  "avatar.end": "종료"
+  "avatar.end": "종료",
+  "avatar.listening": "듣는 중이에요",
+  "avatar.thinking": "생각 중이에요",
+  "avatar.speaking": "답변 중이에요"
 }

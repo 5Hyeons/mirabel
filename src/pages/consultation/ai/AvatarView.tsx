@@ -7,7 +7,6 @@ import { useAnimationData } from '@/lib/hooks';
 import { useTranslation } from '@/lib/i18n';
 import { useFontSizeStore } from '@/lib/store/font-size-store';
 import imgIconArrowLeft from '@/assets/icon-arrow-left.svg';
-import imgIconGlobe from '@/assets/icon-globe.webp';
 import imgIconSize from '@/assets/icon-size.webp';
 import type { useUnityContext } from 'react-unity-webgl';
 
@@ -290,12 +289,6 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShow
                 <img alt="" className="block max-w-none size-full" src={imgIconArrowLeft} />
               </button>
             </div>
-            <div className="content-stretch flex gap-[4px] items-center p-[8px] shrink-0">
-              <img alt="" className="shrink-0 size-[20px]" src={imgIconGlobe} />
-              <p className="font-bold leading-[1.4] shrink-0 text-scale-14 text-[rgba(17,17,17,0.5)] text-nowrap text-right tracking-[-0.28px]">
-                {language === 'ko' ? t('language.korean') : t('language.english')}
-              </p>
-            </div>
             <button
               onClick={toggleFontSize}
               className="content-stretch flex gap-[4px] items-center p-[8px] shrink-0"
@@ -363,12 +356,6 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShow
                 <img alt="" className="block max-w-none size-full" src={imgIconArrowLeft} />
               </button>
             </div>
-            <div className="content-stretch flex gap-[4px] items-center p-[8px] shrink-0">
-              <img alt="" className="shrink-0 size-[20px]" src={imgIconGlobe} />
-              <p className="font-bold leading-[1.4] shrink-0 text-scale-14 text-[rgba(17,17,17,0.5)] text-nowrap text-right tracking-[-0.28px]">
-                {language === 'ko' ? t('language.korean') : t('language.english')}
-              </p>
-            </div>
             <button
               onClick={toggleFontSize}
               className="content-stretch flex gap-[4px] items-center p-[8px] shrink-0"
@@ -431,45 +418,50 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShow
             </div>
             {/* 버튼들 - 볼륨 오버레이보다 높은 z-index */}
             <div
-              className="relative z-[90] content-stretch flex gap-[12px] h-[70px] items-end justify-center px-[16px] pt-[8px] w-full"
-              style={{ paddingBottom: 'calc(8px + env(safe-area-inset-bottom, 0px))' }}
+              className="relative z-[90] flex items-center justify-center px-[32px] py-[20px] w-full"
+              style={{ paddingBottom: 'calc(20px + env(safe-area-inset-bottom, 0px))' }}
             >
-              {/* 음소거 버튼 */}
+              {/* 마이크 버튼 - 원형 */}
               <button
                 onClick={toggleMic}
                 disabled={!isLoaded}
-                className={`flex-[4] h-[56px] rounded-[8px] shadow-[0px_2.59px_12.952px_0px_rgba(0,0,0,0.12)] flex items-center justify-center gap-[4px] active:scale-95 transition-transform disabled:opacity-50 ${
-                  isMicEnabled ? 'bg-[#666666]' : 'bg-[#ff6464]'
-                }`}
+                className="size-[67px] rounded-full bg-white shadow-[0px_4px_20px_0px_rgba(0,0,0,0.12)] flex items-center justify-center active:scale-95 transition-transform disabled:opacity-50"
               >
-                <img src="/images/icon-mic-mono.webp" alt="" width={20} height={20} />
-                <p className="font-bold text-scale-16 text-white tracking-[-0.32px]">
-                  {isMicEnabled ? t('avatar.mute') : t('avatar.unmute')}
-                </p>
+                <img
+                  src="/images/icon-mic-mono.webp"
+                  alt=""
+                  width={28}
+                  height={28}
+                  style={{
+                    filter: isMicEnabled
+                      ? 'invert(52%) sepia(76%) saturate(1095%) hue-rotate(196deg) brightness(101%) contrast(101%)'
+                      : 'invert(52%) sepia(76%) saturate(2000%) hue-rotate(330deg) brightness(100%) contrast(100%)',
+                  }}
+                />
               </button>
 
-              {/* 일시중지 버튼 */}
-              <button
-                onClick={handleInterruptAgent}
-                disabled={!isLoaded}
-                className="flex-[4] h-[56px] bg-[#6490ff] rounded-[8px] shadow-[0px_2.59px_12.952px_0px_rgba(0,0,0,0.12)] flex items-center justify-center gap-[4px] active:scale-95 transition-transform disabled:opacity-50"
-              >
-                <img src="/images/icon-stop.webp" alt="" width={20} height={20} />
-                <p className="font-bold text-scale-16 text-white tracking-[-0.32px]">
-                  {t('avatar.pause')}
-                </p>
-              </button>
+              {/* 중앙 상태 텍스트 */}
+              <p className="flex-1 text-scale-16 text-[#6490ff] text-center font-medium tracking-[-0.32px]">
+                {agentState === 'listening' && t('avatar.listening')}
+                {agentState === 'thinking' && t('avatar.thinking')}
+                {agentState === 'speaking' && t('avatar.speaking')}
+              </p>
 
-              {/* 종료 버튼 */}
+              {/* 종료 버튼 - 원형 */}
               <button
                 onClick={handleEndClick}
                 disabled={!isLoaded}
-                className="flex-[3] h-[56px] bg-[#fd4848] rounded-[8px] shadow-[0px_2.59px_12.952px_0px_rgba(0,0,0,0.12)] flex items-center justify-center gap-[4px] active:scale-95 transition-transform disabled:opacity-50"
+                className="size-[67px] rounded-full bg-white shadow-[0px_4px_20px_0px_rgba(0,0,0,0.12)] flex items-center justify-center active:scale-95 transition-transform disabled:opacity-50"
               >
-                <img src="/images/icon-call-slash-mono.webp" alt="" width={20} height={20} />
-                <p className="font-bold text-scale-16 text-white tracking-[-0.32px]">
-                  {t('avatar.end')}
-                </p>
+                <img
+                  src="/images/icon-call-slash-mono.webp"
+                  alt=""
+                  width={28}
+                  height={28}
+                  style={{
+                    filter: 'invert(52%) sepia(76%) saturate(2000%) hue-rotate(330deg) brightness(100%) contrast(100%)',
+                  }}
+                />
               </button>
             </div>
           </div>
