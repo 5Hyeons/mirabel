@@ -6,9 +6,10 @@ import { useTranslation } from '@/lib/i18n';
 interface ExaminationContentProps {
   examinationType: string;
   onCheckboxComplete?: (complete: boolean) => void;
+  onContentInteraction?: () => void;
 }
 
-export function ExaminationContent({ examinationType, onCheckboxComplete }: ExaminationContentProps) {
+export function ExaminationContent({ examinationType, onCheckboxComplete, onContentInteraction }: ExaminationContentProps) {
   const { t, language } = useTranslation();
   const [content, setContent] = useState<ExaminationType | null>(null);
   const [loading, setLoading] = useState(true);
@@ -67,7 +68,11 @@ export function ExaminationContent({ examinationType, onCheckboxComplete }: Exam
   return (
     <div className="flex flex-col gap-[24px] w-full">
       {/* 메인 카드 */}
-      <div className="bg-white border border-[#dddddd] border-solid rounded-[8px] p-[16px] flex flex-col gap-[24px]">
+      <div
+        className="bg-white border border-[#dddddd] border-solid rounded-[8px] p-[16px] flex flex-col gap-[24px]"
+        onMouseDown={onContentInteraction}
+        onTouchStart={onContentInteraction}
+      >
         <p className="font-['Noto_Sans_KR:Bold',sans-serif] font-bold text-scale-18 text-[#111111] tracking-[-0.36px] leading-[1.4]">
           {t('examination.consentForm')}
         </p>
@@ -84,16 +89,18 @@ export function ExaminationContent({ examinationType, onCheckboxComplete }: Exam
 
       {/* 추가 검사 동의 (별도 영역) */}
       {consentSection && (
-        <ContentBlock
-          section={consentSection}
-          selectedValue={checkboxes['section-consent']}
-          onCheckboxChange={(optionId) => {
-            setCheckboxes(prev => ({
-              ...prev,
-              'section-consent': optionId
-            }));
-          }}
-        />
+        <div onMouseDown={onContentInteraction} onTouchStart={onContentInteraction}>
+          <ContentBlock
+            section={consentSection}
+            selectedValue={checkboxes['section-consent']}
+            onCheckboxChange={(optionId) => {
+              setCheckboxes(prev => ({
+                ...prev,
+                'section-consent': optionId
+              }));
+            }}
+          />
+        </div>
       )}
     </div>
   );

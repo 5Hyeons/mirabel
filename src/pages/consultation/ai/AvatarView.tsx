@@ -308,54 +308,40 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShow
 
   return (
     <div className="bg-[#f0f3ff] relative w-full h-full overflow-y-auto">
-      {/* 공통 Unity Canvas - 항상 렌더링 (재로드 방지) */}
-      <div
-        className="absolute left-0 right-0 h-[420px] z-[45] flex justify-center items-end pointer-events-none"
-        style={{ bottom: 'calc(70px + env(safe-area-inset-bottom, 0px))', touchAction: 'pan-y' }}
-      >
-        <div style={{ width: 'min(360px, 100vw)', height: '420px' }}>
-          <Unity
-            unityProvider={unityProvider}
-            style={{ width: '100%', height: '100%' }}
-          />
-        </div>
-      </div>
-
-      {/* 대화 시작 전 - 플렉스 레이아웃 */}
-      {showReadyScreen && (
-        <div className="flex flex-col h-full">
-          {/* Header */}
-          <div className="content-stretch flex items-center pb-[12px] pt-[32px] px-[20px] shrink-0 w-full">
-            <div className="basis-0 content-stretch flex gap-[4px] grow h-[36px] items-center min-h-px min-w-px shrink-0">
-              <button onClick={onBack} className="shrink-0 size-[24px]">
-                <img alt="" className="block max-w-none size-full" src={imgIconArrowLeft} />
-              </button>
-            </div>
-            <button
-              onClick={toggleFontSize}
-              className="content-stretch flex gap-[4px] items-center p-[8px] shrink-0"
-            >
-              <img alt="" className="shrink-0 size-[20px]" src={imgIconSize} />
-              <p className="font-bold leading-[1.4] shrink-0 text-scale-14 text-[rgba(17,17,17,0.5)] text-nowrap text-right tracking-[-0.28px]">
-                {t('common.sizeAdjust')}{fontSizeLabel}
-              </p>
+      <div className="flex flex-col min-h-full">
+        {/* Header - 공통 */}
+        <div className="content-stretch flex items-center pb-[12px] pt-[32px] px-[20px] shrink-0 w-full">
+          <div className="basis-0 content-stretch flex gap-[4px] grow h-[36px] items-center min-h-px min-w-px shrink-0">
+            <button onClick={onBack} className="shrink-0 size-[24px]">
+              <img alt="" className="block max-w-none size-full" src={imgIconArrowLeft} />
             </button>
           </div>
-
-          {/* FAQ 힌트 바 */}
           <button
-            onClick={() => setShowFAQ(true)}
-            className="backdrop-blur-[10px] bg-white content-stretch flex gap-[8px] min-h-[46px] items-center leading-[1.4] max-w-full px-[16px] py-[8px] rounded-[8px] shrink-0 text-nowrap w-full mx-auto active:scale-[0.98] transition-transform"
+            onClick={toggleFontSize}
+            className="content-stretch flex gap-[4px] items-center p-[8px] shrink-0"
           >
-            <p className="basis-0 font-normal grow min-h-px min-w-px overflow-ellipsis overflow-hidden shrink-0 text-[#666666] text-scale-16 tracking-[-0.32px] text-left">
-              Q. {sampleQuestions[0] || '...'}
-            </p>
-            <p className="font-medium shrink-0 text-[#dddddd] text-scale-14 text-center tracking-[-0.28px]">
-              {t('avatar.seeMore')}
+            <img alt="" className="shrink-0 size-[20px]" src={imgIconSize} />
+            <p className="font-bold leading-[1.4] shrink-0 text-scale-14 text-[rgba(17,17,17,0.5)] text-nowrap text-right tracking-[-0.28px]">
+              {t('common.sizeAdjust')}{fontSizeLabel}
             </p>
           </button>
+        </div>
 
-          {/* 메인 텍스트 */}
+        {/* FAQ 힌트 바 - 공통 */}
+        <button
+          onClick={() => setShowFAQ(true)}
+          className="backdrop-blur-[10px] bg-white content-stretch flex gap-[8px] min-h-[46px] items-center leading-[1.4] max-w-full px-[16px] py-[8px] rounded-[8px] shrink-0 text-nowrap w-full mx-auto active:scale-[0.98] transition-transform"
+        >
+          <p className="basis-0 font-normal grow min-h-px min-w-px overflow-ellipsis overflow-hidden shrink-0 text-[#666666] text-scale-16 tracking-[-0.32px] text-left">
+            Q. {sampleQuestions[0] || '...'}
+          </p>
+          <p className="font-medium shrink-0 text-[#dddddd] text-scale-14 text-center tracking-[-0.28px]">
+            {t('avatar.seeMore')}
+          </p>
+        </button>
+
+        {/* 메인 콘텐츠 - 조건부 */}
+        {showReadyScreen ? (
           <div className="content-stretch flex flex-col font-normal gap-[10px] items-center justify-center leading-[1.3] p-[20px] shrink-0 text-center w-full">
             <div className="shrink-0 text-[#222222] text-scale-23 tracking-[-0.46px] w-full">
               <p className="mb-0">{t('avatar.questionTitle1')}</p>
@@ -365,11 +351,36 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShow
               {t('avatar.tapToSpeak')}
             </p>
           </div>
+        ) : (
+          <div
+            className="shrink-0 px-5 flex flex-col justify-end overflow-hidden"
+            style={{ height: 'calc(20px * var(--font-scale, 1) * 1.4 * 3 + 32px)' }}
+          >
+            {isLoaded && lastMessage && (
+              <p className="text-scale-20 leading-[1.4] tracking-[-0.46px] text-black text-center">
+                {lastMessage.message}
+              </p>
+            )}
+          </div>
+        )}
 
-          {/* Unity 공간 확보용 placeholder */}
-          <div className="shrink-0 mt-auto h-[420px]" />
+        {/* Unity 컨테이너 - 항상 렌더링 (재로드 방지), flex 흐름에 포함 */}
+        <div className="shrink-0 mt-auto h-[420px] relative">
+          <div
+            className="absolute inset-0 flex justify-center items-end pointer-events-none"
+            style={{ zIndex: 45 }}
+          >
+            <div style={{ width: 'min(360px, 100vw)', height: '420px' }}>
+              <Unity
+                unityProvider={unityProvider}
+                style={{ width: '100%', height: '100%' }}
+              />
+            </div>
+          </div>
+        </div>
 
-          {/* 그라데이션 + 버튼 영역 */}
+        {/* 푸터 영역 - 조건부 */}
+        {showReadyScreen ? (
           <div className="shrink-0 relative z-[70]">
             <div className="w-full h-[100px] bg-gradient-to-b from-transparent to-[#f0f3ff] -mt-[100px] relative z-[50] pointer-events-none" />
             <div
@@ -388,75 +399,21 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShow
               </button>
             </div>
           </div>
-        </div>
-      )}
-
-      {/* 대화 중 - 플렉스 레이아웃 */}
-      {!showReadyScreen && (
-        <div className="flex flex-col h-full">
-          {/* Header */}
-          <div className="content-stretch flex items-center pb-[12px] pt-[32px] px-[20px] shrink-0 w-full">
-            <div className="basis-0 content-stretch flex gap-[4px] grow h-[36px] items-center min-h-px min-w-px shrink-0">
-              <button onClick={onBack} className="shrink-0 size-[24px]">
-                <img alt="" className="block max-w-none size-full" src={imgIconArrowLeft} />
-              </button>
-            </div>
-            <button
-              onClick={toggleFontSize}
-              className="content-stretch flex gap-[4px] items-center p-[8px] shrink-0"
-            >
-              <img alt="" className="shrink-0 size-[20px]" src={imgIconSize} />
-              <p className="font-bold leading-[1.4] shrink-0 text-scale-14 text-[rgba(17,17,17,0.5)] text-nowrap text-right tracking-[-0.28px]">
-                {t('common.sizeAdjust')}{fontSizeLabel}
-              </p>
-            </button>
-          </div>
-
-          {/* FAQ 힌트 바 */}
-          <button
-            onClick={() => setShowFAQ(true)}
-            className="backdrop-blur-[10px] bg-white content-stretch flex gap-[8px] min-h-[46px] items-center leading-[1.4] max-w-full px-[16px] py-[8px] rounded-[8px] shrink-0 text-nowrap w-full mx-auto active:scale-[0.98] transition-transform"
-          >
-            <p className="basis-0 font-normal grow min-h-px min-w-px overflow-ellipsis overflow-hidden shrink-0 text-[#666666] text-scale-16 tracking-[-0.32px] text-left">
-              Q. {sampleQuestions[0] || '...'}
-            </p>
-            <p className="font-medium shrink-0 text-[#dddddd] text-scale-14 text-center tracking-[-0.28px]">
-              {t('avatar.seeMore')}
-            </p>
-          </button>
-
-          {/* Agent Message - 3줄 고정 높이, 항상 공간 유지 */}
-          <div
-            className="shrink-0 px-5 flex flex-col justify-end overflow-hidden"
-            style={{ height: 'calc(20px * var(--font-scale, 1) * 1.4 * 3 + 32px)' }}
-          >
-            {isLoaded && lastMessage && (
-              <p className="text-scale-20 leading-[1.4] tracking-[-0.46px] text-black text-center">
-                {lastMessage.message}
-              </p>
-            )}
-          </div>
-
-          {/* Unity 공간 확보용 placeholder */}
-          <div className="shrink-0 mt-auto h-[420px]" />
-
-          {/* Volume-reactive gradient - 앱 컨테이너 하단에서 시작 */}
-          {isLoaded && isMicEnabled && (
-            <div
-              className="absolute left-0 right-0 pointer-events-none z-[60]"
-              style={{
-                bottom: 0,
-                height: '220px',
-                background: 'linear-gradient(to top, rgba(150, 180, 255, 0.5), transparent)',
-                opacity: userVolume > 0.02 ? Math.min((userVolume - 0.02) * 3, 1) : 0,
-                transition: 'opacity 0.2s ease-in-out',
-              }}
-            />
-          )}
-
-          {/* 그라데이션 + 버튼 영역 */}
+        ) : (
           <div className="shrink-0 relative">
-            {/* 푸터 배경 - 볼륨 오버레이보다 낮은 z-index */}
+            {/* Volume-reactive gradient - 푸터 기준 absolute, bottom-0으로 푸터 하단에 맞춤 */}
+            {isLoaded && isMicEnabled && (
+              <div
+                className="absolute left-0 right-0 bottom-0 pointer-events-none"
+                style={{
+                  height: '220px',
+                  zIndex: 60,
+                  background: 'linear-gradient(to top, rgba(150, 180, 255, 0.5), transparent)',
+                  opacity: userVolume > 0.02 ? Math.min((userVolume - 0.02) * 3, 1) : 0,
+                  transition: 'opacity 0.2s ease-in-out',
+                }}
+              />
+            )}
             <div className="absolute inset-0 z-[55]">
               <div className="w-full h-[100px] bg-gradient-to-b from-transparent to-[#f0f3ff] -mt-[100px] pointer-events-none" />
               <div
@@ -464,12 +421,10 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShow
                 style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
               />
             </div>
-            {/* 버튼들 - 볼륨 오버레이보다 높은 z-index */}
             <div
               className="relative z-[90] flex items-center justify-center px-[32px] py-[20px] w-full"
               style={{ paddingBottom: 'calc(20px + env(safe-area-inset-bottom, 0px))' }}
             >
-              {/* 마이크 버튼 - 원형 */}
               <button
                 onClick={toggleMic}
                 disabled={!isLoaded}
@@ -488,14 +443,12 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShow
                 />
               </button>
 
-              {/* 중앙 상태 텍스트 */}
               <p className="flex-1 text-scale-16 text-[#6490ff] text-center font-medium tracking-[-0.32px]">
                 {agentState === 'listening' && t('avatar.listening')}
                 {agentState === 'thinking' && t('avatar.thinking')}
                 {agentState === 'speaking' && t('avatar.speaking')}
               </p>
 
-              {/* 종료 버튼 - 원형 */}
               <button
                 onClick={handleEndClick}
                 disabled={!isLoaded}
@@ -513,8 +466,8 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShow
               </button>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* FAQ 바텀시트 */}
       <FAQBottomSheet

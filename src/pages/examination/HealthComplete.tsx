@@ -2,6 +2,7 @@
  * 건강 상태 - 완료 화면
  */
 
+import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from '@/lib/i18n';
 import { usePatientStore } from '@/lib/store/patient-store';
@@ -18,6 +19,31 @@ export function HealthComplete() {
   const { patientData } = usePatientStore();
   const { fontSize, toggleFontSize } = useFontSizeStore();
   const fontSizeLabel = fontSize === 'normal' ? '' : fontSize === 'large' ? ' (L)' : ' (XL)';
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // 페이지 진입 시 음성 안내 재생
+  useEffect(() => {
+    let isMounted = true;
+    const audio = new Audio('/audio/complete_outro.wav');
+
+    audio.addEventListener('canplaythrough', () => {
+      if (isMounted) {
+        audioRef.current = audio;
+        audio.play().catch((err) => {
+          console.log('[HealthComplete] Audio play failed:', err.message);
+        });
+      }
+    });
+
+    audio.load();
+
+    return () => {
+      isMounted = false;
+      audio.pause();
+      audio.src = '';
+      audioRef.current = null;
+    };
+  }, []);
 
   return (
     <div className="h-full flex flex-col bg-[#f0f3ff]">
@@ -131,7 +157,13 @@ export function HealthComplete() {
             style={{ paddingBottom: 'calc(8px + env(safe-area-inset-bottom, 0px))' }}
           >
             <button
-              onClick={() => navigate('/consultation/ai')}
+              onClick={() => {
+                if (audioRef.current) {
+                  audioRef.current.pause();
+                  audioRef.current = null;
+                }
+                navigate('/consultation/ai');
+              }}
               className="flex-1 bg-[#bcceff] h-[56px] px-[12px] rounded-[8px] flex items-center justify-center shadow-[0px_2.59px_12.952px_0px_rgba(0,0,0,0.12)]"
             >
               <p className="font-bold text-scale-16 text-[#446fdd] tracking-[-0.32px] leading-[1.2] text-center">
@@ -139,7 +171,13 @@ export function HealthComplete() {
               </p>
             </button>
             <button
-              onClick={() => navigate('/')}
+              onClick={() => {
+                if (audioRef.current) {
+                  audioRef.current.pause();
+                  audioRef.current = null;
+                }
+                navigate('/');
+              }}
               className="flex-1 bg-[#6490ff] h-[56px] px-[12px] rounded-[8px] flex items-center justify-center shadow-[0px_2.59px_12.952px_0px_rgba(0,0,0,0.12)]"
             >
               <p className="font-bold text-scale-16 text-white tracking-[-0.32px] leading-[1.2] text-center">

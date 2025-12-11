@@ -21,6 +21,7 @@
 mirabel/
 ├── api/livekit/token.ts          # LiveKit 토큰 생성 API
 ├── public/
+│   ├── audio/                    # TTS 음성 안내 파일 (WAV)
 │   ├── images/                   # 정적 이미지
 │   └── unity/doctor/Build/       # Unity WebGL 빌드
 ├── src/
@@ -102,10 +103,10 @@ Unity ReactBridge → FluentTAvatar (립싱크)
 
 ```
 z-90: 버튼 (최상단, 항상 클릭 가능)
-z-60: Volume gradient (fixed, 화면 하단)
+z-60: Volume gradient (푸터 기준 absolute, 스크롤과 함께 이동)
 z-55: 푸터 배경 (볼륨 오버레이에 가려짐)
 z-50: 그라데이션 오버레이 (Unity→푸터 페이드)
-z-45: Unity Canvas
+z-45: Unity Canvas (flex 흐름에 포함, mt-auto로 푸터 위에 배치)
 ```
 
 ## Zustand 스토어
@@ -140,9 +141,22 @@ z-45: Unity Canvas
 | `/consent/complete` | 완료 |
 | `/consultation/ai` | AI 상담 |
 
+## 음성 안내 파일 (public/audio/)
+
+| 파일명 | 용도 | 재생 위치 |
+|--------|------|-----------|
+| `home_intro.wav` | 홈 화면 인트로 | Home.tsx |
+| `exam_explanation.wav` | 검사 설명 | ExaminationContent.tsx |
+| `health_check_intro.wav` | 건강 체크 시작 | HealthCheck.tsx |
+| `warning_notice.wav` | 주의사항 안내 | HealthWarning.tsx |
+| `recording_danger.wav` | 위험군 녹음 안내 | HealthRecording.tsx |
+| `recording_normal.wav` | 일반 녹음 안내 | HealthRecording.tsx |
+| `complete_outro.wav` | 완료 안내 | HealthComplete.tsx |
+
 ## 개발 가이드라인
 
 - **이미지**: WebP 포맷 사용
+- **오디오**: WAV 포맷, 페이지 진입 시 자동 재생
 - **스타일**: Tailwind 클래스 우선, 인라인 스타일은 동적 값만
 - **타입**: TypeScript strict 모드
 

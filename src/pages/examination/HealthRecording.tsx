@@ -2,9 +2,10 @@
  * 건강 상태 - 음성 녹음 화면
  */
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from '@/lib/i18n';
+import { usePatientStore } from '@/lib/store/patient-store';
 import { HealthCheckHeader } from '@/components/health-check/HealthCheckHeader';
 import { ProgressIndicator } from '@/components/health-check/ProgressIndicator';
 import { ScrollableContainer } from '@/components/shared/ScrollableContainer';
@@ -17,15 +18,73 @@ type RecordingState = 'idle' | 'recording' | 'completed';
 
 export function HealthRecording() {
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
+  const { healthCheckState } = usePatientStore();
   const [recordingState, setRecordingState] = useState<RecordingState>('idle');
   const [recordingTime, setRecordingTime] = useState(0);
+  const [isDangerUser, setIsDangerUser] = useState(false);
+  const [dangerCheckComplete, setDangerCheckComplete] = useState(false);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // 위험군 여부 확인
+  useEffect(() => {
+    const checkDangerStatus = async () => {
+      try {
+        const response = await fetch(`/mock-data.${language}.json`);
+        const data = await response.json();
+        const selectedItems = healthCheckState || [];
+        const hasDangerOrCaution = data.healthCheck.items
+          .filter((item: { id: string }) => selectedItems.includes(item.id))
+          .some((item: { category: string }) => item.category === 'danger' || item.category === 'caution');
+        setIsDangerUser(hasDangerOrCaution);
+        setDangerCheckComplete(true);
+      } catch (error) {
+        console.error('Failed to check danger status:', error);
+        setDangerCheckComplete(true);
+      }
+    };
+
+    checkDangerStatus();
+  }, [healthCheckState, language]);
+
+  // 위험군 확인 완료 후 음성 안내 재생
+  useEffect(() => {
+    if (!dangerCheckComplete) return;
+
+    let isMounted = true;
+    const audioFile = isDangerUser ? '/audio/recording_danger.wav' : '/audio/recording_normal.wav';
+    const audio = new Audio(audioFile);
+
+    audio.addEventListener('canplaythrough', () => {
+      if (isMounted) {
+        audioRef.current = audio;
+        audio.play().catch((err) => {
+          console.log('[HealthRecording] Audio play failed:', err.message);
+        });
+      }
+    });
+
+    audio.load();
+
+    return () => {
+      isMounted = false;
+      audio.pause();
+      audio.src = '';
+      audioRef.current = null;
+    };
+  }, [dangerCheckComplete, isDangerUser]);
 
   const handleStartRecording = async () => {
+    // 재생 중인 오디오 중지
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
+
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       mediaRecorderRef.current = new MediaRecorder(stream);
@@ -233,7 +292,13 @@ export function HealthRecording() {
               </button>
 
               <button
-                onClick={() => navigate('/health-check/complete')}
+                onClick={() => {
+                  if (audioRef.current) {
+                    audioRef.current.pause();
+                    audioRef.current = null;
+                  }
+                  navigate('/health-check/complete');
+                }}
                 className="flex-1 bg-[#6490ff] h-[56px] rounded-[8px] flex items-center justify-center"
               >
                 <p className="font-['Noto_Sans_KR:Bold',sans-serif] font-bold text-[16px] text-white tracking-[-0.32px]">

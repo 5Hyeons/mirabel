@@ -2,7 +2,7 @@
  * 건강 상태 체크 페이지
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePatientStore } from '@/lib/store/patient-store';
 import { useTranslation } from '@/lib/i18n';
@@ -21,6 +21,7 @@ export function HealthCheck() {
   const [healthCheckData, setHealthCheckData] = useState<HealthCheckData | null>(null);
   const [selected, setSelected] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     const loadHealthCheckData = async () => {
@@ -42,7 +43,37 @@ export function HealthCheck() {
     window.scrollTo(0, 0);
   }, []);
 
+  // 페이지 진입 시 음성 안내 재생
+  useEffect(() => {
+    let isMounted = true;
+    const audio = new Audio('/audio/health_check_intro.wav');
+
+    audio.addEventListener('canplaythrough', () => {
+      if (isMounted) {
+        audioRef.current = audio;
+        audio.play().catch((err) => {
+          console.log('[HealthCheck] Audio play failed:', err.message);
+        });
+      }
+    });
+
+    audio.load();
+
+    return () => {
+      isMounted = false;
+      audio.pause();
+      audio.src = '';
+      audioRef.current = null;
+    };
+  }, []);
+
   const handleSubmit = () => {
+    // 재생 중인 오디오 중지
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
+
     setHealthCheckState(selected);
 
     if (!healthCheckData) return;

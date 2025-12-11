@@ -2,7 +2,7 @@
  * 건강 상태 안내 화면
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePatientStore } from '@/lib/store/patient-store';
 import { useTranslation } from '@/lib/i18n';
@@ -20,6 +20,7 @@ export function HealthWarning() {
   const [healthCheckData, setHealthCheckData] = useState<HealthCheckData | null>(null);
   const [showDanger, setShowDanger] = useState(false);
   const [showCaution, setShowCaution] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     const loadData = async () => {
@@ -45,6 +46,39 @@ export function HealthWarning() {
 
     loadData();
   }, [healthCheckState, language]);
+
+  // 페이지 진입 시 음성 안내 재생
+  useEffect(() => {
+    let isMounted = true;
+    const audio = new Audio('/audio/warning_notice.wav');
+
+    audio.addEventListener('canplaythrough', () => {
+      if (isMounted) {
+        audioRef.current = audio;
+        audio.play().catch((err) => {
+          console.log('[HealthWarning] Audio play failed:', err.message);
+        });
+      }
+    });
+
+    audio.load();
+
+    return () => {
+      isMounted = false;
+      audio.pause();
+      audio.src = '';
+      audioRef.current = null;
+    };
+  }, []);
+
+  // 다음 페이지 이동
+  const handleNext = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
+    navigate('/health-check/recording');
+  };
 
   if (!healthCheckData) {
     return (
@@ -145,7 +179,7 @@ export function HealthWarning() {
 
           <BottomButton
             text={t('healthWarning.nextStep')}
-            onClick={() => navigate('/health-check/recording')}
+            onClick={handleNext}
             active={true}
           />
         </div>

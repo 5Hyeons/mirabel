@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
+import { Start } from './pages/Start';
 import { Home } from './pages/Home';
 import { HealthCheck } from './pages/examination/HealthCheck';
 import { HealthWarning } from './pages/examination/HealthWarning';
@@ -22,7 +23,8 @@ function App() {
         data-font-size={fontSize}
       >
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Start />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/health-check" element={<HealthCheck />} />
           <Route path="/health-check/warning" element={<HealthWarning />} />
           <Route path="/health-check/recording" element={<HealthRecording />} />

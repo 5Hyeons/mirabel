@@ -2,7 +2,7 @@
  * 통합 홈 페이지 (검사 정보 + 의사 정보 + 검사 내용)
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePatientStore } from '@/lib/store/patient-store';
 import { useTranslation } from '@/lib/i18n';
@@ -20,6 +20,9 @@ export function Home() {
   const { language } = useLanguageStore();
   const { loading, error, patientData, loadPatientData } = usePatientStore();
   const [checkboxComplete, setCheckboxComplete] = useState(false);
+  const [currentAudio, setCurrentAudio] = useState<'home_intro' | 'exam_explanation'>('home_intro');
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const hasPlayedRef = useRef(false);
 
   useEffect(() => {
     const token = 'mock-token-123';
@@ -30,6 +33,37 @@ export function Home() {
     // 스크롤 위치 초기화
     window.scrollTo(0, 0);
   }, []);
+
+  // 데이터 로드 완료 후 음성 안내 재생
+  useEffect(() => {
+    if (patientData && !hasPlayedRef.current) {
+      hasPlayedRef.current = true;
+      const audio = new Audio('/audio/home_intro.wav');
+      audioRef.current = audio;
+      audio.play().catch((err) => {
+        console.log('[Home] Audio play failed:', err.message);
+      });
+    }
+  }, [patientData]);
+
+  // 콘텐츠 영역 상호작용 시 다음 음성으로 전환
+  const handleContentInteraction = () => {
+    if (currentAudio !== 'home_intro') return;
+
+    // 기존 오디오 중지
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
+
+    // exam_explanation 재생
+    setCurrentAudio('exam_explanation');
+    const audio = new Audio('/audio/exam_explanation.wav');
+    audioRef.current = audio;
+    audio.play().catch((err) => {
+      console.log('[Home] Audio play failed:', err.message);
+    });
+  };
 
   if (loading) {
     return (
@@ -77,11 +111,19 @@ export function Home() {
           <ExaminationContent
             examinationType="stomach"
             onCheckboxComplete={setCheckboxComplete}
+            onContentInteraction={handleContentInteraction}
           />
 
           <BottomButton
             text={t('home.startButton')}
-            onClick={() => navigate('/health-check')}
+            onClick={() => {
+              // 재생 중인 오디오 중지
+              if (audioRef.current) {
+                audioRef.current.pause();
+                audioRef.current = null;
+              }
+              navigate('/health-check');
+            }}
             active={checkboxComplete}
             disabled={!checkboxComplete}
           />
