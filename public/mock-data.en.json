@@ -148,19 +148,6 @@
           "type": "bullet-list"
         },
         {
-          "title": "",
-          "content": "If abnormalities are found during endoscopy, biopsy or Helicobacter testing may be necessary for accurate diagnosis.\nBiopsy may cause slight bleeding and pain, and additional costs will be incurred. Do you consent to biopsy and Helicobacter testing?\n\nTissue Biopsy / Helicobacter Testing",
-          "type": "text"
-        },
-        {
-          "title": "",
-          "type": "checkbox",
-          "checkboxOptions": [
-            {"id": "tissue-yes", "label": "Yes"},
-            {"id": "tissue-no", "label": "No"}
-          ]
-        },
-        {
           "title": "Patients Requiring Caution",
           "content": "During gastroscopy, dental damage (implants, dentures, resin, bridges, orthodontic/retaining devices, loose teeth) may occur if the patient bites the mouthpiece too hard, as well as lip injuries and jaw dislocation. Our clinic is not responsible for such incidents.\n\n*If you have no TMJ disorder and have not received dental treatment on front teeth, select 'No dental issues'",
           "type": "warning"
