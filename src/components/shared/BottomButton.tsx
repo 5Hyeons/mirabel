@@ -16,7 +16,7 @@ export function BottomButton({ text, onClick, disabled = false, active = false }
           disabled={disabled}
           className={`w-full ${bgColor} flex h-[56px] items-center justify-center rounded-[8px] shadow-[0px_2.59px_12.952px_0px_rgba(0,0,0,0.12)] disabled:opacity-50 active:scale-95 transition-all`}
         >
-          <p className="font-['Noto_Sans_KR:Bold',sans-serif] font-bold text-[16px] text-white tracking-[-0.32px] leading-[1.4]">
+          <p className="font-['Noto_Sans_KR:Bold',sans-serif] font-bold text-scale-16 text-white tracking-[-0.32px] leading-[1.4]">
             {text}
           </p>
         </button>

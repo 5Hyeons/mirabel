@@ -55,7 +55,7 @@ export function CheckboxList({ items, selected, onChange }: CheckboxListProps) {
                 </div>
               )}
             </div>
-            <p className={`flex-1 text-[16px] text-black tracking-[-0.32px] leading-[1.5] whitespace-pre-line ${
+            <p className={`flex-1 text-scale-16 text-black tracking-[-0.32px] leading-[1.5] whitespace-pre-line ${
               item.bold ? "font-['Noto_Sans_KR:Bold',sans-serif] font-bold" : "font-['Noto_Sans_KR:Regular',sans-serif] font-normal"
             }`}>
               {item.text}

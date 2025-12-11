@@ -63,27 +63,27 @@ export function HealthWarning() {
 
       <ScrollableContainer>
         {/* 의사 인사 영역 */}
-        <div className="h-[152px] w-full relative mb-[16px]">
-          <div className="absolute bottom-0 right-0 w-[180px] h-[160px]">
-            <img
-              alt="Dr.Lee"
-              src={imgDoctorAvatar}
-              className="w-full h-full object-contain object-bottom"
-            />
-          </div>
-
-          <div className="absolute left-0 top-0 w-[calc(100%-180px)] pl-[20px] pt-[10px] flex flex-col gap-[10px]">
-            <div className="text-[20px] text-[#222222] tracking-[-0.46px] leading-[1.3] font-['Noto_Sans_KR:Bold',sans-serif] font-bold">
+        <div className="min-h-[152px] w-full flex mb-[16px]">
+          <div className="flex-1 pl-[20px] pt-[10px] flex flex-col gap-[10px]">
+            <div className="text-scale-20 text-[#222222] tracking-[-0.46px] leading-[1.3] font-['Noto_Sans_KR:Bold',sans-serif] font-bold">
               <p>{t('healthWarning.title1')}</p>
               <p>{t('healthWarning.title2')}</p>
               <p>{t('healthWarning.title3')}</p>
             </div>
 
-            <p className="text-[16px] text-[#666666] tracking-[-0.32px] leading-[1.3]">
+            <p className="text-scale-16 text-[#666666] tracking-[-0.32px] leading-[1.3]">
               {t('healthWarning.desc1')}
               <br />
               {t('healthWarning.desc2')}
             </p>
+          </div>
+
+          <div className="w-[170px] h-[160px] shrink-0 self-end">
+            <img
+              alt="Dr.Lee"
+              src={imgDoctorAvatar}
+              className="w-full h-full object-contain object-bottom"
+            />
           </div>
         </div>
 
@@ -94,15 +94,15 @@ export function HealthWarning() {
               <div className="flex flex-col gap-[8px]">
                 <div className="flex gap-[8px] items-center">
                   <div className="bg-[#fd4848] rounded-full px-[10px] py-[2px]">
-                    <span className="text-[12px] text-white font-semibold">
+                    <span className="text-scale-12 text-white font-semibold">
                       {t('healthWarning.danger')}
                     </span>
                   </div>
-                  <p className="flex-1 font-['Pretendard:Bold',sans-serif] font-bold text-[16px] text-black tracking-[-0.32px] leading-[1.5]">
+                  <p className="flex-1 font-['Pretendard:Bold',sans-serif] font-bold text-scale-16 text-black tracking-[-0.32px] leading-[1.5]">
                     🫀 {t('healthWarning.heartDisease')}
                   </p>
                 </div>
-                <div className="text-[14px] text-[#4f5161] tracking-[-0.28px] leading-[2] font-medium">
+                <div className="text-scale-14 text-[#4f5161] tracking-[-0.28px] leading-[2] font-medium">
                   <p><span className="font-black text-[#fd4848]">|</span>   {t('healthWarning.heartDesc1')}</p>
                   <p><span className="font-black text-[#fd4848]">|</span>   {t('healthWarning.heartDesc2')}</p>
                   <p><span className="font-black text-[#fd4848]">|</span>   {t('healthWarning.heartDesc3')}</p>
@@ -117,15 +117,15 @@ export function HealthWarning() {
               <div className="flex flex-col gap-[8px]">
                 <div className="flex gap-[8px] items-center">
                   <div className="bg-[#ff8e26] rounded-full px-[10px] py-[2px]">
-                    <span className="text-[12px] text-white font-semibold">
+                    <span className="text-scale-12 text-white font-semibold">
                       {t('healthWarning.caution')}
                     </span>
                   </div>
-                  <p className="flex-1 font-['Noto_Sans_KR:Bold',sans-serif] font-bold text-[16px] text-black tracking-[-0.32px] leading-[1.4]">
+                  <p className="flex-1 font-['Noto_Sans_KR:Bold',sans-serif] font-bold text-scale-16 text-black tracking-[-0.32px] leading-[1.4]">
                     🫁  {t('healthWarning.respiratoryDisease')}
                   </p>
                 </div>
-                <div className="text-[14px] text-[#4f5161] tracking-[-0.28px] leading-[2] font-medium">
+                <div className="text-scale-14 text-[#4f5161] tracking-[-0.28px] leading-[2] font-medium">
                   <p><span className="font-black text-[#ff8e26]">|</span>   {t('healthWarning.respiratoryDesc1')}</p>
                   <p><span className="font-black text-[#ff8e26]">|</span>   {t('healthWarning.respiratoryDesc2')}</p>
                   <p><span className="font-black text-[#ff8e26]">|</span>   {t('healthWarning.respiratoryDesc3')}</p>
@@ -136,7 +136,7 @@ export function HealthWarning() {
 
           {/* 노란 안내 문구 */}
           <div className="bg-[#fff8d8] border border-[#fed200] rounded-[8px] p-[16px] w-full">
-            <p className="text-[13px] text-[#786300] text-center leading-[1.4] tracking-[-0.26px]">
+            <p className="text-scale-13 text-[#786300] text-center leading-[1.4] tracking-[-0.26px]">
               <span className="font-bold">⚠️</span> {t('healthCheck.unknownWarningLine1')}
               <br />
               {t('healthCheck.unknownWarningLine2')}

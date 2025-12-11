@@ -68,7 +68,7 @@ export function Home() {
 
       <ScrollableContainer>
         <div className="flex flex-col items-center p-[16px] gap-[16px]">
-          <p className="font-['Noto_Sans_KR:Medium',sans-serif] font-medium text-[24px] text-[#222222] tracking-[-0.48px] leading-[1.3] text-center w-full whitespace-pre-line">
+          <p className="font-['Noto_Sans_KR:Medium',sans-serif] font-medium text-scale-24 text-[#222222] tracking-[-0.48px] leading-[1.3] text-center w-full whitespace-pre-line">
             {t('home.title')}
           </p>
 

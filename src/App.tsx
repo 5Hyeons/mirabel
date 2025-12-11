@@ -9,13 +9,17 @@ import { ConsentCheckbox } from './pages/consent/Checkbox';
 import { ConsentSignature } from './pages/consent/Signature';
 import { ConsentVoice } from './pages/consent/Voice';
 import { ConsentComplete } from './pages/consent/Complete';
+import { useFontSizeStore } from './lib/store/font-size-store';
 
 function App() {
+  const { fontSize } = useFontSizeStore();
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-200">
       <div
         className="w-full max-w-[480px] h-screen max-h-[932px] relative shadow-xl overflow-hidden"
         style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
+        data-font-size={fontSize}
       >
         <Routes>
           <Route path="/" element={<Home />} />

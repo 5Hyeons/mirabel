@@ -96,7 +96,7 @@ export function HealthCheck() {
           {/* 모르겠어요 선택 시 노란 안내 문구 */}
           {selected.includes('hc-16') && (
             <div className="bg-[#fff8d8] border border-[#fed200] rounded-[8px] p-[16px]">
-              <p className="text-[13px] text-[#786300] text-center leading-[1.4] tracking-[-0.26px]">
+              <p className="text-scale-13 text-[#786300] text-center leading-[1.4] tracking-[-0.26px]">
                 <span className="font-bold">⚠️</span> {t('healthCheck.unknownWarningLine1')}
                 <br />
                 {t('healthCheck.unknownWarningLine2')}

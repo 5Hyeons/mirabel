@@ -9,6 +9,18 @@
   --text-primary: #111111;
   --text-secondary: #666666;
   --accent-red: #ff6b6b;
+
+  /* 콘텐츠 텍스트 크기 스케일 */
+  --font-scale: 1;
+}
+
+/* 크기 조절 설정 */
+[data-font-size="large"] {
+  --font-scale: 1.2;
+}
+
+[data-font-size="xlarge"] {
+  --font-scale: 1.4;
 }
 
 @theme inline {
@@ -45,6 +57,27 @@ body {
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
+
+  /* 크기 조절 가능한 텍스트 */
+  .text-scalable {
+    font-size: calc(1em * var(--font-scale, 1));
+  }
+
+  /* 콘텐츠 영역 전체에 크기 스케일 적용 */
+  .content-scalable {
+    font-size: calc(1rem * var(--font-scale, 1));
+  }
+
+  /* 특정 크기에 스케일 적용 */
+  .text-scale-12 { font-size: calc(12px * var(--font-scale, 1)); }
+  .text-scale-13 { font-size: calc(13px * var(--font-scale, 1)); }
+  .text-scale-14 { font-size: calc(14px * var(--font-scale, 1)); }
+  .text-scale-16 { font-size: calc(16px * var(--font-scale, 1)); }
+  .text-scale-18 { font-size: calc(18px * var(--font-scale, 1)); }
+  .text-scale-20 { font-size: calc(20px * var(--font-scale, 1)); }
+  .text-scale-22 { font-size: calc(22px * var(--font-scale, 1)); }
+  .text-scale-23 { font-size: calc(23px * var(--font-scale, 1)); }
+  .text-scale-24 { font-size: calc(24px * var(--font-scale, 1)); }
 }
 
 @keyframes wave {
