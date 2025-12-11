@@ -17,7 +17,7 @@ function App() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-200">
       <div
-        className="w-full max-w-[480px] h-screen max-h-[932px] relative shadow-xl overflow-hidden"
+        className="w-full max-w-[480px] h-screen max-h-[980px] relative shadow-xl overflow-hidden"
         style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
         data-font-size={fontSize}
       >

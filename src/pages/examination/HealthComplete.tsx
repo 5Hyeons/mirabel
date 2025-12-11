@@ -20,7 +20,7 @@ export function HealthComplete() {
   const fontSizeLabel = fontSize === 'normal' ? '' : fontSize === 'large' ? ' (L)' : ' (XL)';
 
   return (
-    <div className="h-full flex flex-col bg-white">
+    <div className="h-full flex flex-col bg-[#f0f3ff]">
       {/* 헤더 */}
       <div className="flex items-center pb-[12px] pt-[32px] px-[16px]">
         <div className="flex gap-[4px] grow h-[36px] items-center">
@@ -126,7 +126,10 @@ export function HealthComplete() {
           </div>
 
           {/* 하단 버튼 */}
-          <div className="flex gap-[16px] h-[100px] items-start justify-center px-[16px] pt-[8px] pb-[24px] w-full">
+          <div
+            className="bg-[#f0f3ff] flex gap-[16px] items-end justify-center px-[16px] py-[8px] w-full"
+            style={{ paddingBottom: 'calc(8px + env(safe-area-inset-bottom, 0px))' }}
+          >
             <button
               onClick={() => navigate('/consultation/ai')}
               className="flex-1 bg-[#bcceff] h-[56px] px-[12px] rounded-[8px] flex items-center justify-center shadow-[0px_2.59px_12.952px_0px_rgba(0,0,0,0.12)]"

@@ -267,9 +267,22 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShow
 
   return (
     <div className="bg-[#f0f3ff] relative w-full h-full overflow-y-auto">
-      {/* 대화 시작 전 - 스크롤 가능한 플렉스 레이아웃 */}
+      {/* 공통 Unity Canvas - 항상 렌더링 (재로드 방지) */}
+      <div
+        className="absolute left-0 right-0 h-[420px] z-[45] flex justify-center items-end pointer-events-none"
+        style={{ bottom: 'calc(70px + env(safe-area-inset-bottom, 0px))', touchAction: 'pan-y' }}
+      >
+        <div style={{ width: 'min(360px, 100vw)', height: '420px' }}>
+          <Unity
+            unityProvider={unityProvider}
+            style={{ width: '100%', height: '100%' }}
+          />
+        </div>
+      </div>
+
+      {/* 대화 시작 전 - 플렉스 레이아웃 */}
       {showReadyScreen && (
-        <div className="flex flex-col" style={{ minHeight: '100%' }}>
+        <div className="flex flex-col h-full">
           {/* Header */}
           <div className="content-stretch flex items-center pb-[12px] pt-[32px] px-[20px] shrink-0 w-full">
             <div className="basis-0 content-stretch flex gap-[4px] grow h-[36px] items-center min-h-px min-w-px shrink-0">
@@ -315,22 +328,15 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShow
             </p>
           </div>
 
-          {/* Unity Canvas Area - 고정 높이, 터치 스크롤 허용 */}
-          <div className="shrink-0 flex justify-center items-end h-[420px] relative z-[45]" style={{ touchAction: 'pan-y' }}>
-            <div style={{ width: 'min(360px, 100vw)', height: '420px', pointerEvents: 'none' }}>
-              <Unity
-                unityProvider={unityProvider}
-                style={{ width: '100%', height: '100%' }}
-              />
-            </div>
-          </div>
+          {/* Unity 공간 확보용 placeholder */}
+          <div className="shrink-0 mt-auto h-[420px]" />
 
           {/* 그라데이션 + 버튼 영역 */}
           <div className="shrink-0 relative z-[70]">
-            <div className="w-full h-[70px] bg-gradient-to-b from-transparent to-[rgba(240,243,255,0.8)] -mt-[70px] relative z-[50] pointer-events-none" />
+            <div className="w-full h-[100px] bg-gradient-to-b from-transparent to-[#f0f3ff] -mt-[100px] relative z-[50] pointer-events-none" />
             <div
-              className="bg-[#f0f3ff] content-stretch flex gap-[16px] h-[100px] items-end justify-center pb-[38px] pt-[8px] px-[16px] w-full"
-              style={{ paddingBottom: 'calc(38px + env(safe-area-inset-bottom, 0px))' }}
+              className="bg-[#f0f3ff] content-stretch flex gap-[16px] h-[70px] items-end justify-center pb-[8px] pt-[8px] px-[16px] w-full"
+              style={{ paddingBottom: 'calc(8px + env(safe-area-inset-bottom, 0px))' }}
             >
               <button
                 onClick={onStartConversation}
@@ -347,9 +353,9 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShow
         </div>
       )}
 
-      {/* 대화 중 - 스크롤 가능한 플렉스 레이아웃 */}
+      {/* 대화 중 - 플렉스 레이아웃 */}
       {!showReadyScreen && (
-        <div className="flex flex-col" style={{ minHeight: '100%' }}>
+        <div className="flex flex-col h-full">
           {/* Header */}
           <div className="content-stretch flex items-center pb-[12px] pt-[32px] px-[20px] shrink-0 w-full">
             <div className="basis-0 content-stretch flex gap-[4px] grow h-[36px] items-center min-h-px min-w-px shrink-0">
@@ -396,34 +402,37 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShow
             )}
           </div>
 
-          {/* Unity Canvas Area - 고정 높이, 터치 스크롤 허용 */}
-          <div className="shrink-0 flex justify-center items-end h-[420px] relative z-[45]" style={{ touchAction: 'pan-y' }}>
-            <div style={{ width: 'min(360px, 100vw)', height: '420px', pointerEvents: 'none' }}>
-              <Unity
-                unityProvider={unityProvider}
-                style={{ width: '100%', height: '100%' }}
-              />
-            </div>
-            {/* Volume-reactive gradient */}
-            {isLoaded && isMicEnabled && (
-              <div
-                className="absolute bottom-0 left-0 right-0 pointer-events-none z-[60]"
-                style={{
-                  height: '220px',
-                  background: 'linear-gradient(to top, rgba(150, 180, 255, 0.5), transparent)',
-                  opacity: userVolume > 0.02 ? Math.min((userVolume - 0.02) * 3, 1) : 0,
-                  transition: 'opacity 0.2s ease-in-out',
-                }}
-              />
-            )}
-          </div>
+          {/* Unity 공간 확보용 placeholder */}
+          <div className="shrink-0 mt-auto h-[420px]" />
+
+          {/* Volume-reactive gradient - 앱 컨테이너 하단에서 시작 */}
+          {isLoaded && isMicEnabled && (
+            <div
+              className="absolute left-0 right-0 pointer-events-none z-[60]"
+              style={{
+                bottom: 0,
+                height: '220px',
+                background: 'linear-gradient(to top, rgba(150, 180, 255, 0.5), transparent)',
+                opacity: userVolume > 0.02 ? Math.min((userVolume - 0.02) * 3, 1) : 0,
+                transition: 'opacity 0.2s ease-in-out',
+              }}
+            />
+          )}
 
           {/* 그라데이션 + 버튼 영역 */}
-          <div className="shrink-0 relative z-[70]">
-            <div className="w-full h-[70px] bg-gradient-to-b from-transparent to-[rgba(240,243,255,0.8)] -mt-[70px] relative z-[50] pointer-events-none" />
+          <div className="shrink-0 relative">
+            {/* 푸터 배경 - 볼륨 오버레이보다 낮은 z-index */}
+            <div className="absolute inset-0 z-[55]">
+              <div className="w-full h-[100px] bg-gradient-to-b from-transparent to-[#f0f3ff] -mt-[100px] pointer-events-none" />
+              <div
+                className="bg-[#f0f3ff] h-[70px] w-full"
+                style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
+              />
+            </div>
+            {/* 버튼들 - 볼륨 오버레이보다 높은 z-index */}
             <div
-              className="bg-[#f0f3ff] content-stretch flex gap-[12px] h-[100px] items-end justify-center px-[16px] pt-[8px] w-full"
-              style={{ paddingBottom: 'calc(38px + env(safe-area-inset-bottom, 0px))' }}
+              className="relative z-[90] content-stretch flex gap-[12px] h-[70px] items-end justify-center px-[16px] pt-[8px] w-full"
+              style={{ paddingBottom: 'calc(8px + env(safe-area-inset-bottom, 0px))' }}
             >
               {/* 음소거 버튼 */}
               <button

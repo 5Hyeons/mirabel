@@ -149,6 +149,8 @@
   "avatar.tapToSpeak": "Tap the button to speak",
   "avatar.startConversation": "Start",
   "avatar.preparing": "Preparing...",
+  "avatar.connecting": "Connecting to AI doctor...",
+  "avatar.pleaseWait": "Please wait a moment",
   "avatar.mute": "Mute",
   "avatar.unmute": "Unmute",
   "avatar.pause": "Pause",

@@ -149,6 +149,8 @@
   "avatar.tapToSpeak": "버튼을 탭하여 말해보세요",
   "avatar.startConversation": "대화 시작",
   "avatar.preparing": "준비 중...",
+  "avatar.connecting": "AI 의사에게 연결 중...",
+  "avatar.pleaseWait": "잠시만 기다려주세요",
   "avatar.mute": "음소거",
   "avatar.unmute": "해제",
   "avatar.pause": "일시중지",

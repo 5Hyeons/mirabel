@@ -53,6 +53,11 @@ body {
     animation: wave 1s ease-in-out infinite;
   }
 
+  /* 느린 회전 애니메이션 (로딩 링) */
+  .animate-spin-slow {
+    animation: spin 2s linear infinite;
+  }
+
   /* 스크롤바 숨기기 */
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
