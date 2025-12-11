@@ -38,13 +38,14 @@ export function Home() {
   useEffect(() => {
     if (patientData && !hasPlayedRef.current) {
       hasPlayedRef.current = true;
-      const audio = new Audio('/audio/home_intro.wav');
+      const audioFile = language === 'ko' ? '/audio/home_intro.wav' : '/audio/home_intro.en.wav';
+      const audio = new Audio(audioFile);
       audioRef.current = audio;
       audio.play().catch((err) => {
         console.log('[Home] Audio play failed:', err.message);
       });
     }
-  }, [patientData]);
+  }, [patientData, language]);
 
   // 콘텐츠 영역 상호작용 시 다음 음성으로 전환
   const handleContentInteraction = () => {
@@ -58,7 +59,8 @@ export function Home() {
 
     // exam_explanation 재생
     setCurrentAudio('exam_explanation');
-    const audio = new Audio('/audio/exam_explanation.wav');
+    const audioFile = language === 'ko' ? '/audio/exam_explanation.wav' : '/audio/exam_explanation.en.wav';
+    const audio = new Audio(audioFile);
     audioRef.current = audio;
     audio.play().catch((err) => {
       console.log('[Home] Audio play failed:', err.message);

@@ -46,7 +46,8 @@ export function HealthCheck() {
   // 페이지 진입 시 음성 안내 재생
   useEffect(() => {
     let isMounted = true;
-    const audio = new Audio('/audio/health_check_intro.wav');
+    const audioFile = language === 'ko' ? '/audio/health_check_intro.wav' : '/audio/health_check_intro.en.wav';
+    const audio = new Audio(audioFile);
 
     audio.addEventListener('canplaythrough', () => {
       if (isMounted) {
@@ -65,7 +66,7 @@ export function HealthCheck() {
       audio.src = '';
       audioRef.current = null;
     };
-  }, []);
+  }, [language]);
 
   const handleSubmit = () => {
     // 재생 중인 오디오 중지

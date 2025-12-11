@@ -50,7 +50,8 @@ export function HealthWarning() {
   // 페이지 진입 시 음성 안내 재생
   useEffect(() => {
     let isMounted = true;
-    const audio = new Audio('/audio/warning_notice.wav');
+    const audioFile = language === 'ko' ? '/audio/warning_notice.wav' : '/audio/warning_notice.en.wav';
+    const audio = new Audio(audioFile);
 
     audio.addEventListener('canplaythrough', () => {
       if (isMounted) {
@@ -69,7 +70,7 @@ export function HealthWarning() {
       audio.src = '';
       audioRef.current = null;
     };
-  }, []);
+  }, [language]);
 
   // 다음 페이지 이동
   const handleNext = () => {

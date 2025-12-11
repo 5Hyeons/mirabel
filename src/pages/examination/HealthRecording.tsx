@@ -56,7 +56,12 @@ export function HealthRecording() {
     if (!dangerCheckComplete) return;
 
     let isMounted = true;
-    const audioFile = isDangerUser ? '/audio/recording_danger.wav' : '/audio/recording_normal.wav';
+    let audioFile: string;
+    if (language === 'ko') {
+      audioFile = isDangerUser ? '/audio/recording_danger.wav' : '/audio/recording_normal.wav';
+    } else {
+      audioFile = isDangerUser ? '/audio/recording_danger.en.wav' : '/audio/recording_normal.en.wav';
+    }
     const audio = new Audio(audioFile);
 
     audio.addEventListener('canplaythrough', () => {
@@ -76,7 +81,7 @@ export function HealthRecording() {
       audio.src = '';
       audioRef.current = null;
     };
-  }, [dangerCheckComplete, isDangerUser]);
+  }, [dangerCheckComplete, isDangerUser, language]);
 
   const handleStartRecording = async () => {
     // 재생 중인 오디오 중지

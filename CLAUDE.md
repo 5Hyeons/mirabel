@@ -130,7 +130,8 @@ z-45: Unity Canvas (flex 흐름에 포함, mt-auto로 푸터 위에 배치)
 
 | 경로 | 페이지 |
 |------|--------|
-| `/` | 홈 |
+| `/` | 시작 (언어 선택) |
+| `/home` | 홈 |
 | `/health-check` | 건강 체크 |
 | `/health-check/warning` | 주의사항 |
 | `/health-check/recording` | 음성 녹음 |
@@ -143,15 +144,22 @@ z-45: Unity Canvas (flex 흐름에 포함, mt-auto로 푸터 위에 배치)
 
 ## 음성 안내 파일 (public/audio/)
 
-| 파일명 | 용도 | 재생 위치 |
-|--------|------|-----------|
-| `home_intro.wav` | 홈 화면 인트로 | Home.tsx |
-| `exam_explanation.wav` | 검사 설명 | ExaminationContent.tsx |
-| `health_check_intro.wav` | 건강 체크 시작 | HealthCheck.tsx |
-| `warning_notice.wav` | 주의사항 안내 | HealthWarning.tsx |
-| `recording_danger.wav` | 위험군 녹음 안내 | HealthRecording.tsx |
-| `recording_normal.wav` | 일반 녹음 안내 | HealthRecording.tsx |
-| `complete_outro.wav` | 완료 안내 | HealthComplete.tsx |
+한국어 (기본) 및 영어 버전 제공. 시작 화면(Start.tsx)에서 언어 선택 가능.
+
+| 파일명 | 영어 버전 | 용도 | 재생 위치 |
+|--------|-----------|------|-----------|
+| `home_intro.wav` | `home_intro.en.wav` | 홈 화면 인트로 | Home.tsx |
+| `exam_explanation.wav` | `exam_explanation.en.wav` | 검사 설명 | Home.tsx |
+| `health_check_intro.wav` | `health_check_intro.en.wav` | 건강 체크 시작 | HealthCheck.tsx |
+| `warning_notice.wav` | `warning_notice.en.wav` | 주의사항 안내 | HealthWarning.tsx |
+| `recording_danger.wav` | `recording_danger.en.wav` | 위험군 녹음 안내 | HealthRecording.tsx |
+| `recording_normal.wav` | `recording_normal.en.wav` | 일반 녹음 안내 | HealthRecording.tsx |
+| `complete_outro.wav` | `complete_outro.en.wav` | 완료 안내 | HealthComplete.tsx |
+
+**언어별 오디오 경로:**
+```tsx
+const audioFile = language === 'ko' ? '/audio/home_intro.wav' : '/audio/home_intro.en.wav';
+```
 
 ## 개발 가이드라인
 

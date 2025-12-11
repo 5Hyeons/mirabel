@@ -15,7 +15,7 @@ import imgIconSize from '@/assets/icon-size.webp';
 
 export function HealthComplete() {
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   const { patientData } = usePatientStore();
   const { fontSize, toggleFontSize } = useFontSizeStore();
   const fontSizeLabel = fontSize === 'normal' ? '' : fontSize === 'large' ? ' (L)' : ' (XL)';
@@ -24,7 +24,8 @@ export function HealthComplete() {
   // 페이지 진입 시 음성 안내 재생
   useEffect(() => {
     let isMounted = true;
-    const audio = new Audio('/audio/complete_outro.wav');
+    const audioFile = language === 'ko' ? '/audio/complete_outro.wav' : '/audio/complete_outro.en.wav';
+    const audio = new Audio(audioFile);
 
     audio.addEventListener('canplaythrough', () => {
       if (isMounted) {
@@ -43,7 +44,7 @@ export function HealthComplete() {
       audio.src = '';
       audioRef.current = null;
     };
-  }, []);
+  }, [language]);
 
   return (
     <div className="h-full flex flex-col bg-[#f0f3ff]">
