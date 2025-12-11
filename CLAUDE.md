@@ -19,123 +19,134 @@
 
 ```
 mirabel/
-├── api/                          # Vercel Serverless Functions
-│   └── livekit/token.ts          # LiveKit 토큰 생성 API
+├── api/livekit/token.ts          # LiveKit 토큰 생성 API
 ├── public/
-│   ├── images/                   # 정적 이미지 (WebP)
+│   ├── images/                   # 정적 이미지
 │   └── unity/doctor/Build/       # Unity WebGL 빌드
 ├── src/
 │   ├── assets/                   # 이미지 에셋 (WebP)
-│   ├── components/               # 재사용 컴포넌트
+│   ├── components/
 │   │   ├── health-check/         # 건강 체크 UI
 │   │   ├── home/                 # 홈 화면 UI
-│   │   └── shared/               # 공통 컴포넌트
+│   │   └── shared/               # 공통 (BottomButton, ScrollableContainer)
 │   ├── lib/
-│   │   ├── api/                  # API 타입 및 mock
-│   │   ├── hooks/                # 커스텀 훅
-│   │   │   ├── useAnimationData.ts   # 아바타 애니메이션 데이터
-│   │   │   ├── useAudioContext.ts    # 오디오 컨텍스트 관리
-│   │   │   ├── useLiveKit.ts         # LiveKit 연결 관리
-│   │   │   └── useTrackVolume.ts     # 마이크 볼륨 추적
+│   │   ├── hooks/                # useLiveKit, useAnimationData, useTrackVolume
+│   │   ├── i18n/                 # 다국어 (ko, en)
 │   │   ├── store/                # Zustand 스토어
-│   │   │   ├── consultation-store.ts # 상담 메시지 저장
-│   │   │   └── patient-store.ts      # 환자 정보 저장
-│   │   └── types/                # TypeScript 타입 정의
-│   └── pages/                    # 페이지 컴포넌트
-│       ├── consent/              # 동의서 (체크박스, 서명, 음성)
-│       ├── consultation/ai/      # AI 상담 화면
-│       └── examination/          # 검사 안내 화면
-└── vercel.json                   # Vercel 배포 설정
+│   │   └── types/                # TypeScript 타입
+│   └── pages/
+│       ├── consent/              # 동의서 플로우
+│       ├── consultation/ai/      # AI 상담 (핵심)
+│       └── examination/          # 건강 체크 플로우
+└── vercel.json
 ```
 
-## 주요 파일 설명
+## 레이아웃 시스템
 
-### AI 상담 (`src/pages/consultation/ai/`)
+### App 컨테이너 (`App.tsx`)
+```tsx
+<div className="w-full max-w-[480px] h-screen max-h-[980px] ...">
+```
+- 모바일 최적화: 최대 480px 너비, 980px 높이
 
-| 파일 | 역할 |
-|------|------|
-| `AIConsultation.tsx` | 메인 상담 화면, Unity + LiveKit 통합 |
-| `SessionManager.tsx` | LiveKit 세션 관리, RPC/Transcription 핸들러 |
-| `AvatarView.tsx` | 3D 아바타 UI, 마이크 제어, 애니메이션 전송 |
-| `ConsultationSummary.tsx` | 상담 내역 요약 페이지 |
+### 푸터 패턴
+```tsx
+<div className="bg-[#f0f3ff] flex h-[70px] items-end justify-center px-[16px] py-[8px]"
+     style={{ paddingBottom: 'calc(8px + env(safe-area-inset-bottom, 0px))' }}>
+```
+- 높이 70px, 버튼은 하단 정렬
+- safe-area 자동 처리
 
-### 커스텀 훅 (`src/lib/hooks/`)
+### Flexbox 레이아웃
+- 컨테이너: `h-full flex flex-col`
+- 상단 고정: `shrink-0`
+- 하단 고정: `mt-auto shrink-0`
 
-| 훅 | 용도 |
-|-----|------|
-| `useLiveKit` | LiveKit 토큰 발급 및 연결 관리 |
-| `useAnimationData` | Agent → Unity 애니메이션 데이터 수신 |
-| `useTrackVolume` | 마이크 볼륨 실시간 추적 |
-| `useAudioContext` | iOS Safari 오디오 컨텍스트 unlock |
+## AI 상담 아키텍처
 
-## 개발 가이드라인
-
-### 코드 스타일
-
-- TypeScript strict 모드 사용
-- 함수형 컴포넌트 + Hooks 패턴
-- Tailwind CSS 클래스 사용 (인라인 스타일 최소화)
-
-### 이미지 에셋
-
-- **WebP 포맷** 사용 (PNG 대비 70-90% 용량 감소)
-- `src/assets/`: 컴포넌트에서 import하는 이미지
-- `public/images/`: 정적 경로로 참조하는 이미지
-
-### LiveKit 통신
-
-```typescript
-// RPC 등록 (Agent → Client)
-localParticipant.registerRpcMethod('agent_state_changed', handler);
-
-// RPC 호출 (Client → Agent)
-localParticipant.performRpc({
-  destinationIdentity: agentIdentity,
-  method: 'start_conversation',
-  payload: '',
-});
-
-// Transcription 스트림 등록
-room.registerTextStreamHandler('lk.transcription', handler);
+### 컴포넌트 계층
+```
+AIConsultation (Unity 로드, LiveKit 연결)
+  └─ LiveKitRoom (Context Provider)
+       └─ SessionManager (비즈니스 로직)
+            └─ AvatarView (UI)
 ```
 
-### Unity 통신
+### SessionManager 역할
+- RPC 핸들러: `agent_state_changed` (Agent 상태 수신)
+- Transcription 핸들러: `lk.transcription` (STT 텍스트 수신)
+- RPC 호출: `start_conversation`, `interrupt_agent`
 
-```typescript
-// React → Unity 메시지
-sendMessage('ReactBridge', 'OnReactMessage', JSON.stringify({ action, data }));
-sendMessage('ReactBridge', 'OnAnimationData', frameData);
+### AvatarView 역할
+- Unity 통신: `sendMessage('ReactBridge', 'OnAnimationData', frameData)`
+- 마이크 제어, 볼륨 시각화
+- Agent 상태 기반 UI
+
+## 애니메이션 파이프라인
+
 ```
+Agent (60fps) → LiveKit DataChannel
+      ↓
+useAnimationData (3:1 다운샘플링 → 20fps 큐)
+      ↓
+AvatarView (16.67ms 간격 디큐)
+      ↓
+Unity ReactBridge → FluentTAvatar (립싱크)
+```
+
+**프레임 형식:**
+- 208 bytes = 52 floats (blendshape)
+- Control: `"final"` (큐 경유), `"interrupted"` (즉시 클리어)
+
+## z-index 레이어 (AvatarView)
+
+```
+z-90: 버튼 (최상단, 항상 클릭 가능)
+z-60: Volume gradient (fixed, 화면 하단)
+z-55: 푸터 배경 (볼륨 오버레이에 가려짐)
+z-50: 그라데이션 오버레이 (Unity→푸터 페이드)
+z-45: Unity Canvas
+```
+
+## Zustand 스토어
+
+| 스토어 | 용도 |
+|--------|------|
+| `consultation-store` | 상담 메시지 (messages[]) |
+| `font-size-store` | 글꼴 크기 (`--font-scale` CSS 변수) |
+| `patient-store` | 환자 정보, 건강 체크 상태 |
+| `language-store` | 언어 설정 (ko/en) |
+
+## 공통 컴포넌트
+
+| 컴포넌트 | 용도 |
+|----------|------|
+| `BottomButton` | 그라데이션 + safe-area 푸터 버튼 |
+| `ScrollableContainer` | flex-1 스크롤 영역, 스크롤바 숨김 |
+| `HealthCheckHeader` | 건강 체크 헤더 (뒤로가기, 크기 조절) |
 
 ## 라우팅
 
 | 경로 | 페이지 |
 |------|--------|
 | `/` | 홈 |
-| `/health-check` | 건강 체크 시작 |
+| `/health-check` | 건강 체크 |
 | `/health-check/warning` | 주의사항 |
 | `/health-check/recording` | 음성 녹음 |
-| `/health-check/complete` | 건강 체크 완료 |
-| `/consent/checkbox` | 동의서 체크박스 |
-| `/consent/signature` | 동의서 서명 |
-| `/consent/voice` | 동의서 음성 |
-| `/consent/complete` | 동의서 완료 |
+| `/health-check/complete` | 완료 |
+| `/consent/checkbox` | 동의서 체크 |
+| `/consent/signature` | 서명 |
+| `/consent/voice` | 음성 동의 |
+| `/consent/complete` | 완료 |
 | `/consultation/ai` | AI 상담 |
 
-## 빌드 및 배포
+## 개발 가이드라인
 
-```bash
-# 개발 서버
-npm run dev
+- **이미지**: WebP 포맷 사용
+- **스타일**: Tailwind 클래스 우선, 인라인 스타일은 동적 값만
+- **타입**: TypeScript strict 모드
 
-# 프로덕션 빌드
-npm run build
-
-# 타입 체크
-npx tsc --noEmit
-```
-
-### Vercel 환경 변수
+## 환경 변수 (Vercel)
 
 ```
 LIVEKIT_API_KEY=xxx
@@ -143,19 +154,6 @@ LIVEKIT_API_SECRET=xxx
 LIVEKIT_URL=wss://xxx.livekit.cloud
 ```
 
-## 알려진 이슈 및 해결책
-
-### 1. iOS Safari 오디오 재생
-- `useAudioContext` 훅으로 사용자 인터랙션 시 AudioContext unlock
-
-### 2. Unity WebGL 메모리
-- 장시간 사용 시 메모리 증가 가능
-- 페이지 이탈 시 Unity 인스턴스 정리 필요
-
-### 3. LiveKit 핸들러 중복 등록
-- `SessionManager`가 리마운트될 때 핸들러 중복 등록 방지
-- `visibility: hidden`으로 컴포넌트 유지, 언마운트 방지
-
 ---
 
-**업데이트**: 2024-12-10
+**업데이트**: 2025-12-11

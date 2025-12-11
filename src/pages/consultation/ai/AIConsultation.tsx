@@ -10,6 +10,7 @@ import { Unity, useUnityContext } from 'react-unity-webgl';
 import '@livekit/components-styles';
 import { useLiveKit } from '@/lib/hooks';
 import { useConsultationStore } from '@/lib/store/consultation-store';
+import { useFontSizeStore } from '@/lib/store/font-size-store';
 import { useTranslation } from '@/lib/i18n';
 import { SessionManager } from './SessionManager';
 import { ConsultationSummary } from './ConsultationSummary';
@@ -23,6 +24,8 @@ export function AIConsultation() {
   const { t, language } = useTranslation();
   const { token, serverUrl, isConnecting, error, connect, reset } = useLiveKit();
   const { clearMessages } = useConsultationStore();
+  const { fontSize, toggleFontSize } = useFontSizeStore();
+  const fontSizeLabel = fontSize === 'normal' ? '' : fontSize === 'large' ? ' (L)' : ' (XL)';
   const [showSummary, setShowSummary] = useState(false);
   const [conversationStarted, setConversationStarted] = useState(false);
 
@@ -143,12 +146,15 @@ export function AIConsultation() {
                 <img src={imgIconArrowLeft} alt="뒤로" className="w-full h-full" />
               </button>
             </div>
-            <div className="flex gap-[4px] items-center p-[8px]">
+            <button
+              onClick={toggleFontSize}
+              className="flex gap-[4px] items-center p-[8px]"
+            >
               <img src={imgIconSize} alt="" className="w-[20px] h-[20px]" />
-              <p className="font-bold text-[14px] text-[rgba(17,17,17,0.5)] tracking-[-0.28px]">
-                {t('common.sizeAdjust')}
+              <p className="font-bold text-scale-14 text-[rgba(17,17,17,0.5)] tracking-[-0.28px]">
+                {t('common.sizeAdjust')}{fontSizeLabel}
               </p>
-            </div>
+            </button>
           </div>
 
           {/* 아바타 영역 */}
@@ -169,10 +175,10 @@ export function AIConsultation() {
 
           {/* 텍스트 영역 */}
           <div className="flex flex-col gap-[10px] items-center justify-center pt-[20px] px-[20px]">
-            <p className="text-[23px] text-[#222222] text-center tracking-[-0.46px] leading-[1.3]">
+            <p className="text-scale-23 text-[#222222] text-center tracking-[-0.46px] leading-[1.3]">
               {t('consultation.connecting')}
             </p>
-            <p className="text-[16px] text-[#666666] text-center tracking-[-0.32px]">
+            <p className="text-scale-16 text-[#666666] text-center tracking-[-0.32px]">
               {t('consultation.pleaseWait')}
             </p>
           </div>

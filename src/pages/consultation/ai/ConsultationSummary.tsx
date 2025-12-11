@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useConsultationStore } from '@/lib/store/consultation-store';
+import { useFontSizeStore } from '@/lib/store/font-size-store';
 import { useTranslation } from '@/lib/i18n';
 import { ChatMessage } from '@/lib/types/consultation';
 import imgIconArrowLeft from '@/assets/icon-arrow-left.svg';
@@ -20,6 +21,8 @@ interface MessagePair {
 export function ConsultationSummary({ onBack, onEndConsultation }: ConsultationSummaryProps) {
   const { t, language } = useTranslation();
   const { messages, removeMessage } = useConsultationStore();
+  const { fontSize, toggleFontSize } = useFontSizeStore();
+  const fontSizeLabel = fontSize === 'normal' ? '' : fontSize === 'large' ? ' (L)' : ' (XL)';
 
   // Group messages into user/AI pairs
   const groupedMessages = useMemo(() => {
@@ -90,21 +93,24 @@ export function ConsultationSummary({ onBack, onEndConsultation }: ConsultationS
             {language === 'ko' ? t('language.korean') : t('language.english')}
           </p>
         </div>
-        <div className="content-stretch flex gap-[4px] items-center p-[8px] shrink-0">
+        <button
+          onClick={toggleFontSize}
+          className="content-stretch flex gap-[4px] items-center p-[8px] shrink-0"
+        >
           <img alt="" className="shrink-0 size-[20px]" src={imgIconSize} />
           <p className="font-bold leading-[1.4] shrink-0 text-[14px] text-[rgba(17,17,17,0.5)] text-nowrap text-right tracking-[-0.28px]">
-            {t('common.sizeAdjust')}
+            {t('common.sizeAdjust')}{fontSizeLabel}
           </p>
-        </div>
+        </button>
       </div>
 
       {/* Title */}
       <div className="content-stretch flex flex-col gap-[10px] items-center justify-center leading-[1.3] p-[20px] shrink-0 text-center w-full">
-        <div className="font-bold shrink-0 text-[#222222] text-[23px] tracking-[-0.46px] w-full">
+        <div className="font-bold shrink-0 text-[#222222] text-scale-23 tracking-[-0.46px] w-full">
           <p className="mb-0">{t('consultationSummary.title1')}</p>
           <p>{t('consultationSummary.title2')}</p>
         </div>
-        <p className="font-normal shrink-0 text-[#666666] text-[16px] tracking-[-0.32px] w-full">
+        <p className="font-normal shrink-0 text-[#666666] text-scale-16 tracking-[-0.32px] w-full">
           {t('consultationSummary.deliveryNotice')}
         </p>
       </div>
@@ -117,7 +123,7 @@ export function ConsultationSummary({ onBack, onEndConsultation }: ConsultationS
               {/* User Message */}
               {pair.userMessage && (
                 <div className="backdrop-blur-[10px] bg-[#bcceff] border-[#dddddd] border border-solid flex gap-[8px] items-center leading-[1.4] p-[16px] rounded-[8px] w-full">
-                  <p className="basis-0 font-normal grow min-h-px min-w-px text-[16px] text-black tracking-[-0.32px]">
+                  <p className="basis-0 font-normal grow min-h-px min-w-px text-scale-16 text-black tracking-[-0.32px]">
                     {pair.userMessage.message}
                   </p>
                   <button
@@ -132,7 +138,7 @@ export function ConsultationSummary({ onBack, onEndConsultation }: ConsultationS
               {/* AI Message */}
               {pair.aiMessage && (
                 <div className="backdrop-blur-[10px] bg-white border-[#dddddd] border border-solid flex flex-col items-start justify-center p-[16px] rounded-[8px] w-full">
-                  <p className="font-normal leading-[1.4] text-[16px] text-black tracking-[-0.32px] w-full">
+                  <p className="font-normal leading-[1.4] text-scale-16 text-black tracking-[-0.32px] w-full">
                     {pair.aiMessage.message}
                   </p>
                 </div>
@@ -154,17 +160,17 @@ export function ConsultationSummary({ onBack, onEndConsultation }: ConsultationS
       >
         <button
           onClick={onBack}
-          className="basis-0 bg-[#666666] flex gap-[4px] grow h-[56px] items-center justify-center min-h-px min-w-px p-[20px] rounded-[8px] shadow-[0px_2.59px_12.952px_0px_rgba(0,0,0,0.12)] shrink-0 active:scale-95 transition-transform"
+          className="basis-0 bg-[#666666] flex gap-[4px] grow h-[56px] items-center justify-center min-w-px px-[12px] rounded-[8px] shadow-[0px_2.59px_12.952px_0px_rgba(0,0,0,0.12)] shrink-0 active:scale-95 transition-transform"
         >
-          <p className="font-bold leading-[1.4] text-[16px] text-center text-nowrap text-white tracking-[-0.32px]">
+          <p className="font-bold leading-[1.2] text-scale-16 text-center text-white tracking-[-0.32px]">
             {t('consultationSummary.goBack')}
           </p>
         </button>
         <button
           onClick={onEndConsultation}
-          className="basis-0 bg-[#6490ff] flex gap-[4px] grow h-[56px] items-center justify-center min-h-px min-w-px p-[20px] rounded-[8px] shadow-[0px_2.59px_12.952px_0px_rgba(0,0,0,0.12)] shrink-0 active:scale-95 transition-transform"
+          className="basis-0 bg-[#6490ff] flex gap-[4px] grow h-[56px] items-center justify-center min-w-px px-[12px] rounded-[8px] shadow-[0px_2.59px_12.952px_0px_rgba(0,0,0,0.12)] shrink-0 active:scale-95 transition-transform"
         >
-          <p className="font-bold leading-[1.4] text-[16px] text-center text-nowrap text-white tracking-[-0.32px]">
+          <p className="font-bold leading-[1.2] text-scale-16 text-center text-white tracking-[-0.32px]">
             {t('consultationSummary.endConsultation')}
           </p>
         </button>

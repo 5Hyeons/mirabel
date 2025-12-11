@@ -82,27 +82,27 @@ export function HealthRecording() {
 
       <ScrollableContainer>
         {/* 의사 인사 영역 - DoctorGreeting과 동일한 스타일 */}
-        <div className="h-[152px] w-full relative mb-[24px]">
-          <div className="absolute bottom-0 right-0 w-[180px] h-[160px]">
-            <img
-              alt="Dr.Lee"
-              src={imgDoctorAvatar}
-              className="w-full h-full object-contain object-bottom"
-            />
-          </div>
-
-          <div className="absolute left-0 top-0 w-[calc(100%-180px)] pl-[20px] pt-[10px] flex flex-col gap-[15px]">
-            <div className="text-[20px] text-[#222222] tracking-[-0.46px] leading-[1.3] font-['Noto_Sans_KR:Bold',sans-serif] font-bold">
+        <div className="min-h-[152px] w-full flex mb-[24px]">
+          <div className="flex-1 pl-[20px] pt-[10px] flex flex-col gap-[15px]">
+            <div className="text-scale-20 text-[#222222] tracking-[-0.46px] leading-[1.3] font-['Noto_Sans_KR:Bold',sans-serif] font-bold">
               <p>{t('healthRecording.title1')}</p>
               <p>{t('healthRecording.title2')}</p>
               <p>{t('healthRecording.title3')}</p>
             </div>
 
-            <p className="text-[16px] text-[#666666] tracking-[-0.32px] leading-[1.3]">
+            <p className="text-scale-16 text-[#666666] tracking-[-0.32px] leading-[1.3]">
               {t('healthRecording.instruction1')}
               <br />
               {t('healthRecording.instruction2')}
             </p>
+          </div>
+
+          <div className="w-[170px] h-[160px] shrink-0 self-end">
+            <img
+              alt="Dr.Lee"
+              src={imgDoctorAvatar}
+              className="w-full h-full object-contain object-bottom"
+            />
           </div>
         </div>
         <div className="flex flex-col px-[20px] py-[16px] gap-[24px]">
@@ -110,16 +110,16 @@ export function HealthRecording() {
           {/* 녹음 스크립트 */}
           <div className="border-l-2 border-[#6490ff] pl-[20px] flex flex-col gap-[8px]">
             <div className="flex gap-[8px] items-start">
-              <p className="font-['Pretendard:Bold',sans-serif] text-[16px] text-[#6490ff] tracking-[-0.32px] leading-[1.5]">
+              <p className="font-['Pretendard:Bold',sans-serif] text-scale-16 text-[#6490ff] tracking-[-0.32px] leading-[1.5]">
                 {t('common.required')}
               </p>
-              <p className="font-['Pretendard:Bold',sans-serif] flex-1 text-[16px] text-black tracking-[-0.32px] leading-[1.5]">
+              <p className="font-['Pretendard:Bold',sans-serif] flex-1 text-scale-16 text-black tracking-[-0.32px] leading-[1.5]">
                 {t('healthRecording.recording')}
               </p>
             </div>
 
             <div className="bg-white rounded-[8px] p-[16px]">
-              <p className="font-['Pretendard:SemiBold',sans-serif] text-[16px] text-black tracking-[-0.32px] leading-[1.5]">
+              <p className="font-['Pretendard:SemiBold',sans-serif] text-scale-16 text-black tracking-[-0.32px] leading-[1.5]">
                 "{t('healthRecording.script')}"
               </p>
             </div>
@@ -182,7 +182,7 @@ export function HealthRecording() {
               {/* 툴팁 */}
               <div className="flex flex-col items-start">
                 <div className="bg-[#111111] rounded-[8px] px-[10px] py-[10px] mb-[-8px]">
-                  <p className="font-['Noto_Sans_KR:Medium',sans-serif] font-medium text-[14px] text-white text-center tracking-[-0.28px] leading-[1.4]">
+                  <p className="font-['Noto_Sans_KR:Medium',sans-serif] font-medium text-scale-14 text-white text-center tracking-[-0.28px] leading-[1.4]">
                     {t('healthRecording.pressToStart')}
                   </p>
                 </div>

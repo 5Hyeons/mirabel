@@ -5,6 +5,7 @@ import { ConnectionState, Track } from 'livekit-client';
 import { ChatMessage, AgentState } from '@/lib/types/consultation';
 import { useAnimationData } from '@/lib/hooks';
 import { useTranslation } from '@/lib/i18n';
+import { useFontSizeStore } from '@/lib/store/font-size-store';
 import imgIconArrowLeft from '@/assets/icon-arrow-left.svg';
 import imgIconGlobe from '@/assets/icon-globe.webp';
 import imgIconSize from '@/assets/icon-size.webp';
@@ -37,6 +38,8 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShow
   // Agent is ready when state is 'listening' (uses existing agent_state_changed RPC)
   const isAgentReady = agentState === 'listening';
   const { t, language } = useTranslation();
+  const { fontSize, toggleFontSize } = useFontSizeStore();
+  const fontSizeLabel = fontSize === 'normal' ? '' : fontSize === 'large' ? ' (L)' : ' (XL)';
 
   const { unityProvider, isLoaded, sendMessage } = unityContext;
 
@@ -263,115 +266,11 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShow
   const showReadyScreen = !conversationStarted;
 
   return (
-    <div className="bg-[#f0f3ff] overflow-clip relative w-full h-full">
-      {/* 상단 헤더 - 대화 시작 전 */}
-      {showReadyScreen && (
-        <div className="absolute bg-[#f0f3ff] content-stretch flex flex-col items-start left-0 top-0 w-full z-50">
-          {/* Header */}
-          <div className="content-stretch flex items-center pb-[12px] pt-[32px] px-[20px] relative shrink-0 w-full">
-            <div className="basis-0 content-stretch flex gap-[4px] grow h-[36px] items-center min-h-px min-w-px relative shrink-0">
-              <button onClick={onBack} className="relative shrink-0 size-[24px]">
-                <img alt="" className="block max-w-none size-full" src={imgIconArrowLeft} />
-              </button>
-            </div>
-            <div className="content-stretch flex gap-[4px] items-center p-[8px] relative shrink-0">
-              <img alt="" className="relative shrink-0 size-[20px]" src={imgIconGlobe} />
-              <p className="font-bold leading-[1.4] relative shrink-0 text-[14px] text-[rgba(17,17,17,0.5)] text-nowrap text-right tracking-[-0.28px]">
-                {language === 'ko' ? t('language.korean') : t('language.english')}
-              </p>
-            </div>
-            <div className="content-stretch flex gap-[4px] items-center p-[8px] relative shrink-0">
-              <img alt="" className="relative shrink-0 size-[20px]" src={imgIconSize} />
-              <p className="font-bold leading-[1.4] relative shrink-0 text-[14px] text-[rgba(17,17,17,0.5)] text-nowrap text-right tracking-[-0.28px]">
-                {t('common.sizeAdjust')}
-              </p>
-            </div>
-          </div>
-
-          {/* FAQ 힌트 바 */}
-          <div className="backdrop-blur-[10px] bg-white content-stretch flex gap-[8px] h-[46px] items-center leading-[1.4] max-w-full px-[16px] py-[8px] relative rounded-[8px] shrink-0 text-nowrap w-full mx-auto">
-            <p className="basis-0 font-normal grow min-h-px min-w-px overflow-ellipsis overflow-hidden relative shrink-0 text-[#666666] text-[16px] tracking-[-0.32px]">
-              Q. {sampleQuestions[0] || '...'}
-            </p>
-            <p className="font-medium relative shrink-0 text-[#dddddd] text-[14px] text-center tracking-[-0.28px]">
-              {t('avatar.seeMore')}
-            </p>
-          </div>
-
-          {/* 메인 텍스트 */}
-          <div className="content-stretch flex flex-col font-normal gap-[10px] items-center justify-center leading-[1.3] p-[20px] relative shrink-0 text-center w-full">
-            <div className="relative shrink-0 text-[#222222] text-[23px] tracking-[-0.46px] w-full">
-              <p className="mb-0">{t('avatar.questionTitle1')}</p>
-              <p>{t('avatar.questionTitle2')}</p>
-            </div>
-            <p className="relative shrink-0 text-[#666666] text-[16px] tracking-[-0.32px] w-full">
-              {t('avatar.tapToSpeak')}
-            </p>
-          </div>
-        </div>
-      )}
-
-      {/* 상단 헤더 - 대화 중 (대화 시작 화면과 동일한 디자인) */}
-      {!showReadyScreen && (
-        <div className="absolute bg-[#f0f3ff] content-stretch flex flex-col items-start left-0 top-0 w-full z-50">
-          {/* Header */}
-          <div className="content-stretch flex items-center pb-[12px] pt-[32px] px-[20px] relative shrink-0 w-full">
-            <div className="basis-0 content-stretch flex gap-[4px] grow h-[36px] items-center min-h-px min-w-px relative shrink-0">
-              <button onClick={onBack} className="relative shrink-0 size-[24px]">
-                <img alt="" className="block max-w-none size-full" src={imgIconArrowLeft} />
-              </button>
-            </div>
-            <div className="content-stretch flex gap-[4px] items-center p-[8px] relative shrink-0">
-              <img alt="" className="relative shrink-0 size-[20px]" src={imgIconGlobe} />
-              <p className="font-bold leading-[1.4] relative shrink-0 text-[14px] text-[rgba(17,17,17,0.5)] text-nowrap text-right tracking-[-0.28px]">
-                {language === 'ko' ? t('language.korean') : t('language.english')}
-              </p>
-            </div>
-            <div className="content-stretch flex gap-[4px] items-center p-[8px] relative shrink-0">
-              <img alt="" className="relative shrink-0 size-[20px]" src={imgIconSize} />
-              <p className="font-bold leading-[1.4] relative shrink-0 text-[14px] text-[rgba(17,17,17,0.5)] text-nowrap text-right tracking-[-0.28px]">
-                {t('common.sizeAdjust')}
-              </p>
-            </div>
-          </div>
-
-          {/* FAQ 힌트 바 */}
-          <div className="backdrop-blur-[10px] bg-white content-stretch flex gap-[8px] h-[46px] items-center leading-[1.4] max-w-full px-[16px] py-[8px] relative rounded-[8px] shrink-0 text-nowrap w-full mx-auto">
-            <p className="basis-0 font-normal grow min-h-px min-w-px overflow-ellipsis overflow-hidden relative shrink-0 text-[#666666] text-[16px] tracking-[-0.32px]">
-              Q. {sampleQuestions[0] || '...'}
-            </p>
-            <p className="font-medium relative shrink-0 text-[#dddddd] text-[14px] text-center tracking-[-0.28px]">
-              {t('avatar.seeMore')}
-            </p>
-          </div>
-        </div>
-      )}
-
-      {/* Agent Message - 대화 중에만 표시 */}
-      {!showReadyScreen && isLoaded && lastMessage && (
-        <div
-          className="absolute left-1/2 translate-x-[-50%] w-full px-5 z-10"
-          style={{
-            top: '126px',
-            bottom: 'calc(420px + 100px)',
-            overflow: 'hidden',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-          }}
-        >
-          <div className="text-center">
-            <p className="text-[20px] leading-[1.4] tracking-[-0.46px] text-black">
-              {lastMessage.message}
-            </p>
-          </div>
-        </div>
-      )}
-
-      {/* Unity Canvas Area */}
+    <div className="bg-[#f0f3ff] relative w-full h-full overflow-y-auto">
+      {/* 공통 Unity Canvas - 항상 렌더링 (재로드 방지) */}
       <div
-        className="absolute left-0 right-0 flex justify-center"
-        style={{ bottom: '100px', height: '420px', zIndex: 45 }}
+        className="absolute left-0 right-0 h-[420px] z-[45] flex justify-center items-end pointer-events-none"
+        style={{ bottom: 'calc(70px + env(safe-area-inset-bottom, 0px))', touchAction: 'pan-y' }}
       >
         <div style={{ width: 'min(360px, 100vw)', height: '420px' }}>
           <Unity
@@ -381,109 +280,199 @@ export function AvatarView({ lastMessage, agentState, userVolume, onBack, onShow
         </div>
       </div>
 
-      {/* 로딩은 AIConsultation에서 처리됨 - Unity + LiveKit 모두 완료 후 이 컴포넌트 렌더링 */}
-
-      {/* Volume-reactive gradient - 대화 중에만 */}
-      {!showReadyScreen && isLoaded && isMicEnabled && (
-        <div
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: '220px',
-            background: 'linear-gradient(to top, rgba(150, 180, 255, 0.5), transparent)',
-            opacity: userVolume > 0.02 ? Math.min((userVolume - 0.02) * 3, 1) : 0,
-            transition: 'opacity 0.2s ease-in-out',
-            pointerEvents: 'none',
-            zIndex: 60,
-          }}
-        />
-      )}
-
-      {/* Unity->Footer 그라데이션 */}
-      {isLoaded && (
-        <div
-          className="absolute left-1/2 translate-x-[-50%] w-full pointer-events-none"
-          style={{
-            bottom: '100px',
-            height: '70px',
-            background: 'linear-gradient(to bottom, transparent, #f0f3ff)',
-            zIndex: 50,
-          }}
-        />
-      )}
-
-      {/* 하단 버튼 - 대화 시작 전 */}
+      {/* 대화 시작 전 - 플렉스 레이아웃 */}
       {showReadyScreen && (
-        <div className="absolute bottom-0 left-0 w-full z-70">
-          {/* 그라데이션 */}
-          <div className="w-full h-[100px] bg-gradient-to-b from-transparent to-[rgba(240,243,255,0.8)]" />
-          {/* 버튼 영역 */}
-          <div
-            className="bg-[#f0f3ff] content-stretch flex gap-[16px] h-[100px] items-end justify-center pb-[38px] pt-[8px] px-[16px] w-full"
-            style={{ paddingBottom: 'calc(38px + env(safe-area-inset-bottom, 0px))' }}
-          >
+        <div className="flex flex-col h-full">
+          {/* Header */}
+          <div className="content-stretch flex items-center pb-[12px] pt-[32px] px-[20px] shrink-0 w-full">
+            <div className="basis-0 content-stretch flex gap-[4px] grow h-[36px] items-center min-h-px min-w-px shrink-0">
+              <button onClick={onBack} className="shrink-0 size-[24px]">
+                <img alt="" className="block max-w-none size-full" src={imgIconArrowLeft} />
+              </button>
+            </div>
+            <div className="content-stretch flex gap-[4px] items-center p-[8px] shrink-0">
+              <img alt="" className="shrink-0 size-[20px]" src={imgIconGlobe} />
+              <p className="font-bold leading-[1.4] shrink-0 text-scale-14 text-[rgba(17,17,17,0.5)] text-nowrap text-right tracking-[-0.28px]">
+                {language === 'ko' ? t('language.korean') : t('language.english')}
+              </p>
+            </div>
             <button
-              onClick={onStartConversation}
-              disabled={!isLoaded || !isAgentReady}
-              className="flex-1 bg-[#6490ff] content-stretch flex gap-[8px] h-[56px] items-center justify-center p-[20px] rounded-[8px] shadow-[0px_2.59px_12.952px_0px_rgba(0,0,0,0.12)] active:scale-95 transition-transform disabled:opacity-50"
+              onClick={toggleFontSize}
+              className="content-stretch flex gap-[4px] items-center p-[8px] shrink-0"
             >
-              <IconCall className="shrink-0" />
-              <p className="font-bold leading-[1.4] text-[16px] text-center text-nowrap text-white tracking-[-0.32px]">
-                {isAgentReady ? t('avatar.startConversation') : t('avatar.preparing')}
+              <img alt="" className="shrink-0 size-[20px]" src={imgIconSize} />
+              <p className="font-bold leading-[1.4] shrink-0 text-scale-14 text-[rgba(17,17,17,0.5)] text-nowrap text-right tracking-[-0.28px]">
+                {t('common.sizeAdjust')}{fontSizeLabel}
               </p>
             </button>
+          </div>
+
+          {/* FAQ 힌트 바 */}
+          <div className="backdrop-blur-[10px] bg-white content-stretch flex gap-[8px] min-h-[46px] items-center leading-[1.4] max-w-full px-[16px] py-[8px] rounded-[8px] shrink-0 text-nowrap w-full mx-auto">
+            <p className="basis-0 font-normal grow min-h-px min-w-px overflow-ellipsis overflow-hidden shrink-0 text-[#666666] text-scale-16 tracking-[-0.32px]">
+              Q. {sampleQuestions[0] || '...'}
+            </p>
+            <p className="font-medium shrink-0 text-[#dddddd] text-scale-14 text-center tracking-[-0.28px]">
+              {t('avatar.seeMore')}
+            </p>
+          </div>
+
+          {/* 메인 텍스트 */}
+          <div className="content-stretch flex flex-col font-normal gap-[10px] items-center justify-center leading-[1.3] p-[20px] shrink-0 text-center w-full">
+            <div className="shrink-0 text-[#222222] text-scale-23 tracking-[-0.46px] w-full">
+              <p className="mb-0">{t('avatar.questionTitle1')}</p>
+              <p>{t('avatar.questionTitle2')}</p>
+            </div>
+            <p className="shrink-0 text-[#666666] text-scale-16 tracking-[-0.32px] w-full">
+              {t('avatar.tapToSpeak')}
+            </p>
+          </div>
+
+          {/* Unity 공간 확보용 placeholder */}
+          <div className="shrink-0 mt-auto h-[420px]" />
+
+          {/* 그라데이션 + 버튼 영역 */}
+          <div className="shrink-0 relative z-[70]">
+            <div className="w-full h-[100px] bg-gradient-to-b from-transparent to-[#f0f3ff] -mt-[100px] relative z-[50] pointer-events-none" />
+            <div
+              className="bg-[#f0f3ff] content-stretch flex gap-[16px] h-[70px] items-end justify-center pb-[8px] pt-[8px] px-[16px] w-full"
+              style={{ paddingBottom: 'calc(8px + env(safe-area-inset-bottom, 0px))' }}
+            >
+              <button
+                onClick={onStartConversation}
+                disabled={!isLoaded || !isAgentReady}
+                className="flex-1 bg-[#6490ff] content-stretch flex gap-[8px] h-[56px] items-center justify-center p-[20px] rounded-[8px] shadow-[0px_2.59px_12.952px_0px_rgba(0,0,0,0.12)] active:scale-95 transition-transform disabled:opacity-50"
+              >
+                <IconCall className="shrink-0" />
+                <p className="font-bold leading-[1.4] text-scale-16 text-center text-nowrap text-white tracking-[-0.32px]">
+                  {isAgentReady ? t('avatar.startConversation') : t('avatar.preparing')}
+                </p>
+              </button>
+            </div>
           </div>
         </div>
       )}
 
-      {/* 하단 버튼 - 대화 중 */}
+      {/* 대화 중 - 플렉스 레이아웃 */}
       {!showReadyScreen && (
-        <div
-          className="absolute bottom-0 left-1/2 translate-x-[-50%] w-full flex gap-[16px] items-end justify-center px-[16px] pt-[8px]"
-          style={{
-            paddingBottom: 'calc(38px + env(safe-area-inset-bottom, 0px))',
-            zIndex: 70,
-          }}
-        >
-          {/* 음소거 버튼 */}
-          <button
-            onClick={toggleMic}
-            disabled={!isLoaded}
-            className={`w-[86px] h-[56px] rounded-[8px] shadow-[0px_2.59px_12.952px_0px_rgba(0,0,0,0.12)] flex items-center justify-center gap-[4px] active:scale-95 transition-transform disabled:opacity-50 ${
-              isMicEnabled ? 'bg-[#666666]' : 'bg-[#ff6464]'
-            }`}
-          >
-            <img src="/images/icon-mic-mono.webp" alt="" width={20} height={20} />
-            <p className="font-bold text-[16px] text-white tracking-[-0.32px]">
-              {isMicEnabled ? t('avatar.mute') : t('avatar.unmute')}
-            </p>
-          </button>
+        <div className="flex flex-col h-full">
+          {/* Header */}
+          <div className="content-stretch flex items-center pb-[12px] pt-[32px] px-[20px] shrink-0 w-full">
+            <div className="basis-0 content-stretch flex gap-[4px] grow h-[36px] items-center min-h-px min-w-px shrink-0">
+              <button onClick={onBack} className="shrink-0 size-[24px]">
+                <img alt="" className="block max-w-none size-full" src={imgIconArrowLeft} />
+              </button>
+            </div>
+            <div className="content-stretch flex gap-[4px] items-center p-[8px] shrink-0">
+              <img alt="" className="shrink-0 size-[20px]" src={imgIconGlobe} />
+              <p className="font-bold leading-[1.4] shrink-0 text-scale-14 text-[rgba(17,17,17,0.5)] text-nowrap text-right tracking-[-0.28px]">
+                {language === 'ko' ? t('language.korean') : t('language.english')}
+              </p>
+            </div>
+            <button
+              onClick={toggleFontSize}
+              className="content-stretch flex gap-[4px] items-center p-[8px] shrink-0"
+            >
+              <img alt="" className="shrink-0 size-[20px]" src={imgIconSize} />
+              <p className="font-bold leading-[1.4] shrink-0 text-scale-14 text-[rgba(17,17,17,0.5)] text-nowrap text-right tracking-[-0.28px]">
+                {t('common.sizeAdjust')}{fontSizeLabel}
+              </p>
+            </button>
+          </div>
 
-          {/* 일시중지 버튼 */}
-          <button
-            onClick={handleInterruptAgent}
-            disabled={!isLoaded}
-            className="flex-1 h-[56px] bg-[#6490ff] rounded-[8px] shadow-[0px_2.59px_12.952px_0px_rgba(0,0,0,0.12)] flex items-center justify-center gap-[4px] active:scale-95 transition-transform disabled:opacity-50"
-          >
-            <img src="/images/icon-stop.webp" alt="" width={20} height={20} />
-            <p className="font-bold text-[16px] text-white tracking-[-0.32px]">
-              {t('avatar.pause')}
+          {/* FAQ 힌트 바 */}
+          <div className="backdrop-blur-[10px] bg-white content-stretch flex gap-[8px] min-h-[46px] items-center leading-[1.4] max-w-full px-[16px] py-[8px] rounded-[8px] shrink-0 text-nowrap w-full mx-auto">
+            <p className="basis-0 font-normal grow min-h-px min-w-px overflow-ellipsis overflow-hidden shrink-0 text-[#666666] text-scale-16 tracking-[-0.32px]">
+              Q. {sampleQuestions[0] || '...'}
             </p>
-          </button>
+            <p className="font-medium shrink-0 text-[#dddddd] text-scale-14 text-center tracking-[-0.28px]">
+              {t('avatar.seeMore')}
+            </p>
+          </div>
 
-          {/* 종료 버튼 */}
-          <button
-            onClick={handleEndClick}
-            disabled={!isLoaded}
-            className="w-[86px] h-[56px] bg-[#fd4848] rounded-[8px] shadow-[0px_2.59px_12.952px_0px_rgba(0,0,0,0.12)] flex items-center justify-center gap-[4px] active:scale-95 transition-transform disabled:opacity-50"
+          {/* Agent Message - 3줄 고정 높이, 항상 공간 유지 */}
+          <div
+            className="shrink-0 px-5 flex flex-col justify-end overflow-hidden"
+            style={{ height: 'calc(20px * var(--font-scale, 1) * 1.4 * 3 + 32px)' }}
           >
-            <img src="/images/icon-call-slash-mono.webp" alt="" width={20} height={20} />
-            <p className="font-bold text-[16px] text-white tracking-[-0.32px]">
-              {t('avatar.end')}
-            </p>
-          </button>
+            {isLoaded && lastMessage && (
+              <p className="text-scale-20 leading-[1.4] tracking-[-0.46px] text-black text-center">
+                {lastMessage.message}
+              </p>
+            )}
+          </div>
+
+          {/* Unity 공간 확보용 placeholder */}
+          <div className="shrink-0 mt-auto h-[420px]" />
+
+          {/* Volume-reactive gradient - 앱 컨테이너 하단에서 시작 */}
+          {isLoaded && isMicEnabled && (
+            <div
+              className="absolute left-0 right-0 pointer-events-none z-[60]"
+              style={{
+                bottom: 0,
+                height: '220px',
+                background: 'linear-gradient(to top, rgba(150, 180, 255, 0.5), transparent)',
+                opacity: userVolume > 0.02 ? Math.min((userVolume - 0.02) * 3, 1) : 0,
+                transition: 'opacity 0.2s ease-in-out',
+              }}
+            />
+          )}
+
+          {/* 그라데이션 + 버튼 영역 */}
+          <div className="shrink-0 relative">
+            {/* 푸터 배경 - 볼륨 오버레이보다 낮은 z-index */}
+            <div className="absolute inset-0 z-[55]">
+              <div className="w-full h-[100px] bg-gradient-to-b from-transparent to-[#f0f3ff] -mt-[100px] pointer-events-none" />
+              <div
+                className="bg-[#f0f3ff] h-[70px] w-full"
+                style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
+              />
+            </div>
+            {/* 버튼들 - 볼륨 오버레이보다 높은 z-index */}
+            <div
+              className="relative z-[90] content-stretch flex gap-[12px] h-[70px] items-end justify-center px-[16px] pt-[8px] w-full"
+              style={{ paddingBottom: 'calc(8px + env(safe-area-inset-bottom, 0px))' }}
+            >
+              {/* 음소거 버튼 */}
+              <button
+                onClick={toggleMic}
+                disabled={!isLoaded}
+                className={`flex-[4] h-[56px] rounded-[8px] shadow-[0px_2.59px_12.952px_0px_rgba(0,0,0,0.12)] flex items-center justify-center gap-[4px] active:scale-95 transition-transform disabled:opacity-50 ${
+                  isMicEnabled ? 'bg-[#666666]' : 'bg-[#ff6464]'
+                }`}
+              >
+                <img src="/images/icon-mic-mono.webp" alt="" width={20} height={20} />
+                <p className="font-bold text-scale-16 text-white tracking-[-0.32px]">
+                  {isMicEnabled ? t('avatar.mute') : t('avatar.unmute')}
+                </p>
+              </button>
+
+              {/* 일시중지 버튼 */}
+              <button
+                onClick={handleInterruptAgent}
+                disabled={!isLoaded}
+                className="flex-[4] h-[56px] bg-[#6490ff] rounded-[8px] shadow-[0px_2.59px_12.952px_0px_rgba(0,0,0,0.12)] flex items-center justify-center gap-[4px] active:scale-95 transition-transform disabled:opacity-50"
+              >
+                <img src="/images/icon-stop.webp" alt="" width={20} height={20} />
+                <p className="font-bold text-scale-16 text-white tracking-[-0.32px]">
+                  {t('avatar.pause')}
+                </p>
+              </button>
+
+              {/* 종료 버튼 */}
+              <button
+                onClick={handleEndClick}
+                disabled={!isLoaded}
+                className="flex-[3] h-[56px] bg-[#fd4848] rounded-[8px] shadow-[0px_2.59px_12.952px_0px_rgba(0,0,0,0.12)] flex items-center justify-center gap-[4px] active:scale-95 transition-transform disabled:opacity-50"
+              >
+                <img src="/images/icon-call-slash-mono.webp" alt="" width={20} height={20} />
+                <p className="font-bold text-scale-16 text-white tracking-[-0.32px]">
+                  {t('avatar.end')}
+                </p>
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

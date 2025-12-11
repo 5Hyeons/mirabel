@@ -68,7 +68,7 @@ export function ExaminationContent({ examinationType, onCheckboxComplete }: Exam
     <div className="flex flex-col gap-[24px] w-full">
       {/* 메인 카드 */}
       <div className="bg-white border border-[#dddddd] border-solid rounded-[8px] p-[16px] flex flex-col gap-[24px]">
-        <p className="font-['Noto_Sans_KR:Bold',sans-serif] font-bold text-[18px] text-[#111111] tracking-[-0.36px] leading-[1.4]">
+        <p className="font-['Noto_Sans_KR:Bold',sans-serif] font-bold text-scale-18 text-[#111111] tracking-[-0.36px] leading-[1.4]">
           {t('examination.consentForm')}
         </p>
 
